@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.Controller">
+    <JFXTreeTableView fx:id="treeTableView" layoutX="173.0" layoutY="64.0" prefHeight="240.0" prefWidth="258.0"/>
+</AnchorPane>
