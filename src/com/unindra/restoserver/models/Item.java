@@ -1,12 +1,15 @@
 package com.unindra.restoserver.models;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.unindra.restoserver.DB;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.sql2o.Connection;
 
 public class Item extends RecursiveTreeObject<Item> {
+    private int id_transaksi;
     private int id_item;
     private int id_menu;
     private int jumlah_item;
@@ -25,6 +28,15 @@ public class Item extends RecursiveTreeObject<Item> {
 
     public void terima() {
         status_item = "diproses";
+    }
+
+    private void simpan(int id_transaksi) {
+        this.id_transaksi = id_transaksi;
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "INSERT INTO `item` (id_transaksi,id_menu,jumlah_item,lvl_item,no_meja)" +
+                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:lvl_item,:no_meja)";
+            connection.createQuery(query).executeUpdate();
+        }
     }
 
     int getId_item() {
@@ -62,11 +74,12 @@ public class Item extends RecursiveTreeObject<Item> {
     @Override
     public String toString() {
         return "Item{" +
-                "id_item=" + id_item +
+                "id_transaksi=" + id_transaksi +
+                ", id_item=" + id_item +
                 ", id_menu=" + id_menu +
                 ", jumlah_item=" + jumlah_item +
                 ", lvl_item=" + lvl_item +
-                ", no_meja=" + no_meja +
+                ", no_meja='" + no_meja + '\'' +
                 ", status_item='" + status_item + '\'' +
                 '}';
     }
