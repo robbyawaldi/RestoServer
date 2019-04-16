@@ -8,6 +8,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.sql2o.Connection;
 
+import java.io.IOException;
+
+import static com.unindra.restoserver.models.Menu.menu;
+import static java.util.Objects.requireNonNull;
+
 public class Item extends RecursiveTreeObject<Item> {
     private int id_transaksi;
     private int id_item;
@@ -36,6 +41,13 @@ public class Item extends RecursiveTreeObject<Item> {
             final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`lvl_item`)" +
                     " VALUES (:id_transaksi,:id_menu,:jumlah_item,:lvl_item)";
             connection.createQuery(query).executeUpdate();
+        }
+    }
+    private int getTotal() {
+        try {
+            return (requireNonNull(menu(this)).getHarga_menu() + level(lvl_item).getHarga_level()) * jumlah_item;
+        } catch (IOException e) {
+            return 0;
         }
     }
 

@@ -6,6 +6,8 @@ import org.sql2o.Connection;
 
 import java.util.Date;
 
+import static com.unindra.restoserver.models.ItemService.getItems;
+
 public class Transaksi extends RecursiveTreeObject<Transaksi> {
     private int id_transaksi;
     private String no_meja;
@@ -18,6 +20,10 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
             final String query = "INSERT INTO `transaksi` (`no_meja`,`tanggal`) VALUES (:no_meja,:tanggal)";
             id_transaksi = connection.createQuery(query).executeUpdate().getKey(Integer.class);
         }
+    }
+
+    private int getTotalHarga() {
+
     }
 
     @Override
