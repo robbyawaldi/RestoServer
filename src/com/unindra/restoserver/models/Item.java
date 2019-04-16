@@ -10,6 +10,7 @@ import org.sql2o.Connection;
 
 import java.io.IOException;
 
+import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
 import static java.util.Objects.requireNonNull;
 
@@ -43,12 +44,9 @@ public class Item extends RecursiveTreeObject<Item> {
             connection.createQuery(query).executeUpdate();
         }
     }
-    private int getTotal() {
-        try {
-            return (requireNonNull(menu(this)).getHarga_menu() + level(lvl_item).getHarga_level()) * jumlah_item;
-        } catch (IOException e) {
-            return 0;
-        }
+
+    int getTotal() {
+        return (menu(this).getHarga_menu() + level(lvl_item).getHarga_level()) * jumlah_item;
     }
 
     int getId_item() {

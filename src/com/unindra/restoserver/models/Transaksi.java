@@ -5,6 +5,8 @@ import com.unindra.restoserver.DB;
 import org.sql2o.Connection;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.unindra.restoserver.models.ItemService.getItems;
 
@@ -23,7 +25,11 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     private int getTotalHarga() {
-
+        List<Item> items = getItems()
+                .stream()
+                .filter(item -> item.getNo_meja().equals(no_meja))
+                .collect(Collectors.toList());
+        return items.stream().mapToInt(Item::getTotal).sum();
     }
 
     @Override
