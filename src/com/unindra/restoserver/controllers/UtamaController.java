@@ -140,9 +140,12 @@ public class UtamaController implements Initializable {
         pesananTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
 
         TreeTableColumn<Transaksi, String> mejaTransaksiCol = new TreeTableColumn<>("No Meja");
-        TreeTableColumn<Transaksi, String> totalCol = new TreeTableColumn<>("Total Harga");
+        TreeTableColumn<Transaksi, Integer> totalCol = new TreeTableColumn<>("Total Harga");
         TreeTableColumn<Transaksi, String> billCol = new TreeTableColumn<>("Bill");
         TreeTableColumn<Transaksi, String> bayarCol = new TreeTableColumn<>("Bayar");
+
+        mejaTransaksiCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
+        totalCol.setCellValueFactory(param -> param.getValue().getValue().totalProperty());
 
         pembayaranTableView.getColumns().add(mejaTransaksiCol);
         pembayaranTableView.getColumns().add(totalCol);
