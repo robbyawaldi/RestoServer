@@ -1,6 +1,5 @@
 package com.unindra.restoserver.models;
 
-import com.unindra.restoserver.models.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -16,8 +15,8 @@ public class ItemService {
         return items;
     }
 
-    public static List<Item> getItems(int noMeja) {
-        return items.stream().filter(item -> item.getNo_meja() == noMeja).collect(Collectors.toList());
+    public static List<Item> getItems(String no_meja) {
+        return items.stream().filter(item -> item.getNo_meja().equals(no_meja)).collect(Collectors.toList());
     }
 
     public static void add(Item item) {
@@ -34,9 +33,9 @@ public class ItemService {
     }
 
     public static boolean delete(Item item) {
-        Item toEdit = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
-        if (toEdit != null) {
-            items.remove(toEdit);
+        Item toDelete = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
+        if (toDelete != null) {
+            items.remove(toDelete);
             return true;
         } else return false;
     }

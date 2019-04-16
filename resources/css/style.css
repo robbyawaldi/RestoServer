@@ -1,0 +1,88 @@
+/*******************************************************************************
+ *                                                                             *
+ * Font			                                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+@font-face {
+    font-family: OpenSans;
+    src: url('/fonts/OpenSans-Bold.ttf');
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Button  			                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.halaman-utama {
+    -fx-graphic: url('/icons/icons8-home-20.png');
+}
+
+.daftar-menu {
+    -fx-graphic: url('/icons/icons8-food-18.png');
+}
+
+.laporan {
+    -fx-graphic: url('/icons/icons8-graph-report-20.png');
+}
+
+.keluar {
+    -fx-graphic: url('/icons/icons8-logout-rounded-left-20.png');
+}
+
+.halaman-utama:hover, .daftar-menu:hover, .laporan:hover, .keluar:hover {
+    -fx-background-color: #EAEAEA;
+}
+
+.halaman-utama-pressed {
+    -fx-graphic: url('/icons/icons8-home-20.png');
+    -fx-background-color: #80FFE8;
+}
+
+.daftar-menu-pressed {
+    -fx-graphic: url('/icons/icons8-food-18.png');
+    -fx-background-color: #80FFE8;
+}
+
+.laporan-pressed {
+    -fx-graphic: url('/icons/icons8-graph-report-20.png');
+    -fx-background-color: #80FFE8;
+}
+
+.tambah {
+    -fx-graphic: url('/icons/icons8-plus-25.png');
+}
+
+.hapus {
+    -fx-graphic: url('/icons/icons8-delete-30.png');
+}
+
+.ubah {
+    -fx-graphic: url('/icons/icons8-compose-30.png');
+}
+/*******************************************************************************
+ *                                                                             *
+ * Pane  			                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+ .body-white {
+    -fx-background-color: white;
+ }
+
+ /*******************************************************************************
+  *                                                                             *
+  * Text   			                                                            *
+  *                                                                             *
+  ******************************************************************************/
+
+  .text-judul {
+    -fx-font-family: 'OpenSans';
+    -fx-font-size: 12pt;
+  }
+
+  .text-body {
+    -fx-font-family: 'OpenSans';
+    -fx-font-size: 10pt;
+  }

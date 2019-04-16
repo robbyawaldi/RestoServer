@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox prefWidth="780.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.172-ea"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.AppController">
+    <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="150.0" styleClass="body-white" HBox.hgrow="NEVER">
+        <padding>
+            <Insets top="30.0"/>
+        </padding>
+        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/logo-ramen-bulet-merah-copy50x50.png"/>
+            <VBox.margin>
+                <Insets bottom="20.0"/>
+            </VBox.margin>
+        </ImageView>
+        <JFXButton fx:id="utamaButton" alignment="BASELINE_LEFT" focusTraversable="false" mnemonicParsing="false"
+                   onAction="#menuHandle" prefHeight="50.0" prefWidth="150.0" styleClass="halaman-utama-pressed"
+                   text="Halaman Utama">
+            <graphic>
+                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"/>
+            </graphic>
+            <padding>
+                <Insets left="20.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="menuButton" alignment="BASELINE_LEFT" focusTraversable="false" layoutX="10.0" layoutY="90.0"
+                   mnemonicParsing="false" onAction="#menuHandle" prefHeight="50.0" prefWidth="150.0"
+                   styleClass="daftar-menu" text="Daftar Menu">
+            <graphic>
+                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"/>
+            </graphic>
+            <padding>
+                <Insets left="20.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="laporanButton" alignment="BASELINE_LEFT" focusTraversable="false" layoutX="10.0" layoutY="140.0"
+                   mnemonicParsing="false" onAction="#menuHandle" prefHeight="50.0" prefWidth="150.0"
+                   styleClass="laporan" text="Laporan">
+            <graphic>
+                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"/>
+            </graphic>
+            <padding>
+                <Insets left="20.0"/>
+            </padding>
+        </JFXButton>
+        <JFXButton fx:id="keluarButton" alignment="BASELINE_LEFT" focusTraversable="false" layoutX="10.0" layoutY="190.0"
+                   mnemonicParsing="false" onAction="#menuHandle" prefHeight="50.0" prefWidth="150.0"
+                   styleClass="keluar" text="Keluar">
+            <graphic>
+                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"/>
+            </graphic>
+            <padding>
+                <Insets left="20.0"/>
+            </padding>
+        </JFXButton>
+    </VBox>
+    <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefWidth="630.0"
+                stylesheets="@../css/scroll.css" HBox.hgrow="ALWAYS"/>
+</HBox>

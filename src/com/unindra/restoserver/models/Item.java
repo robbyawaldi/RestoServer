@@ -3,66 +3,60 @@ package com.unindra.restoserver.models;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Item extends RecursiveTreeObject<Item> {
     private int id_item;
     private int id_menu;
     private int jumlah_item;
-    private int no_meja;
+    private int lvl_item;
+    private String no_meja;
     private String status_item;
 
-    public Item(int idMenu, int jumlahItem, int noMeja, String statusItem) {
-        this.id_menu = idMenu;
-        this.jumlah_item = jumlahItem;
-        this.no_meja = noMeja;
-        this.status_item = statusItem;
+    public Item(int id_item, int id_menu, int jumlah_item, int lvl_item, String no_meja, String status_item) {
+        this.id_item = id_item;
+        this.id_menu = id_menu;
+        this.jumlah_item = jumlah_item;
+        this.lvl_item = lvl_item;
+        this.no_meja = no_meja;
+        this.status_item = status_item;
     }
 
-    public Item() {
+    public void terima() {
+        status_item = "diproses";
     }
 
-    public int getId_item() {
+    int getId_item() {
         return id_item;
     }
 
-    public void setId_item(int id_item) {
+    void setId_item(int id_item) {
         this.id_item = id_item;
     }
 
-    public int getId_menu() {
+    int getId_menu() {
         return id_menu;
     }
 
-    public void setId_menu(int id_menu) {
-        this.id_menu = id_menu;
+    public int getLvl_item() {
+        return lvl_item;
     }
 
-    public int getJumlah_item() {
-        return jumlah_item;
-    }
-
-    public void setJumlah_item(int jumlah_item) {
-        this.jumlah_item = jumlah_item;
-    }
-
-    public int getNo_meja() {
+    String getNo_meja() {
         return no_meja;
-    }
-
-    public void setNo_meja(int no_meja) {
-        this.no_meja = no_meja;
     }
 
     public String getStatus_item() {
         return status_item;
     }
 
-    public void setStatus_item(String status_item) {
-        this.status_item = status_item;
-    }
-
     public ObjectProperty<Integer> jumlahProperty() {
         return new SimpleObjectProperty<>(jumlah_item);
+    }
+
+    public StringProperty no_mejaProperty() {
+        return new SimpleStringProperty(no_meja);
     }
 
     @Override
@@ -71,6 +65,7 @@ public class Item extends RecursiveTreeObject<Item> {
                 "id_item=" + id_item +
                 ", id_menu=" + id_menu +
                 ", jumlah_item=" + jumlah_item +
+                ", lvl_item=" + lvl_item +
                 ", no_meja=" + no_meja +
                 ", status_item='" + status_item + '\'' +
                 '}';

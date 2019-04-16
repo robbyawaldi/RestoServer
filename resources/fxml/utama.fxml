@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.UtamaController">
+    <VBox prefWidth="600.0" spacing="10.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <Label styleClass="text-judul" text="Pesanan Masuk" />
+        <JFXTreeTableView fx:id="pesananTableView" prefHeight="400.0" showRoot="false" VBox.vgrow="ALWAYS" />
+      <FlowPane.margin>
+         <Insets />
+      </FlowPane.margin>
+      <padding>
+         <Insets bottom="25.0" left="30.0" right="20.0" top="20.0" />
+      </padding>
+    </VBox>
+    <VBox layoutX="10.0" layoutY="10.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="ALWAYS">
+        <Label styleClass="text-judul" text="Pembayaran" />
+        <JFXTreeTableView fx:id="pembayaranTableView" prefHeight="400.0" showRoot="false" VBox.vgrow="ALWAYS" />
+      <padding>
+         <Insets bottom="25.0" left="30.0" right="20.0" top="20.0" />
+      </padding>
+    </VBox>
+</FlowPane>

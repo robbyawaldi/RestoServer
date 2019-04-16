@@ -8,16 +8,30 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.models.Item;
 import com.unindra.restoserver.models.StandardResponse;
 import com.unindra.restoserver.models.StatusResponse;
+import javafx.collections.FXCollections;
 
-import static com.unindra.restoserver.models.DaftarMenu.menus;
+import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.ItemService.delete;
 import static com.unindra.restoserver.models.ItemService.*;
+import static com.unindra.restoserver.models.Level.levelList;
 import static spark.Spark.delete;
 import static spark.Spark.*;
 
 class Server {
+    private static Gson gson;
+
     static {
-        Gson gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
+        gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+                return fieldAttributes.getDeclaringClass().equals(RecursiveTreeObject.class);
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> aClass) {
+                return false;
+            }
+        }).addDeserializationExclusionStrategy(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes fieldAttributes) {
                 return fieldAttributes.getDeclaringClass().equals(RecursiveTreeObject.class);
@@ -43,16 +57,7 @@ class Server {
 
             return gson.toJson(new StandardResponse(
                     StatusResponse.SUCCESS,
-                    gson.toJsonTree(getItems(Integer.valueOf(request.params(":no_meja")))))
-            );
-        });
-
-        get("/menus", (request, response) -> {
-            response.type("application/json");
-
-            return gson.toJson(new StandardResponse(
-                    StatusResponse.SUCCESS,
-                    gson.toJsonTree(menus()))
+                    gson.toJsonTree(getItems(request.params(":no_meja"))))
             );
         });
 
@@ -60,7 +65,7 @@ class Server {
             response.type("application/json");
 
             Item item = gson.fromJson(request.body(), Item.class);
-
+            item.setChildren(FXCollections.observableArrayList());
             if (update(item)) {
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Item diedit"));
             } else {
@@ -77,6 +82,30 @@ class Server {
             } else {
                 return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
             }
+        });
+
+        get("/menus", (request, response) -> {
+            response.type("application/json");
+
+            return gson.toJson(new StandardResponse(
+                    StatusResponse.SUCCESS,
+                    gson.toJsonTree(getMenus()))
+            );
+        });
+
+        get("/levels", (request, response) -> {
+            response.type("application/json");
+
+            return gson.toJson(new StandardResponse(
+                    StatusResponse.SUCCESS,
+                    gson.toJsonTree(levelList()))
+            );
+        });
+
+        get("/bayar/:no_meja", (request, response) -> {
+            response.type("application/json");
+
+            return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
     }
 

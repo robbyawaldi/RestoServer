@@ -1,6 +1,6 @@
 package com.unindra.restoserver.models;
 
-public enum  StatusResponse {
+public enum StatusResponse {
     SUCCESS("Success"), ERROR("Error");
 
     final private String status;
@@ -9,7 +9,10 @@ public enum  StatusResponse {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
+    @Override
+    public String toString() {
+        return "StatusResponse{" +
+                "status='" + status + '\'' +
+                '}';
     }
 }
