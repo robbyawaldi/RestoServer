@@ -1,5 +1,6 @@
 package com.unindra.restoserver.models;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class Level {
                 new Level(9, 2000),
                 new Level(10, 2000)
         );
+    }
+
+    static Level level(int level) {
+        return levelList().stream().filter(l -> l.level == level).findFirst().orElse(null);
     }
 
     @Override
