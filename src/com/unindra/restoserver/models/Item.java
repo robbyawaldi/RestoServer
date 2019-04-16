@@ -33,7 +33,7 @@ public class Item extends RecursiveTreeObject<Item> {
     private void simpan(int id_transaksi) {
         this.id_transaksi = id_transaksi;
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `item` (id_transaksi,id_menu,jumlah_item,lvl_item,no_meja)" +
+            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`lvl_item`,`no_meja`)" +
                     " VALUES (:id_transaksi,:id_menu,:jumlah_item,:lvl_item,:no_meja)";
             connection.createQuery(query).executeUpdate();
         }
