@@ -8,12 +8,14 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.models.Item;
 import com.unindra.restoserver.models.StandardResponse;
 import com.unindra.restoserver.models.StatusResponse;
+import com.unindra.restoserver.models.Transaksi;
 import javafx.collections.FXCollections;
 
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.ItemService.delete;
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Level.levelList;
+import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 import static spark.Spark.delete;
 import static spark.Spark.*;
 
@@ -105,11 +107,8 @@ class Server {
         get("/bayar/:no_meja", (request, response) -> {
             response.type("application/json");
 
+            getTransaksiList().add(new Transaksi(request.params(":no_meja")));
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
-    }
-
-    public static void main(String[] args) {
-        new Server();
     }
 }

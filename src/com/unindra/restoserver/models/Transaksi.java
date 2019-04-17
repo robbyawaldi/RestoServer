@@ -45,8 +45,16 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         }
     }
 
+    public boolean isExist(String no_meja) {
+        return transaksiList.stream().anyMatch(transaksi -> transaksi.getNo_meja().equals(no_meja));
+    }
+
     public static ObservableList<Transaksi> getTransaksiList() {
         return transaksiList;
+    }
+
+    private String getNo_meja() {
+        return no_meja;
     }
 
     public StringProperty no_mejaProperty() {
