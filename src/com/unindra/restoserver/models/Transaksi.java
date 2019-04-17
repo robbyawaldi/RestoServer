@@ -37,11 +37,11 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
-    public boolean simpan() {
+    public void simpan() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "INSERT INTO `transaksi` (`no_meja`,`tanggal`) VALUES (:no_meja,:tanggal)";
             id_transaksi = connection.createQuery(query).executeUpdate().getKey(Integer.class);
-            return connection.getResult() > 0;
+
         }
     }
 

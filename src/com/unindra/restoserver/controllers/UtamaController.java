@@ -12,7 +12,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -20,7 +23,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import static com.unindra.restoserver.Dialog.getDialogLayout;
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
@@ -70,7 +72,6 @@ public class UtamaController implements Initializable {
             public TreeTableCell<Item, String> call(TreeTableColumn<Item, String> param) {
                 return new TreeTableCell<Item, String>() {
                     final JFXButton button = new JFXButton("Terima");
-
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
@@ -97,7 +98,6 @@ public class UtamaController implements Initializable {
             public TreeTableCell<Item, String> call(TreeTableColumn<Item, String> param) {
                 return new TreeTableCell<Item, String>() {
                     final JFXButton button = new JFXButton("Tolak");
-
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
@@ -142,18 +142,20 @@ public class UtamaController implements Initializable {
         TreeTableColumn<Transaksi, String> mejaTransaksiCol = new TreeTableColumn<>("No Meja");
         TreeTableColumn<Transaksi, Integer> totalCol = new TreeTableColumn<>("Total Harga");
         TreeTableColumn<Transaksi, String> billCol = new TreeTableColumn<>("Bill");
-        TreeTableColumn<Transaksi, String> bayarCol = new TreeTableColumn<>("Bayar");
+        TreeTableColumn<Transaksi, String> strukCol = new TreeTableColumn<>("Struk");
+        TreeTableColumn<Transaksi, String> simpanCol = new TreeTableColumn<>("Simpan");
 
         mejaTransaksiCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
         totalCol.setCellValueFactory(param -> param.getValue().getValue().totalProperty());
-        bayarCol.setCellValueFactory(param -> new SimpleStringProperty(""));
+        billCol.setCellValueFactory(param -> new SimpleStringProperty(""));
+        strukCol.setCellValueFactory(param -> new SimpleStringProperty(""));
+        simpanCol.setCellValueFactory(param -> new SimpleStringProperty(""));
 
-        bayarCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
+        strukCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
             @Override
             public TreeTableCell<Transaksi, String> call(TreeTableColumn<Transaksi, String> param) {
                 return new TreeTableCell<Transaksi, String>() {
                     final JFXButton button = new JFXButton("Cetak");
-
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
@@ -164,7 +166,51 @@ public class UtamaController implements Initializable {
                             button.setStyle("-fx-background-color: #EAEAEA");
                             button.setOnAction(event -> {
                                 Dialog jumlahTunaiDialog = new Dialog((Stage) pesananTableView.getScene().getWindow());
+                                JFXTextField tunaiField = new JFXTextField();
+                                tunaiField.textProperty().addListener((observable, oldValue, newValue) -> {
+                                    if (!newValue.matches("\\d*")) {
+                                        tunaiField.setText(newValue.replaceAll("[^\\d]", ""));
+                                    }
+                                });
 
+                                jumlahTunaiDialog.input(
+                                        tunaiField,
+                                        e -> {
+                                            System.out.println(tunaiField.getText());
+                                            jumlahTunaiDialog.getAlert().hide();
+                                        });
+
+                            });
+                            setGraphic(button);
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
+
+        simpanCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
+            @Override
+            public TreeTableCell<Transaksi, String> call(TreeTableColumn<Transaksi, String> param) {
+                return new TreeTableCell<Transaksi, String>() {
+                    final JFXButton button = new JFXButton("Simpan");
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.setOnAction(event -> {
+                                Dialog confirmDialog = new Dialog((Stage) pesananTableView.getScene().getWindow());
+                                confirmDialog.confirmation(
+                                        "Transaksi sudah selesai?",
+                                        e -> {
+                                            Transaksi transaksi = getTransaksiList().get(getIndex());
+                                            transaksi.simpan();
+                                            confirmDialog.getAlert().hide();
+                                        });
 
                             });
                             setGraphic(button);
@@ -180,7 +226,8 @@ public class UtamaController implements Initializable {
         pembayaranTableView.getColumns().add(mejaTransaksiCol);
         pembayaranTableView.getColumns().add(totalCol);
         pembayaranTableView.getColumns().add(billCol);
-        pembayaranTableView.getColumns().add(bayarCol);
+        pembayaranTableView.getColumns().add(strukCol);
+        pembayaranTableView.getColumns().add(simpanCol);
         pembayaranTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
     }
 }

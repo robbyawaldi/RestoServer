@@ -4,13 +4,13 @@ import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class Dialog {
 
@@ -57,6 +57,20 @@ public class Dialog {
                 yaButton,
                 batalButton
         ));
+        alert.show();
+    }
+
+    public void input(JFXTextField textField, EventHandler<ActionEvent> eventConfirm) {
+        JFXButton yaButton = new JFXButton("Ya");
+        JFXButton batalButton = new JFXButton("Batal");
+        yaButton.setOnAction(eventConfirm);
+        batalButton.setOnAction(event -> alert.hide());
+
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        dialogLayout.setActions(yaButton, batalButton);
+        dialogLayout.setHeading(new Label("Jumlah tunai"));
+        dialogLayout.setBody(textField);
+        alert.setContent(dialogLayout);
         alert.show();
     }
 }
