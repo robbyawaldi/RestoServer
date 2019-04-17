@@ -15,8 +15,7 @@ import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.ItemService.delete;
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Level.levelList;
-import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
-import static com.unindra.restoserver.models.Transaksi.isExist;
+import static com.unindra.restoserver.models.Transaksi.*;
 import static spark.Spark.delete;
 import static spark.Spark.*;
 
@@ -107,8 +106,12 @@ class Server {
 
         get("/bayar/:no_meja", (request, response) -> {
             response.type("application/json");
+
             Transaksi transaksi = new Transaksi(request.params(":no_meja"));
-//            if (isExist(transaksi))
+            if (isExist(transaksi)) {
+                int index = getIndex(transaksi);
+                getTransaksiList().set(index, transaksi);
+            } else getTransaksiList().add(transaksi);
 
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });

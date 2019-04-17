@@ -1,6 +1,7 @@
 package com.unindra.restoserver.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -11,10 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -22,6 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import static com.unindra.restoserver.Dialog.getDialogLayout;
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
@@ -147,9 +146,37 @@ public class UtamaController implements Initializable {
 
         mejaTransaksiCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
         totalCol.setCellValueFactory(param -> param.getValue().getValue().totalProperty());
+        bayarCol.setCellValueFactory(param -> new SimpleStringProperty(""));
 
-        TreeItem<Transaksi> rootTransaksi = new RecursiveTreeItem<>(getTransaksiList(), RecursiveTreeObject::getChildren);
-        pembayaranTableView.setRoot(rootTransaksi);
+        bayarCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
+            @Override
+            public TreeTableCell<Transaksi, String> call(TreeTableColumn<Transaksi, String> param) {
+                return new TreeTableCell<Transaksi, String>() {
+                    final JFXButton button = new JFXButton("Cetak");
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.setOnAction(event -> {
+                                Dialog jumlahTunaiDialog = new Dialog((Stage) pesananTableView.getScene().getWindow());
+
+
+                            });
+                            setGraphic(button);
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
+
+        TreeItem<Transaksi> rootTrans = new RecursiveTreeItem<>(getTransaksiList(), RecursiveTreeObject::getChildren);
+        pembayaranTableView.setRoot(rootTrans);
         pembayaranTableView.getColumns().add(mejaTransaksiCol);
         pembayaranTableView.getColumns().add(totalCol);
         pembayaranTableView.getColumns().add(billCol);
