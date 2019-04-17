@@ -45,16 +45,20 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         }
     }
 
-    public boolean isExist(String no_meja) {
-        return transaksiList.stream().anyMatch(transaksi -> transaksi.getNo_meja().equals(no_meja));
+    public static boolean isExist(Transaksi transaksi) {
+        return transaksiList.stream().anyMatch(t -> t.no_meja.equals(transaksi.no_meja));
+    }
+
+    public static int getIndex(Transaksi transaksi) {
+        Transaksi toEdit = transaksiList.stream()
+                .filter(t -> t.no_meja.equals(transaksi.no_meja))
+                .findFirst()
+                .orElse(null);
+        return transaksiList.indexOf(toEdit);
     }
 
     public static ObservableList<Transaksi> getTransaksiList() {
         return transaksiList;
-    }
-
-    private String getNo_meja() {
-        return no_meja;
     }
 
     public StringProperty no_mejaProperty() {
