@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Menu.menu;
+import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 import static java.util.Objects.requireNonNull;
 
 public class UtamaController implements Initializable {
@@ -129,9 +130,9 @@ public class UtamaController implements Initializable {
         FilteredList<Item> filteredList = new FilteredList<>(getItems(), predicate);
         getItems().addListener((ListChangeListener<Item>) c -> filteredList.setPredicate(predicate));
 
-        TreeItem<Item> root = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
+        TreeItem<Item> rootItem = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
 
-        pesananTableView.setRoot(root);
+        pesananTableView.setRoot(rootItem);
         pesananTableView.getColumns().add(mejaCol);
         pesananTableView.getColumns().add(namaCol);
         pesananTableView.getColumns().add(jumlahCol);
@@ -147,6 +148,8 @@ public class UtamaController implements Initializable {
         mejaTransaksiCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
         totalCol.setCellValueFactory(param -> param.getValue().getValue().totalProperty());
 
+        TreeItem<Transaksi> rootTransaksi = new RecursiveTreeItem<>(getTransaksiList(), RecursiveTreeObject::getChildren);
+        pembayaranTableView.setRoot(rootTransaksi);
         pembayaranTableView.getColumns().add(mejaTransaksiCol);
         pembayaranTableView.getColumns().add(totalCol);
         pembayaranTableView.getColumns().add(billCol);

@@ -22,7 +22,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     private String no_meja;
     private Date tanggal;
     @Expose
-    private ObservableList<Transaksi> transaksiList = FXCollections.observableArrayList();
+    private static ObservableList<Transaksi> transaksiList = FXCollections.observableArrayList();
 
     public Transaksi(String no_meja) {
         this.no_meja = no_meja;
@@ -41,7 +41,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
-    public ObservableList<Transaksi> getTransaksiList() {
+    public static ObservableList<Transaksi> getTransaksiList() {
         return transaksiList;
     }
 
