@@ -69,19 +69,19 @@ public class DaftarMenuController implements Initializable {
                     Integer.valueOf(hargaField.getText()),
                     deskArea.getText());
             if (menu.tambah()) {
-                getAlert().information("Berhasil!", "Menu berhasil ditambahkan");
+                getDialog().information("Berhasil!", "Menu berhasil ditambahkan");
                 reset();
             }
-            else getAlert().information("Gagal", "Menu gagal ditambahkan");
+            else getDialog().information("Gagal", "Menu gagal ditambahkan");
         } else {
             menu.setNama_menu(namaField.getText());
             menu.setTipe_menu(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
             menu.setDeskripsi(deskArea.getText());
             if (menu.ubah()) {
-                getAlert().information("Berhasil!", "Menu berhasil diubah");
+                getDialog().information("Berhasil!", "Menu berhasil diubah");
                 reset();
-            } else getAlert().information("Gagal", "Menu gagal diubah");
+            } else getDialog().information("Gagal", "Menu gagal diubah");
         }
     }
 
@@ -102,7 +102,7 @@ public class DaftarMenuController implements Initializable {
     }
 
     public void hapusHandle() {
-        Dialog alert = getAlert();
+        Dialog alert = getDialog();
         alert.confirmation(
                 "Anda yakin ingin menghapus menu ini?",
                 event -> {
@@ -126,7 +126,7 @@ public class DaftarMenuController implements Initializable {
         deskArea.setText("");
     }
 
-    private Dialog getAlert() {
+    private Dialog getDialog() {
         return new Dialog((Stage) actionButton.getScene().getWindow());
     }
 }
