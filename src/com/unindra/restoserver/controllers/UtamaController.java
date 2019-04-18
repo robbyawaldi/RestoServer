@@ -151,6 +151,30 @@ public class UtamaController implements Initializable {
         strukCol.setCellValueFactory(param -> new SimpleStringProperty(""));
         simpanCol.setCellValueFactory(param -> new SimpleStringProperty(""));
 
+        billCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
+            @Override
+            public TreeTableCell<Transaksi, String> call(TreeTableColumn<Transaksi, String> param) {
+                return new TreeTableCell<Transaksi, String>() {
+                    final JFXButton button = new JFXButton("Cetak");
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.setOnAction(event -> {
+
+                            });
+                            setGraphic(button);
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
+
         strukCol.setCellFactory(new Callback<TreeTableColumn<Transaksi, String>, TreeTableCell<Transaksi, String>>() {
             @Override
             public TreeTableCell<Transaksi, String> call(TreeTableColumn<Transaksi, String> param) {
@@ -179,7 +203,6 @@ public class UtamaController implements Initializable {
                                             System.out.println(tunaiField.getText());
                                             jumlahTunaiDialog.getAlert().hide();
                                         });
-
                             });
                             setGraphic(button);
                             setText(null);

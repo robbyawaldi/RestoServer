@@ -38,19 +38,19 @@
 
 .halaman-utama-pressed {
     -fx-graphic: url('/icons/icons8-home-20.png');
-    -fx-background-color: #80FFE8;
+    -fx-background-color: #5EB0E5;
     -fx-background-radius: 0;
 }
 
 .daftar-menu-pressed {
     -fx-graphic: url('/icons/icons8-food-18.png');
-    -fx-background-color: #80FFE8;
+    -fx-background-color: #5EB0E5;
     -fx-background-radius: 0;
 }
 
 .laporan-pressed {
     -fx-graphic: url('/icons/icons8-graph-report-20.png');
-    -fx-background-color: #80FFE8;
+    -fx-background-color: #5EB0E5;
     -fx-background-radius: 0;
 }
 
