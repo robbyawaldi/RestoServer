@@ -30,6 +30,7 @@ public class DaftarMenuController implements Initializable {
     public Label titleLabel;
 
     private ObservableList<String> tipeList;
+    private Menu menu;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,7 +78,6 @@ public class DaftarMenuController implements Initializable {
             }
             else getAlert().information("Gagal", "Menu gagal ditambahkan");
         } else {
-            Menu menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
             menu.setNama_menu(namaField.getText());
             menu.setTipe_menu(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
@@ -91,7 +91,7 @@ public class DaftarMenuController implements Initializable {
 
     public void pilihHandle(MouseEvent mouseEvent) {
         if (!menuTableView.getSelectionModel().isEmpty()) {
-            Menu menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
+            menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
             namaField.setText(menu.getNama_menu());
             int index = tipeList.indexOf(menu.getTipe_menu());
             tipeComboBox.getSelectionModel().clearAndSelect(index);
