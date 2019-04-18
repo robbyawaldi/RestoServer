@@ -8,18 +8,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.sql2o.Connection;
 
-import java.io.IOException;
-
 import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
-import static java.util.Objects.requireNonNull;
 
 public class Item extends RecursiveTreeObject<Item> {
     private int id_transaksi;
     private int id_item;
     private int id_menu;
     private int jumlah_item;
-    private int lvl_item;
+    private int level_item;
     private String no_meja;
     private String status_item;
 
@@ -27,7 +24,7 @@ public class Item extends RecursiveTreeObject<Item> {
         this.id_item = id_item;
         this.id_menu = id_menu;
         this.jumlah_item = jumlah_item;
-        this.lvl_item = lvl_item;
+        this.level_item = lvl_item;
         this.no_meja = no_meja;
         this.status_item = status_item;
     }
@@ -36,17 +33,27 @@ public class Item extends RecursiveTreeObject<Item> {
         status_item = "diproses";
     }
 
-    private void simpan(int id_transaksi) {
+    void simpan(int id_transaksi) {
         this.id_transaksi = id_transaksi;
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`lvl_item`)" +
-                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:lvl_item)";
-            connection.createQuery(query).executeUpdate();
+            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
+                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:level_item)";
+            connection.createQuery(query).bind(this).executeUpdate();
         }
     }
 
     int getTotal() {
-        return (menu(this).getHarga_menu() + level(lvl_item).getHarga_level()) * jumlah_item;
+        return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
+    }
+
+    @SuppressWarnings("unused")
+    public int getId_transaksi() {
+        return id_transaksi;
+    }
+
+    @SuppressWarnings("unused")
+    public int getJumlah_item() {
+        return jumlah_item;
     }
 
     int getId_item() {
@@ -61,8 +68,8 @@ public class Item extends RecursiveTreeObject<Item> {
         return id_menu;
     }
 
-    public int getLvl_item() {
-        return lvl_item;
+    public int getLevel_item() {
+        return level_item;
     }
 
     String getNo_meja() {
@@ -88,7 +95,7 @@ public class Item extends RecursiveTreeObject<Item> {
                 ", id_item=" + id_item +
                 ", id_menu=" + id_menu +
                 ", jumlah_item=" + jumlah_item +
-                ", lvl_item=" + lvl_item +
+                ", level_item=" + level_item +
                 ", no_meja='" + no_meja + '\'' +
                 ", status_item='" + status_item + '\'' +
                 '}';

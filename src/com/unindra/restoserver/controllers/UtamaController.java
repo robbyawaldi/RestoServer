@@ -59,7 +59,7 @@ public class UtamaController implements Initializable {
                         } else {
                             Item i = getItems().get(getIndex());
                             if (requireNonNull(menu(i)).getTipe_menu().equals("ramen"))
-                                setText(item + " lv." + i.getLvl_item());
+                                setText(item + " lv." + i.getLevel_item());
                             else setText(item);
                         }
                     }

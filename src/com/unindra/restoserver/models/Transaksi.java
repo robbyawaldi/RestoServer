@@ -40,9 +40,13 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     public void simpan() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "INSERT INTO `transaksi` (`no_meja`,`tanggal`) VALUES (:no_meja,:tanggal)";
-            id_transaksi = connection.createQuery(query).executeUpdate().getKey(Integer.class);
-
+            connection.createQuery(query).bind(this).executeUpdate();
+            this.id_transaksi = connection.getKey(Integer.class);
         }
+        List<Item> items = getItems(no_meja);
+        items.forEach(item -> item.simpan(id_transaksi));
+        getTransaksiList().remove(this);
+        items.forEach(item -> getItems().remove(item));
     }
 
     public static boolean isExist(Transaksi transaksi) {
@@ -55,6 +59,16 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .findFirst()
                 .orElse(null);
         return transaksiList.indexOf(toEdit);
+    }
+
+    @SuppressWarnings("unused")
+    public String getNo_meja() {
+        return no_meja;
+    }
+
+    @SuppressWarnings("unused")
+    public Date getTanggal() {
+        return tanggal;
     }
 
     public static ObservableList<Transaksi> getTransaksiList() {
