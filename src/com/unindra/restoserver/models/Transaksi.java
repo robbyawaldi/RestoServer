@@ -49,16 +49,8 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         items.forEach(item -> getItems().remove(item));
     }
 
-    public static boolean isExist(Transaksi transaksi) {
-        return transaksiList.stream().anyMatch(t -> t.no_meja.equals(transaksi.no_meja));
-    }
-
-    public static int getIndex(Transaksi transaksi) {
-        Transaksi toEdit = transaksiList.stream()
-                .filter(t -> t.no_meja.equals(transaksi.no_meja))
-                .findFirst()
-                .orElse(null);
-        return transaksiList.indexOf(toEdit);
+    public static Transaksi oldTransaksi(Transaksi transaksi) {
+        return transaksiList.stream().filter(t -> t.no_meja.equals(transaksi.no_meja)).findFirst().orElse(null);
     }
 
     @SuppressWarnings("unused")

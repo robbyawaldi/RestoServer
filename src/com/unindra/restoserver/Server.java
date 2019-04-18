@@ -108,10 +108,10 @@ class Server {
             response.type("application/json");
 
             Transaksi transaksi = new Transaksi(request.params(":no_meja"));
-            if (isExist(transaksi)) {
-                int index = getIndex(transaksi);
-                getTransaksiList().set(index, transaksi);
-            } else getTransaksiList().add(transaksi);
+            Transaksi oldTransaksi = oldTransaksi(transaksi);
+
+            if (oldTransaksi == null) getTransaksiList().add(transaksi);
+            else getTransaksiList().set(getTransaksiList().indexOf(oldTransaksi), transaksi);
 
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
