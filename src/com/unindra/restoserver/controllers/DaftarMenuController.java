@@ -61,10 +61,6 @@ public class DaftarMenuController implements Initializable {
         menuTableView.selectionModelProperty().addListener((observable, oldValue, newValue) -> System.out.println(observable));
     }
 
-    private Dialog getAlert() {
-        return new Dialog((Stage) actionButton.getScene().getWindow());
-    }
-
     public void actionHandle() {
         if (actionButton.getText().equals("Tambah")) {
             Menu menu = new Menu(
@@ -130,4 +126,7 @@ public class DaftarMenuController implements Initializable {
         deskArea.setText("");
     }
 
+    private Dialog getAlert() {
+        return new Dialog((Stage) actionButton.getScene().getWindow());
+    }
 }
