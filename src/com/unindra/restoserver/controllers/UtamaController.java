@@ -114,7 +114,7 @@ public class UtamaController implements Initializable {
                                         "Anda yakin ingin menolak pesanan ini?",
                                         e -> {
                                             delete(i);
-                                            alert.getAlert().hide();
+                                            alert.getDialog().hide();
                                         });
                             });
                             setGraphic(button);
@@ -201,7 +201,7 @@ public class UtamaController implements Initializable {
                                         tunaiField,
                                         e -> {
                                             System.out.println(tunaiField.getText());
-                                            jumlahTunaiDialog.getAlert().hide();
+                                            jumlahTunaiDialog.getDialog().hide();
                                         });
                             });
                             setGraphic(button);
@@ -232,7 +232,7 @@ public class UtamaController implements Initializable {
                                         e -> {
                                             Transaksi transaksi = getTransaksiList().get(getIndex());
                                             transaksi.simpan();
-                                            confirmDialog.getAlert().hide();
+                                            confirmDialog.getDialog().hide();
                                         });
 
                             });
