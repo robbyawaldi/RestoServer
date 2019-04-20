@@ -37,6 +37,13 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
+    private List<Transaksi> getTransaksiListFromDB() {
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "SELECT * FROM `transaksi`";
+            return connection.createQuery(query).executeAndFetch(Transaksi.class);
+        }
+    }
+
     public void simpan() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "INSERT INTO `transaksi` (`no_meja`,`tanggal`) VALUES (:no_meja,:tanggal)";
