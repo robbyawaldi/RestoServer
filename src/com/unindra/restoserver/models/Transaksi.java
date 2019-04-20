@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.joda.time.LocalDate;
 import org.sql2o.Connection;
 
 import java.util.Date;
@@ -37,11 +38,34 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
-    private List<Transaksi> getTransaksiListFromDB() {
+    private int getTotalHargaFromDB() {
+        List<Item> items = Item.getItems()
+                .stream()
+                .filter(item -> item.getNo_meja().equals(no_meja))
+                .collect(Collectors.toList());
+        return items.stream().mapToInt(Item::getTotal).sum();
+    }
+
+    private static List<Transaksi> getTransaksiListFromDB() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `transaksi`";
             return connection.createQuery(query).executeAndFetch(Transaksi.class);
         }
+    }
+
+    private static List<Transaksi> getTransaksiList(Date tanggal) {
+        return getTransaksiListFromDB()
+                .stream()
+                .filter(transaksi -> new LocalDate(transaksi.getTanggal()).equals(new LocalDate(tanggal)))
+                .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        int jumlah = getTransaksiList(new Date()).size();
+        System.out.println(jumlah);
+        int total = getTransaksiList(new Date())
+                .stream().mapToInt(Transaksi::getTotalHarga).sum();
+        System.out.println(total);
     }
 
     public void simpan() {
@@ -65,7 +89,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return no_meja;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("WeakerAccess")
     public Date getTanggal() {
         return tanggal;
     }
