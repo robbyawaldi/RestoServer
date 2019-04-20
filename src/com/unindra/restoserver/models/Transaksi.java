@@ -39,11 +39,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     private int getTotalHargaFromDB() {
-        List<Item> items = Item.getItems()
-                .stream()
-                .filter(item -> item.getNo_meja().equals(no_meja))
-                .collect(Collectors.toList());
-        return items.stream().mapToInt(Item::getTotal).sum();
+        return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
     }
 
     private static List<Transaksi> getTransaksiListFromDB() {
@@ -64,7 +60,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         int jumlah = getTransaksiList(new Date()).size();
         System.out.println(jumlah);
         int total = getTransaksiList(new Date())
-                .stream().mapToInt(Transaksi::getTotalHarga).sum();
+                .stream().mapToInt(Transaksi::getTotalHargaFromDB).sum();
         System.out.println(total);
     }
 
@@ -82,6 +78,10 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
 
     public static Transaksi oldTransaksi(Transaksi transaksi) {
         return transaksiList.stream().filter(t -> t.no_meja.equals(transaksi.no_meja)).findFirst().orElse(null);
+    }
+
+    int getId_transaksi() {
+        return id_transaksi;
     }
 
     @SuppressWarnings("unused")

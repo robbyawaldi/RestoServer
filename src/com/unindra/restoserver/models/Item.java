@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import org.sql2o.Connection;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
@@ -31,11 +32,18 @@ public class Item extends RecursiveTreeObject<Item> {
         this.status_item = status_item;
     }
 
-    static List<Item> getItems() {
+    private static List<Item> getItems() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `item`";
             return connection.createQuery(query).executeAndFetch(Item.class);
         }
+    }
+
+    static List<Item> getItems(Transaksi transaksi) {
+        return getItems()
+                .stream()
+                .filter(item -> item.getId_transaksi() == transaksi.getId_transaksi())
+                .collect(Collectors.toList());
     }
 
     public void terima() {
