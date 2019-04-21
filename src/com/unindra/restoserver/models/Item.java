@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.unindra.restoserver.models.Level.level;
+import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 
 public class Item extends RecursiveTreeObject<Item> {
@@ -43,6 +44,13 @@ public class Item extends RecursiveTreeObject<Item> {
         return getItems()
                 .stream()
                 .filter(item -> item.getId_transaksi() == transaksi.getId_transaksi())
+                .collect(Collectors.toList());
+    }
+
+    public static List<Item> getItems(Menu menu) {
+        return getItems()
+                .stream()
+                .filter(item -> item.getId_menu() == menu.getId_menu())
                 .collect(Collectors.toList());
     }
 

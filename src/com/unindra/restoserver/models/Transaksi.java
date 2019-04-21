@@ -56,12 +56,14 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .collect(Collectors.toList());
     }
 
-    public static void main(String[] args) {
-        int jumlah = getTransaksiList(new Date()).size();
-        System.out.println(jumlah);
-        int total = getTransaksiList(new Date())
-                .stream().mapToInt(Transaksi::getTotalHargaFromDB).sum();
-        System.out.println(total);
+    private static List<Transaksi> getTransaksiList(int tahun, int bulan) {
+        return getTransaksiListFromDB()
+                .stream()
+                .filter(transaksi -> {
+                    LocalDate localDate = new LocalDate(transaksi.getTanggal());
+                    return localDate.getYear() == tahun && localDate.getMonthOfYear() == bulan;
+                })
+                .collect(Collectors.toList());
     }
 
     public void simpan() {
