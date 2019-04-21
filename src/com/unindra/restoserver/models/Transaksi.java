@@ -38,7 +38,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
-    private int getTotalHargaFromDB() {
+    public int getTotalHargaFromDB() {
         return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
     }
 
@@ -56,7 +56,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .collect(Collectors.toList());
     }
 
-    private static List<Transaksi> getTransaksiList(int tahun, int bulan) {
+    public static List<Transaksi> getTransaksiList(int tahun, int bulan) {
         return getTransaksiListFromDB()
                 .stream()
                 .filter(transaksi -> {

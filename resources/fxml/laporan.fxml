@@ -1,72 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.DaftarMenuController">
+<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.LaporanController">
     <VBox prefWidth="600.0" spacing="20.0">
         <padding>
             <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
         </padding>
-        <Label styleClass="text-judul" text="DAFTAR MENU" />
-        <JFXTreeTableView fx:id="menuTableView" onMouseClicked="#pilihHandle" prefHeight="400.0" showRoot="false" />
+        <BarChart fx:id="barChart" legendVisible="false" title="Laporan Bulanan">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </BarChart>
     </VBox>
     <VBox prefWidth="600.0">
         <padding>
             <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
         </padding>
-        <Label fx:id="titleLabel" styleClass="text-judul" text="TAMBAH MENU" />
-        <Label styleClass="text-body" text="Nama">
-            <VBox.margin>
-                <Insets top="20.0" />
-            </VBox.margin>
-        </Label>
-        <JFXTextField fx:id="namaField" />
-        <HBox spacing="20.0">
-            <VBox.margin>
-                <Insets top="20.0" />
-            </VBox.margin>
-            <VBox>
-                <Label styleClass="text-body" text="Tipe" />
-                <JFXComboBox fx:id="tipeComboBox" prefHeight="25.0" prefWidth="222.0" promptText="Pilih tipe menu..." />
-            </VBox>
-            <VBox HBox.hgrow="ALWAYS">
-                <Label styleClass="text-body" text="Harga" />
-                <JFXTextField fx:id="hargaField" />
-            </VBox>
-        </HBox>
-        <Label layoutX="30.0" layoutY="131.0" styleClass="text-body" text="Deskripsi">
-            <VBox.margin>
-                <Insets top="20.0" />
-            </VBox.margin>
-        </Label>
-        <JFXTextArea fx:id="deskArea" prefHeight="50.0" prefWidth="566.0" />
-        <ButtonBar prefHeight="40.0" prefWidth="200.0">
-            <buttons>
-                <JFXButton fx:id="hapusButton" mnemonicParsing="false" onAction="#hapusHandle" styleClass="hapus" text="Hapus" visible="false">
-                    <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                    </graphic>
-                </JFXButton>
-                <JFXButton fx:id="actionButton" layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#actionHandle" styleClass="tambah" text="Tambah">
-                    <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-                    </graphic>
-                </JFXButton>
-            </buttons>
-            <VBox.margin>
-                <Insets top="20.0" />
-            </VBox.margin>
-        </ButtonBar>
+        <PieChart />
+    </VBox>
+    <VBox layoutX="610.0" layoutY="10.0" prefWidth="600.0">
+        <padding>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+        </padding>
+        <LineChart>
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </LineChart>
     </VBox>
 </FlowPane>
