@@ -22,12 +22,14 @@ public class AppController implements Initializable {
 
     private FlowPane utama;
     private FlowPane daftarmenu;
+    private FlowPane laporan;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             utama = (FlowPane) setPane("utama");
             daftarmenu = (FlowPane) setPane("daftarmenu");
+            laporan = (FlowPane) setPane("laporan");
             scrollPane.setContent(utama);
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,6 +55,7 @@ public class AppController implements Initializable {
             scrollPane.setContent(daftarmenu);
         } else if (laporanButton.equals(source)) {
             laporanButton.getStyleClass().set(2, "laporan-pressed");
+            scrollPane.setContent(laporan);
         }
     }
 }
