@@ -14,7 +14,7 @@
         <padding>
             <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
         </padding>
-        <BarChart fx:id="barChart" legendVisible="false" title="Laporan Bulanan">
+        <BarChart fx:id="barChart" legendVisible="false" prefHeight="300.0" title="Laporan Bulanan">
             <xAxis>
                 <CategoryAxis side="BOTTOM" />
             </xAxis>
@@ -27,13 +27,13 @@
         <padding>
             <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
         </padding>
-        <PieChart />
+        <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="540.0" title="Menu Favorit" />
     </VBox>
     <VBox layoutX="610.0" layoutY="10.0" prefWidth="600.0">
         <padding>
             <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
         </padding>
-        <LineChart>
+        <LineChart fx:id="lineChart" legendVisible="false" prefHeight="300.0" prefWidth="540.0" title="Kunjungan">
             <xAxis>
                 <CategoryAxis side="BOTTOM" />
             </xAxis>
