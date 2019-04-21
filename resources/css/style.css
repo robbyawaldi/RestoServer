@@ -65,6 +65,14 @@
 .ubah {
     -fx-graphic: url('/icons/icons8-compose-30.png');
 }
+
+.print-30 {
+    -fx-graphic: url('/icons/icons8-print-filled-30.png');
+}
+
+.print-20 {
+    -fx-graphic: url('/icons/icons8-print-filled-20.png');
+}
 /*******************************************************************************
  *                                                                             *
  * Pane  			                                                           *
