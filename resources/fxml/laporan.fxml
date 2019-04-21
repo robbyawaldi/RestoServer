@@ -1,18 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.LaporanController">
-    <VBox prefWidth="600.0" spacing="20.0">
+<FlowPane prefHeight="620.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.LaporanController">
+    <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="300.0" prefWidth="600.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
+            <Insets left="30.0" right="20.0" top="5.0"/>
+        </padding>
+        <Label text="Laporan Harian">
+           <font>
+               <Font size="18.0"/>
+           </font>
+        </Label>
+        <GridPane vgap="20.0" VBox.vgrow="ALWAYS">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="481.0" minWidth="10.0" prefWidth="470.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="80.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <VBox.margin>
+                <Insets bottom="5.0"/>
+            </VBox.margin>
+            <Label text="Total Transaksi" GridPane.rowIndex="1"/>
+            <Label text="Pemasukan" GridPane.rowIndex="2"/>
+            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Label text="Menu Favorit" GridPane.rowIndex="3"/>
+            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Label text="Tanggal"/>
+            <Label text="Label" GridPane.columnIndex="1"/>
+        </GridPane>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+           <buttons>
+               <JFXButton focusTraversable="false" mnemonicParsing="false" text="Cetak Rincian"/>
+           </buttons>
+        </ButtonBar>
+    </VBox>
+    <VBox prefHeight="300.0" prefWidth="600.0">
+        <padding>
+            <Insets right="20.0" />
         </padding>
         <BarChart fx:id="barChart" legendVisible="false" prefHeight="300.0" title="Laporan Bulanan">
             <xAxis>
@@ -22,16 +67,26 @@
                 <NumberAxis side="LEFT" />
             </yAxis>
         </BarChart>
+      <ButtonBar prefWidth="200.0">
+         <buttons>
+            <JFXButton focusTraversable="false" mnemonicParsing="false" text="Cetak Rincian" />
+         </buttons>
+      </ButtonBar>
     </VBox>
-    <VBox prefWidth="600.0">
+    <VBox prefHeight="320.0" prefWidth="600.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            <Insets bottom="20.0" right="20.0" />
         </padding>
         <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="540.0" title="Menu Favorit" />
+      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+         <buttons>
+            <JFXButton focusTraversable="false" mnemonicParsing="false" text="Cetak Rincian" />
+         </buttons>
+      </ButtonBar>
     </VBox>
-    <VBox layoutX="610.0" layoutY="10.0" prefWidth="600.0">
+    <VBox layoutX="610.0" layoutY="10.0" prefHeight="320.0" prefWidth="600.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            <Insets bottom="20.0" right="20.0" />
         </padding>
         <LineChart fx:id="lineChart" legendVisible="false" prefHeight="300.0" prefWidth="540.0" title="Kunjungan">
             <xAxis>
@@ -41,5 +96,10 @@
                 <NumberAxis side="LEFT" />
             </yAxis>
         </LineChart>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+         <buttons>
+            <JFXButton focusTraversable="false" mnemonicParsing="false" text="Cetak Rincian" />
+         </buttons>
+      </ButtonBar>
     </VBox>
 </FlowPane>

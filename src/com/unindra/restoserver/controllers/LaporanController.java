@@ -42,7 +42,7 @@ public class LaporanController implements Initializable {
         }
         barChart.getData().addAll(seriesBar);
         barChart.getXAxis().setLabel("Bulan");
-        barChart.getYAxis().setLabel("Pendapatan (Rp)");
+        barChart.getYAxis().setLabel("Pemasukan (Rp)");
 
         ObservableList<PieChart.Data> pieObservableList = FXCollections.observableArrayList();
         for (Menu menu : getMenus())
