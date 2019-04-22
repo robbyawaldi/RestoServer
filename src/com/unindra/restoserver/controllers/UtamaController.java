@@ -163,7 +163,7 @@ public class UtamaController implements Initializable {
                             setGraphic(null);
                             setText(null);
                         } else {
-                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.getStyleClass().add("print-20");
                             button.setOnAction(event -> {
 
                             });
@@ -187,7 +187,7 @@ public class UtamaController implements Initializable {
                             setGraphic(null);
                             setText(null);
                         } else {
-                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.getStyleClass().add("print-20");
                             button.setOnAction(event -> {
                                 Dialog jumlahTunaiDialog = new Dialog((Stage) pesananTableView.getScene().getWindow());
                                 JFXTextField tunaiField = new JFXTextField();
