@@ -74,6 +74,11 @@
     -fx-graphic: url('/icons/icons8-print-filled-20.png');
     -fx-background-color: #EAEAEA;
 }
+
+.simpan {
+    -fx-graphic: url('/icons/icons8-save-filled-20.png');
+    -fx-background-color: #EAEAEA;
+}
 /*******************************************************************************
  *                                k                                             *
  * Pane  			                                                           *
