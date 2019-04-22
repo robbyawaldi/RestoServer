@@ -93,8 +93,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
         }
     }
 
-    @SuppressWarnings("unused")
-    public int getId_menu() {
+    int getId_menu() {
         return id_menu;
     }
 
