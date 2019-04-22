@@ -224,7 +224,7 @@ public class UtamaController implements Initializable {
                             setGraphic(null);
                             setText(null);
                         } else {
-                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.getStyleClass().add("simpan");
                             button.setOnAction(event -> {
                                 Dialog confirmDialog = new Dialog((Stage) pesananTableView.getScene().getWindow());
                                 confirmDialog.confirmation(
