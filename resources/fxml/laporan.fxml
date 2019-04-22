@@ -42,12 +42,12 @@
             </VBox.margin>
             <Label text="Total Transaksi" GridPane.rowIndex="1" />
             <Label text="Pemasukan" GridPane.rowIndex="2" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="totalTransaksiLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="pemasukanLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Menu Favorit" GridPane.rowIndex="3" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="menufavLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Tanggal" />
-            <Label text="Label" GridPane.columnIndex="1" />
+            <Label fx:id="tglLabel" text="Label" GridPane.columnIndex="1" />
         </GridPane>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
            <buttons>

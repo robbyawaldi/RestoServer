@@ -48,10 +48,10 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         }
     }
 
-    private static List<Transaksi> getTransaksiList(Date tanggal) {
+    public static List<Transaksi> getTransaksiList(LocalDate tanggal) {
         return getTransaksiListFromDB()
                 .stream()
-                .filter(transaksi -> new LocalDate(transaksi.getTanggal()).equals(new LocalDate(tanggal)))
+                .filter(transaksi -> new LocalDate(transaksi.getTanggal()).equals(tanggal))
                 .collect(Collectors.toList());
     }
 
@@ -81,7 +81,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return transaksiList.stream().filter(t -> t.no_meja.equals(transaksi.no_meja)).findFirst().orElse(null);
     }
 
-    int getId_transaksi() {
+    public int getId_transaksi() {
         return id_transaksi;
     }
 

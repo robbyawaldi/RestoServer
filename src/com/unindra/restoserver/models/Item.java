@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.unindra.restoserver.models.Level.level;
-import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 
 public class Item extends RecursiveTreeObject<Item> {
@@ -71,7 +70,6 @@ public class Item extends RecursiveTreeObject<Item> {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
-    @SuppressWarnings("unused")
     public int getId_transaksi() {
         return id_transaksi;
     }
