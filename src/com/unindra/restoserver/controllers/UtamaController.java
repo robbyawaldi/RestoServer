@@ -26,7 +26,6 @@ import java.util.function.Predicate;
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
-import static java.util.Objects.requireNonNull;
 
 public class UtamaController implements Initializable {
 
@@ -58,7 +57,7 @@ public class UtamaController implements Initializable {
                             setText(null);
                         } else {
                             Item i = getItems().get(getIndex());
-                            if (requireNonNull(menu(i)).getTipe_menu().equals("ramen"))
+                            if (menu(i).getTipe_menu().equals("ramen"))
                                 setText(item + " lv." + i.getLevel_item());
                             else setText(item);
                         }
@@ -79,7 +78,7 @@ public class UtamaController implements Initializable {
                             setGraphic(null);
                             setText(null);
                         } else {
-                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.getStyleClass().add("terima");
                             button.setOnAction(event -> {
                                 Item i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();
                                 i.terima();
@@ -105,7 +104,7 @@ public class UtamaController implements Initializable {
                             setGraphic(null);
                             setText(null);
                         } else {
-                            button.setStyle("-fx-background-color: #EAEAEA");
+                            button.getStyleClass().add("tolak");
                             button.setOnAction(event -> {
                                 Dialog alert = new Dialog((Stage) pesananTableView.getScene().getWindow());
                                 Item i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();

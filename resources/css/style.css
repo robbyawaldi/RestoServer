@@ -77,6 +77,14 @@
 .simpan {
     -fx-graphic: url('/icons/icons8-save-filled-20.png');
 }
+
+.terima {
+    -fx-graphic: url('/icons/icons8-checked-20.png');
+}
+
+.tolak {
+    -fx-graphic: url('/icons/icons8-waste-20.png');
+}
 /*******************************************************************************
  *                                k                                             *
  * Pane  			                                                           *
