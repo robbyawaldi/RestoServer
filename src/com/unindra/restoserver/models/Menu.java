@@ -7,9 +7,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.joda.time.LocalDate;
 import org.sql2o.Connection;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import static com.unindra.restoserver.Rupiah.rupiah;
+import static com.unindra.restoserver.models.Item.getItems;
+import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Menu extends RecursiveTreeObject<Menu> {
     private int id_menu;
@@ -45,6 +51,20 @@ public class Menu extends RecursiveTreeObject<Menu> {
             final String query = "SELECT * FROM `menu`";
             menus.setAll(connection.createQuery(query).executeAndFetch(Menu.class));
         }
+    }
+
+    public static Menu menu(LocalDate localDate) {
+        AtomicReference<Menu> menufav = new AtomicReference<>(
+                new Menu(0, "tidak ada", "", 0, ""));
+        AtomicInteger jumlahAtomic = new AtomicInteger();
+        for (Menu menu : getMenus()) {
+            int jumlah = getItems(menu, getTransaksiList(localDate)).size();
+            if (jumlahAtomic.get() < jumlah) {
+                menufav.set(menu);
+                jumlahAtomic.set(jumlah);
+            }
+        }
+        return menufav.get();
     }
 
     public static Menu menu(Item item) {

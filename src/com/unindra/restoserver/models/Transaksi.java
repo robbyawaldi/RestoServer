@@ -29,7 +29,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         this.tanggal = new Date();
     }
 
-    private int getTotalHarga() {
+    private int getTotalBayar() {
         List<Item> items = getItems()
                 .stream()
                 .filter(item -> item.getNo_meja().equals(no_meja))
@@ -37,7 +37,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return items.stream().mapToInt(Item::getTotal).sum();
     }
 
-    public int getTotalHargaFromDB() {
+    public int getTotalBayarFromDB() {
         return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
     }
 
@@ -104,7 +104,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     public StringProperty totalProperty() {
-        return new SimpleStringProperty(rupiah(getTotalHarga()));
+        return new SimpleStringProperty(rupiah(getTotalBayar()));
     }
 
     @Override

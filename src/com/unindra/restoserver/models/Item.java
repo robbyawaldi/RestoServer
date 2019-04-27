@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import org.sql2o.Connection;
 
 import java.util.List;
@@ -46,6 +47,18 @@ public class Item extends RecursiveTreeObject<Item> {
                 .collect(Collectors.toList());
     }
 
+    public static List<Item> getItems(Menu menu, List<Transaksi> transaksiList) {
+        List<Item> items = getItems(menu);
+        List<Item> filterItems = FXCollections.observableArrayList();
+        for (Transaksi transaksi : transaksiList) {
+            filterItems.addAll(
+                    items.stream()
+                            .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
+                            .collect(Collectors.toList()));
+        }
+        return filterItems;
+    }
+
     public static List<Item> getItems(Menu menu) {
         return getItems()
                 .stream()
@@ -70,6 +83,7 @@ public class Item extends RecursiveTreeObject<Item> {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public int getId_transaksi() {
         return id_transaksi;
     }
