@@ -19,6 +19,12 @@ public class ItemService {
         return items.stream().filter(item -> item.getNo_meja().equals(no_meja)).collect(Collectors.toList());
     }
 
+    public static List<Item> getItems(Transaksi transaksi) {
+        return items.stream()
+                .filter(item -> item.getId_transaksi() == transaksi.getId_transaksi())
+                .collect(Collectors.toList());
+    }
+
     public static void add(Item item) {
         item.setId_item(count.getAndIncrement());
         items.add(item);

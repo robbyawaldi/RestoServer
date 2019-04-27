@@ -2,6 +2,8 @@ package com.unindra.restoserver;
 
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -13,10 +15,12 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.unindra.restoserver.models.Item;
+import com.unindra.restoserver.models.ItemService;
 import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.collections.FXCollections;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.joda.time.YearMonth;
 
 import java.awt.*;
@@ -210,6 +214,68 @@ public class Laporan {
 
         document.add(new Paragraph("Tabel Kunjungan").setMarginTop(10).setFont(boldFont));
         document.add(transaksiTable);
+        document.close();
+        showReport(fileName);
+    }
+
+    public static void bill(Transaksi transaksi) throws IOException {
+        List<Item> items = ItemService.getItems(transaksi);
+
+        String fileName = "bill.pdf";
+        PdfFont boldFont = PdfFontFactory.createFont(bold, true);
+        LocalDate localDate = new LocalDate(new Date());
+
+        PdfWriter writer = new PdfWriter(fileName);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf, new PageSize(new Rectangle(226.8f, 600f)));
+
+        document.add(
+                new Paragraph()
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontSize(5)
+                        .add(new Text("OSAKA RAMEN").setFont(boldFont))
+                        .add("\n-----------------------------------------------------------------------------------------\n")
+                        .add("No Meja:")
+                        .add(items.get(0).getNo_meja())
+                        .add("\tNo transaksi:")
+                        .add(String.valueOf(transaksi.getId_transaksi()))
+                        .add("\tTanggal:")
+                        .add(localDate+" "+new LocalTime().toString().substring(0, 8))
+                        .add("\n-----------------------------------------------------------------------------------------\n")
+        );
+
+        Table itemsTable = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 30),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 50),}, true);
+
+        itemsTable.setFontSize(6);
+        itemsTable.setTextAlignment(TextAlignment.CENTER);
+
+        items.forEach(item -> {
+            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
+            itemsTable.addCell(cellNoBorder(item.getJumlah_item()+"x"));
+            itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
+        });
+
+        document.add(itemsTable);
+
+        document.add(
+                new Paragraph()
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontSize(5)
+                        .add("-----------------------------------------------------------------------------------------")
+        );
+
+        Table footerTable = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 50),}, true);
+
+        footerTable.setTextAlignment(TextAlignment.RIGHT);
+        footerTable.addCell(cellNoBorder("Total").setFontSize(8));
+        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(8));
+
+        document.add(footerTable);
         document.close();
         showReport(fileName);
     }

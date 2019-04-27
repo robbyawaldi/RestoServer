@@ -29,7 +29,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         this.tanggal = new Date();
     }
 
-    private int getTotalBayar() {
+    public int getTotalBayar() {
         List<Item> items = getItems()
                 .stream()
                 .filter(item -> item.getNo_meja().equals(no_meja))

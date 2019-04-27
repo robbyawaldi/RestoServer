@@ -79,7 +79,7 @@ public class Item extends RecursiveTreeObject<Item> {
         }
     }
 
-    int getTotal() {
+    public int getTotal() {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
@@ -109,7 +109,7 @@ public class Item extends RecursiveTreeObject<Item> {
         return level_item;
     }
 
-    String getNo_meja() {
+    public String getNo_meja() {
         return no_meja;
     }
 

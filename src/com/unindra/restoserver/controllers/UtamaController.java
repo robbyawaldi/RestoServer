@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.Dialog;
+import com.unindra.restoserver.Laporan;
 import com.unindra.restoserver.models.Item;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +20,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -164,7 +166,15 @@ public class UtamaController implements Initializable {
                         } else {
                             button.getStyleClass().add("print-20");
                             button.setOnAction(event -> {
-
+                                Transaksi transaksi = getTransaksiList().get(getIndex());
+                                Thread thread = new Thread(() -> {
+                                    try {
+                                        Laporan.bill(transaksi);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+                                thread.start();
                             });
                             setGraphic(button);
                             setText(null);
