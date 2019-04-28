@@ -116,7 +116,6 @@ public class Laporan {
         transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
 
-
         AtomicInteger forMinusMonths = new AtomicInteger(0);
         while (true) {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(forMinusMonths.get()));
