@@ -56,6 +56,6 @@ public class AppController implements Initializable {
         } else if (laporanButton.equals(source)) {
             laporanButton.getStyleClass().set(2, "laporan-pressed");
             scrollPane.setContent(laporan);
-        }
+        } else System.exit(0);
     }
 }
