@@ -237,8 +237,6 @@ public class Laporan {
                         .add("\n-----------------------------------------------------------------------------------------\n")
                         .add("No Meja:")
                         .add(items.get(0).getNo_meja())
-                        .add("\tNo transaksi:")
-                        .add(String.valueOf(transaksi.getId_transaksi()))
                         .add("\tTanggal:")
                         .add(localDate+" "+new LocalTime().toString().substring(0, 8))
                         .add("\n-----------------------------------------------------------------------------------------\n")
@@ -272,8 +270,73 @@ public class Laporan {
                 new UnitValue(UnitValue.PERCENT, 50),}, true);
 
         footerTable.setTextAlignment(TextAlignment.RIGHT);
-        footerTable.addCell(cellNoBorder("Total").setFontSize(8));
-        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(8));
+        footerTable.addCell(cellNoBorder("Total").setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(6));
+
+        document.add(footerTable);
+        document.close();
+        showReport(fileName);
+    }
+
+    public static void struk(Transaksi transaksi, int tunai) throws IOException {
+        List<Item> items = ItemService.getItems(transaksi);
+
+        String fileName = "struk.pdf";
+        PdfFont boldFont = PdfFontFactory.createFont(bold, true);
+        LocalDate localDate = new LocalDate(new Date());
+
+        PdfWriter writer = new PdfWriter(fileName);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf, new PageSize(new Rectangle(226.8f, 600f)));
+
+        document.add(
+                new Paragraph()
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontSize(5)
+                        .add(new Text("OSAKA RAMEN").setFont(boldFont))
+                        .add("\nJl. Keadilan No. 23G, Rangkapan Jaya Baru, Pancoran Mas, Kota Depok Jawa Barat")
+                        .add("\n-----------------------------------------------------------------------------------------\n")
+                        .add("No Meja:")
+                        .add(items.get(0).getNo_meja())
+                        .add("\tTanggal:")
+                        .add(localDate+" "+new LocalTime().toString().substring(0, 8))
+                        .add("\n-----------------------------------------------------------------------------------------\n")
+        );
+
+        Table itemsTable = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 30),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 50),}, true);
+
+        itemsTable.setFontSize(6);
+        itemsTable.setTextAlignment(TextAlignment.CENTER);
+
+        items.forEach(item -> {
+            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
+            itemsTable.addCell(cellNoBorder(item.getJumlah_item()+"x"));
+            itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
+        });
+
+        document.add(itemsTable);
+
+        document.add(
+                new Paragraph()
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontSize(5)
+                        .add("-----------------------------------------------------------------------------------------")
+        );
+
+        Table footerTable = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 50),}, true);
+
+        footerTable.setTextAlignment(TextAlignment.RIGHT);
+        footerTable.addCell(cellNoBorder("Total").setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(6));
+        footerTable.addCell(cellNoBorder("Tunai").setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(tunai)).setFontSize(6));
+        footerTable.addCell(cellNoBorder("Kembali").setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(tunai - transaksi.getTotalBayar())).setFontSize(6));
 
         document.add(footerTable);
         document.close();

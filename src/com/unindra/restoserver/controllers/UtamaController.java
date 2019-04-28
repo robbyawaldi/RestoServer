@@ -166,8 +166,8 @@ public class UtamaController implements Initializable {
                         } else {
                             button.getStyleClass().add("print-20");
                             button.setOnAction(event -> {
-                                Transaksi transaksi = getTransaksiList().get(getIndex());
                                 Thread thread = new Thread(() -> {
+                                    Transaksi transaksi = getTransaksiList().get(getIndex());
                                     try {
                                         Laporan.bill(transaksi);
                                     } catch (IOException e) {
@@ -209,7 +209,15 @@ public class UtamaController implements Initializable {
                                 jumlahTunaiDialog.input(
                                         tunaiField,
                                         e -> {
-                                            System.out.println(tunaiField.getText());
+                                            Thread thread = new Thread(() -> {
+                                                Transaksi transaksi = getTransaksiList().get(getIndex());
+                                                try {
+                                                    Laporan.struk(transaksi, Integer.parseInt(tunaiField.getText()));
+                                                } catch (IOException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                            });
+                                            thread.start();
                                             jumlahTunaiDialog.getDialog().hide();
                                         });
                             });

@@ -26,11 +26,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
     @Expose
     private static ObservableList<Menu> menus = FXCollections.observableArrayList();
 
-    public static ObservableList<Menu> getMenus() {
-        updateMenu();
-        return menus;
-    }
-
     public Menu(int id_menu, String nama_menu, String type, int harga_menu, String deskripsi) {
         this.id_menu = id_menu;
         this.nama_menu = nama_menu;
@@ -44,6 +39,14 @@ public class Menu extends RecursiveTreeObject<Menu> {
         this.tipe_menu = tipe_menu;
         this.harga_menu = harga_menu;
         this.deskripsi = deskripsi;
+    }
+
+    static {
+        updateMenu();
+    }
+
+    public static ObservableList<Menu> getMenus() {
+        return menus;
     }
 
     private static void updateMenu() {
