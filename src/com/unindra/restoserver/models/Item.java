@@ -34,13 +34,14 @@ public class Item extends RecursiveTreeObject<Item> {
         this.status_item = status_item;
     }
 
-    // Void
+    // Terima
     public void terima() {
         status_item = "diproses";
     }
 
-    void simpan(int id_transaksi) {
-        this.id_transaksi = id_transaksi;
+    // Simpan
+    void simpan(Transaksi transaksi) {
+        this.id_transaksi = transaksi.getId_transaksi();
         try (Connection connection = DB.sql2o.open()) {
             final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
                     " VALUES (:id_transaksi,:id_menu,:jumlah_item,:level_item)";
@@ -85,8 +86,6 @@ public class Item extends RecursiveTreeObject<Item> {
     public int getTotal() {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
-
-
 
     int getId_transaksi() {
         return id_transaksi;

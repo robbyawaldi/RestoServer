@@ -31,13 +31,14 @@ public class ItemService {
         return status;
     }
 
-    // add update delete
+    // Add
     public static void add(Item item) {
         item.setId_item(count.getAndIncrement());
         items.add(item);
         status = StatusItem.CHANGED;
     }
 
+    // Update
     public static boolean update(Item item) {
         Item toEdit = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
         if (toEdit != null) {
@@ -47,6 +48,7 @@ public class ItemService {
         } else return false;
     }
 
+    // Delete
     public static boolean delete(Item item) {
         Item toDelete = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
         if (toDelete != null) {
