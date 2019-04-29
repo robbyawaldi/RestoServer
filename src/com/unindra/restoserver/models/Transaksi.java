@@ -38,10 +38,6 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     // Getter
-    public int getTotalBayar() {
-        return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
-    }
-
     private static List<Transaksi> getTransaksiList() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `transaksi`";
@@ -66,6 +62,18 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .collect(Collectors.toList());
     }
 
+    public int getTotalBayar() {
+        return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
+    }
+
+    private int getTotalBayarFromService() {
+        return ItemService.getItems().stream()
+                .filter(item -> item.getNo_meja().equals(no_meja))
+                .collect(Collectors.toList()).stream()
+                .mapToInt(Item::getTotal)
+                .sum();
+    }
+
     public int getId_transaksi() {
         return id_transaksi;
     }
@@ -84,7 +92,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     public StringProperty totalProperty() {
-        return new SimpleStringProperty(rupiah(ItemService.getTotalBayar(this)));
+        return new SimpleStringProperty(rupiah(getTotalBayarFromService()));
     }
 
     @Override
