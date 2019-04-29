@@ -86,6 +86,8 @@ public class Item extends RecursiveTreeObject<Item> {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
+
+
     int getId_transaksi() {
         return id_transaksi;
     }

@@ -27,6 +27,14 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+    static int getTotalBayar(Transaksi transaksi) {
+        return items.stream()
+                .filter(item -> item.getNo_meja().equals(transaksi.getNo_meja()))
+                .collect(Collectors.toList()).stream()
+                .mapToInt(Item::getTotal)
+                .sum();
+    }
+
     public static StatusItem getStatus() {
         return status;
     }

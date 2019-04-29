@@ -69,7 +69,7 @@ public class Laporan {
                         rupiah(
                                 transaksiList
                                         .stream()
-                                        .mapToInt(Transaksi::getTotalBayarFromDB)
+                                        .mapToInt(Transaksi::getTotalBayar)
                                         .sum())));
         detailTable.addCell(cellNoBorder("Menu Favorit:"));
         detailTable.addCell(cellNoBorder(menu(localDate).getNama_menu()));
@@ -86,7 +86,7 @@ public class Laporan {
         transaksiList.forEach(transaksi -> {
             transaksiTable.addCell(cell(String.valueOf(transaksi.getId_transaksi())));
             transaksiTable.addCell(cell(transaksi.getNo_meja()));
-            transaksiTable.addCell(cell(rupiah(transaksi.getTotalBayarFromDB())));
+            transaksiTable.addCell(cell(rupiah(transaksi.getTotalBayar())));
         });
 
         document.add(transaksiTable.setMarginTop(10));
@@ -121,7 +121,7 @@ public class Laporan {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(forMinusMonths.get()));
             int totalPemasukan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear())
                     .stream()
-                    .mapToInt(Transaksi::getTotalBayarFromDB)
+                    .mapToInt(Transaksi::getTotalBayar)
                     .sum();
             if (totalPemasukan == 0) break;
             transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));

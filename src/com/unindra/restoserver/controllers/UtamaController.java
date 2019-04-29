@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 
 import static com.unindra.restoserver.models.ItemService.*;
 import static com.unindra.restoserver.models.Menu.menu;
-import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
+import static com.unindra.restoserver.models.TransaksiService.getTransaksiList;
 
 public class UtamaController implements Initializable {
 

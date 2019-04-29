@@ -44,7 +44,7 @@ public class LaporanController implements Initializable {
         totalTransaksiLabel.setText(String.valueOf(getTransaksiList(localDate).size()));
         pemasukanLabel.setText(rupiah(getTransaksiList(localDate)
                 .stream()
-                .mapToInt(Transaksi::getTotalBayarFromDB)
+                .mapToInt(Transaksi::getTotalBayar)
                 .sum()));
         menufavLabel.setText(menu(localDate).getNama_menu());
 
@@ -56,7 +56,7 @@ public class LaporanController implements Initializable {
             Integer totalPendapatan = getTransaksiList(
                     yearMonth.getYear(), yearMonth.getMonthOfYear())
                     .stream()
-                    .mapToInt(Transaksi::getTotalBayarFromDB)
+                    .mapToInt(Transaksi::getTotalBayar)
                     .sum();
             seriesBar.getData().add(new XYChart.Data(bulan, totalPendapatan));
         }
