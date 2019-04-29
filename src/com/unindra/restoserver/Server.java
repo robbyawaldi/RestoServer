@@ -11,7 +11,7 @@ import javafx.collections.FXCollections;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.ItemService.delete;
 import static com.unindra.restoserver.models.ItemService.*;
-import static com.unindra.restoserver.models.Level.levelList;
+import static com.unindra.restoserver.models.Level.getLevelList;
 import static com.unindra.restoserver.models.Transaksi.*;
 import static spark.Spark.delete;
 import static spark.Spark.*;
@@ -101,7 +101,7 @@ class Server {
 
             return gson.toJson(new StandardResponse(
                     StatusResponse.SUCCESS,
-                    gson.toJsonTree(levelList()))
+                    gson.toJsonTree(getLevelList()))
             );
         });
 

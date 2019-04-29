@@ -7,12 +7,14 @@ public class Level {
     private int level_item;
     private int harga_level;
 
+    // Constructor
     private Level(int level, int harga_level) {
         this.level_item = level;
         this.harga_level = harga_level;
     }
 
-    public static List<Level> levelList() {
+    // Getter
+    public static List<Level> getLevelList() {
         return Arrays.asList(
                 new Level(0, 0),
                 new Level(1, 0),
@@ -29,18 +31,10 @@ public class Level {
     }
 
     static Level level(int level) {
-        return levelList().stream().filter(l -> l.level_item == level).findFirst().orElse(null);
+        return getLevelList().stream().filter(l -> l.level_item == level).findFirst().orElse(null);
     }
 
     int getHarga_level() {
         return harga_level;
-    }
-
-    @Override
-    public String toString() {
-        return "Level{" +
-                "level_item=" + level_item +
-                ", harga_level=" + harga_level +
-                '}';
     }
 }
