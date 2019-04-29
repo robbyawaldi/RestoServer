@@ -24,6 +24,7 @@ public class Item extends RecursiveTreeObject<Item> {
     private String no_meja;
     private String status_item;
 
+    // Constructor
     public Item(int id_item, int id_menu, int jumlah_item, int lvl_item, String no_meja, String status_item) {
         this.id_item = id_item;
         this.id_menu = id_menu;
@@ -33,6 +34,21 @@ public class Item extends RecursiveTreeObject<Item> {
         this.status_item = status_item;
     }
 
+    // Void
+    public void terima() {
+        status_item = "diproses";
+    }
+
+    void simpan(int id_transaksi) {
+        this.id_transaksi = id_transaksi;
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
+                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:level_item)";
+            connection.createQuery(query).bind(this).executeUpdate();
+        }
+    }
+
+    // Getter
     private static List<Item> getItems() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `item`";
@@ -66,39 +82,20 @@ public class Item extends RecursiveTreeObject<Item> {
                 .collect(Collectors.toList());
     }
 
-    public void terima() {
-        status_item = "diproses";
-    }
-
-    void simpan(int id_transaksi) {
-        this.id_transaksi = id_transaksi;
-        try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
-                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:level_item)";
-            connection.createQuery(query).bind(this).executeUpdate();
-        }
-    }
-
     public int getTotal() {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public int getId_transaksi() {
+    int getId_transaksi() {
         return id_transaksi;
     }
 
-    @SuppressWarnings("unused")
     public int getJumlah_item() {
         return jumlah_item;
     }
 
     int getId_item() {
         return id_item;
-    }
-
-    void setId_item(int id_item) {
-        this.id_item = id_item;
     }
 
     int getId_menu() {
@@ -117,6 +114,12 @@ public class Item extends RecursiveTreeObject<Item> {
         return status_item;
     }
 
+    // Setter
+    void setId_item(int id_item) {
+        this.id_item = id_item;
+    }
+
+    // Property
     public ObjectProperty<Integer> jumlahProperty() {
         return new SimpleObjectProperty<>(jumlah_item);
     }
@@ -125,6 +128,7 @@ public class Item extends RecursiveTreeObject<Item> {
         return new SimpleStringProperty(no_meja);
     }
 
+    // toString
     @Override
     public String toString() {
         return "Item{" +
