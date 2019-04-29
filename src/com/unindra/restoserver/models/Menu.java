@@ -26,6 +26,11 @@ public class Menu extends RecursiveTreeObject<Menu> {
     @Expose
     private static ObservableList<Menu> menus = FXCollections.observableArrayList();
 
+    static {
+        updateMenu();
+    }
+
+    // Constructor
     public Menu(int id_menu, String nama_menu, String type, int harga_menu, String deskripsi) {
         this.id_menu = id_menu;
         this.nama_menu = nama_menu;
@@ -41,14 +46,11 @@ public class Menu extends RecursiveTreeObject<Menu> {
         this.deskripsi = deskripsi;
     }
 
-    static {
-        updateMenu();
-    }
-
     public static ObservableList<Menu> getMenus() {
         return menus;
     }
 
+    // Sinkronisasi collections dengan database
     private static void updateMenu() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `menu`";
@@ -56,6 +58,46 @@ public class Menu extends RecursiveTreeObject<Menu> {
         }
     }
 
+    // add update delete
+    public boolean add() {
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "INSERT INTO `menu` (`nama_menu`, `tipe_menu`, `harga_menu`, `deskripsi`) " +
+                    "VALUES (:nama_menu, :tipe_menu, :harga_menu, :deskripsi)";
+            connection.createQuery(query).bind(this).executeUpdate();
+            if (connection.getResult() > 0) {
+                updateMenu();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public boolean update() {
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "UPDATE `menu` SET `nama_menu` = :nama_menu, `tipe_menu` = :tipe_menu, " +
+                    "`harga_menu` = :harga_menu, `deskripsi` = :deskripsi WHERE `id_menu` = :id_menu";
+            connection.createQuery(query).bind(this).executeUpdate();
+            if (connection.getResult() > 0) {
+                updateMenu();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public boolean delete() {
+        try (Connection connection = DB.sql2o.open()) {
+            final String query = "DELETE FROM `menu` WHERE `id_menu` = :id_menu";
+            connection.createQuery(query).bind(this).executeUpdate();
+            if (connection.getResult() > 0) {
+                updateMenu();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // Getter
     public static Menu menu(LocalDate localDate) {
         AtomicReference<Menu> menufav = new AtomicReference<>(
                 new Menu(0, "tidak ada", "", 0, ""));
@@ -78,44 +120,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
                 .orElse(null);
     }
 
-    public boolean tambah() {
-        try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `menu` (`nama_menu`, `tipe_menu`, `harga_menu`, `deskripsi`) " +
-                    "VALUES (:nama_menu, :tipe_menu, :harga_menu, :deskripsi)";
-            connection.createQuery(query).bind(this).executeUpdate();
-            if (connection.getResult() > 0) {
-                updateMenu();
-                return true;
-            }
-            return false;
-        }
-    }
-
-    public boolean hapus() {
-        try (Connection connection = DB.sql2o.open()) {
-            final String query = "DELETE FROM `menu` WHERE `id_menu` = :id_menu";
-            connection.createQuery(query).bind(this).executeUpdate();
-            if (connection.getResult() > 0) {
-                updateMenu();
-                return true;
-            }
-            return false;
-        }
-    }
-
-    public boolean ubah() {
-        try (Connection connection = DB.sql2o.open()) {
-            final String query = "UPDATE `menu` SET `nama_menu` = :nama_menu, `tipe_menu` = :tipe_menu, " +
-                    "`harga_menu` = :harga_menu, `deskripsi` = :deskripsi WHERE `id_menu` = :id_menu";
-            connection.createQuery(query).bind(this).executeUpdate();
-            if (connection.getResult() > 0) {
-                updateMenu();
-                return true;
-            }
-            return false;
-        }
-    }
-
     int getId_menu() {
         return id_menu;
     }
@@ -136,6 +140,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return deskripsi;
     }
 
+    // Setter
     public void setNama_menu(String nama_menu) {
         this.nama_menu = nama_menu;
     }
@@ -152,6 +157,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
         this.deskripsi = deskripsi;
     }
 
+    // Property
     public StringProperty namaProperty() {
         return new SimpleStringProperty(nama_menu);
     }

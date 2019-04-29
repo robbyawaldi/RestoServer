@@ -68,7 +68,7 @@ public class DaftarMenuController implements Initializable {
                     tipeComboBox.getSelectionModel().getSelectedItem(),
                     Integer.valueOf(hargaField.getText()),
                     deskArea.getText());
-            if (menu.tambah()) {
+            if (menu.add()) {
                 getDialog().information("Berhasil!", "Menu berhasil ditambahkan");
                 reset();
             }
@@ -78,7 +78,7 @@ public class DaftarMenuController implements Initializable {
             menu.setTipe_menu(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
             menu.setDeskripsi(deskArea.getText());
-            if (menu.ubah()) {
+            if (menu.update()) {
                 getDialog().information("Berhasil!", "Menu berhasil diubah");
                 reset();
             } else getDialog().information("Gagal", "Menu gagal diubah");
@@ -96,7 +96,7 @@ public class DaftarMenuController implements Initializable {
             titleLabel.setText("UBAH MENU");
             hapusButton.setVisible(true);
             actionButton.setText("Ubah");
-            actionButton.getStyleClass().set(2, "ubah");
+            actionButton.getStyleClass().set(2, "update");
         }
         if (mouseEvent.getClickCount() == 2) reset();
     }
@@ -107,7 +107,7 @@ public class DaftarMenuController implements Initializable {
                 "Anda yakin ingin menghapus menu ini?",
                 event -> {
                     Menu menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
-                    if (menu.hapus()) {
+                    if (menu.delete()) {
                         alert.information("Berhasil!", "Menu berhasil dihapus");
                         reset();
                     } else alert.information("Gagal", "Menu gagal dihapus");
@@ -118,7 +118,7 @@ public class DaftarMenuController implements Initializable {
         titleLabel.setText("TAMBAH MENU");
         hapusButton.setVisible(false);
         actionButton.setText("Tambah");
-        actionButton.getStyleClass().set(2, "tambah");
+        actionButton.getStyleClass().set(2, "add");
         menuTableView.getSelectionModel().clearSelection();
         namaField.setText("");
         tipeComboBox.getSelectionModel().clearSelection();
