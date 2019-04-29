@@ -74,7 +74,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         List<Item> items = getItems(no_meja);
         items.forEach(item -> item.simpan(id_transaksi));
         getTransaksiList().remove(this);
-        items.forEach(item -> getItems().remove(item));
+        items.forEach(ItemService::delete);
     }
 
     public static Transaksi oldTransaksi(Transaksi transaksi) {

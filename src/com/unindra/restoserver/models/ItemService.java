@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class ItemService {
     private static final ObservableList<Item> items = FXCollections.observableArrayList();
     private static final AtomicInteger count = new AtomicInteger(0);
+    private static StatusItem status = StatusItem.CHANGED;
 
     public static ObservableList<Item> getItems() {
         return items;
@@ -28,12 +29,14 @@ public class ItemService {
     public static void add(Item item) {
         item.setId_item(count.getAndIncrement());
         items.add(item);
+        status = StatusItem.CHANGED;
     }
 
     public static boolean update(Item item) {
         Item toEdit = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
         if (toEdit != null) {
             items.set(items.indexOf(toEdit), item);
+            status = StatusItem.CHANGED;
             return true;
         } else return false;
     }
@@ -42,7 +45,20 @@ public class ItemService {
         Item toDelete = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
         if (toDelete != null) {
             items.remove(toDelete);
+            status = StatusItem.CHANGED;
             return true;
         } else return false;
+    }
+
+    public static StatusItem getStatus() {
+        return status;
+    }
+
+    public static void setStatus(StatusItem status) {
+        ItemService.status = status;
+    }
+
+    public enum StatusItem {
+        CHANGED, STILL
     }
 }

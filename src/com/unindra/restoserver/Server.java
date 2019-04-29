@@ -5,10 +5,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.unindra.restoserver.models.Item;
-import com.unindra.restoserver.models.StandardResponse;
-import com.unindra.restoserver.models.StatusResponse;
-import com.unindra.restoserver.models.Transaksi;
+import com.unindra.restoserver.models.*;
 import javafx.collections.FXCollections;
 
 import static com.unindra.restoserver.models.Menu.getMenus;
@@ -57,10 +54,14 @@ class Server {
         get("/items/:no_meja", (request, response) -> {
             response.type("application/json");
 
-            return gson.toJson(new StandardResponse(
-                    StatusResponse.SUCCESS,
-                    gson.toJsonTree(getItems(request.params(":no_meja"))))
-            );
+            if (getStatus() == StatusItem.CHANGED) {
+                setStatus(StatusItem.STILL);
+                return gson.toJson(new StandardResponse(
+                        StatusResponse.SUCCESS,
+                        gson.toJsonTree(getItems(request.params(":no_meja"))))
+                );
+            }
+            return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "NOTHING UPDATE"));
         });
 
         put("/items", (request, response) -> {
