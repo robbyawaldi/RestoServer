@@ -12,6 +12,7 @@ public class ItemService {
     private static final AtomicInteger count = new AtomicInteger(0);
     private static StatusItem status = StatusItem.CHANGED;
 
+    // Getter
     public static ObservableList<Item> getItems() {
         return items;
     }
@@ -26,6 +27,11 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+    public static StatusItem getStatus() {
+        return status;
+    }
+
+    // add update delete
     public static void add(Item item) {
         item.setId_item(count.getAndIncrement());
         items.add(item);
@@ -50,14 +56,12 @@ public class ItemService {
         } else return false;
     }
 
-    public static StatusItem getStatus() {
-        return status;
-    }
-
+    // Setter
     public static void setStatus(StatusItem status) {
         ItemService.status = status;
     }
 
+    // Enum
     public enum StatusItem {
         CHANGED, STILL
     }
