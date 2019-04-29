@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Dialog {
-
     private JFXAlert<String> dialog;
 
     public Dialog(Stage stage) {
