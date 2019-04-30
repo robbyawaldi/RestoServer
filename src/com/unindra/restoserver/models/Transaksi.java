@@ -31,11 +31,10 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
             connection.createQuery(query).bind(this).executeUpdate();
             this.id_transaksi = connection.getKey(Integer.class);
         }
-
         List<Item> items = ItemService.getItems(this);
         items.forEach(item -> item.simpan(this));
-        TransaksiService.delete(this);
         items.forEach(ItemService::delete);
+        TransaksiService.delete(this);
     }
 
     // Getter
@@ -83,7 +82,8 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return no_meja;
     }
 
-    private Date getTanggal() {
+    @SuppressWarnings("WeakerAccess")
+    Date getTanggal() {
         return tanggal;
     }
 

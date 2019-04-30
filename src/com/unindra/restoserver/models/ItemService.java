@@ -23,7 +23,7 @@ public class ItemService {
 
     public static List<Item> getItems(Transaksi transaksi) {
         return items.stream()
-                .filter(item -> item.getId_transaksi() == transaksi.getId_transaksi())
+                .filter(item -> item.getNo_meja().equals(transaksi.getNo_meja()))
                 .collect(Collectors.toList());
     }
 

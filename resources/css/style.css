@@ -114,6 +114,8 @@
   .text-judul {
     -fx-font-family: 'OpenSans';
     -fx-font-size: 12pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4059a9;
   }
 
   .text-body {

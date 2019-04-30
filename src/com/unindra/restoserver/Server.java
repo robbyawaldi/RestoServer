@@ -67,22 +67,20 @@ class Server {
 
             Item item = gson.fromJson(request.body(), Item.class);
             item.setChildren(FXCollections.observableArrayList());
-            if (ItemService.update(item)) {
+            if (ItemService.update(item))
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Item diedit"));
-            } else {
-                return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
-            }
+
+            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
         });
 
         delete("/items", (request, response) -> {
             response.type("application/json");
 
             Item item = gson.fromJson(request.body(), Item.class);
-            if (ItemService.delete(item)) {
+            if (ItemService.delete(item))
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Item dihapus"));
-            } else {
-                return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
-            }
+
+            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
         });
 
         get("/menus", (request, response) -> {
