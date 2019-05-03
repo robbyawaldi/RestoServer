@@ -3,13 +3,12 @@ package com.unindra.restoserver.controllers;
 import com.unindra.restoserver.Laporan;
 import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Transaksi;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
@@ -18,18 +17,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Item.getItems;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
+import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class LaporanController implements Initializable {
-    public BarChart barChart;
-    public PieChart pieChart;
-    public LineChart lineChart;
+    public AreaChart bulananChart;
+    public PieChart menuFavChart;
+    public AreaChart kunjunganChart;
     public Label tglLabel;
     public Label totalTransaksiLabel;
     public Label pemasukanLabel;
@@ -38,52 +37,47 @@ public class LaporanController implements Initializable {
     @SuppressWarnings("unchecked")
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LocalDate localDate = new LocalDate(new Date());
+        getTransaksiList().addListener((ListChangeListener<Transaksi>) c -> {
+            LocalDate localDate = new LocalDate(new Date());
 
-        tglLabel.setText(localDate.toString());
-        totalTransaksiLabel.setText(String.valueOf(getTransaksiList(localDate).size()));
-        pemasukanLabel.setText(rupiah(getTransaksiList(localDate)
-                .stream()
-                .mapToInt(Transaksi::getTotalBayar)
-                .sum()));
-        menufavLabel.setText(menu(localDate).getNama_menu());
-
-        XYChart.Series seriesBar = new XYChart.Series();
-
-        for (AtomicInteger i = new AtomicInteger(5); i.get() >= 0; i.getAndDecrement()) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i.get()));
-            String bulan = yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear();
-            Integer totalPendapatan = getTransaksiList(
-                    yearMonth.getYear(), yearMonth.getMonthOfYear())
+            tglLabel.setText(localDate.toString());
+            totalTransaksiLabel.setText(String.valueOf(getTransaksiList(localDate).size()));
+            pemasukanLabel.setText(rupiah(getTransaksiList(localDate)
                     .stream()
                     .mapToInt(Transaksi::getTotalBayar)
-                    .sum();
-            seriesBar.getData().add(new XYChart.Data(bulan, totalPendapatan));
-        }
+                    .sum()));
+            menufavLabel.setText(menu(localDate).getNama_menu());
 
-        barChart.getData().addAll(seriesBar);
-        barChart.getXAxis().setLabel("Bulan");
-        barChart.getYAxis().setLabel("Pemasukan (Rp)");
+            XYChart.Series bulananData = new XYChart.Series();
+            for (int i = 4; i >= 0; i--) {
+                YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
+                String bulan = yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear();
+                int totalPendapatan = getTotalBayar(yearMonth.getYear(), yearMonth.getMonthOfYear());
+                bulananData.getData().add(new XYChart.Data<>(bulan, totalPendapatan));
+            }
 
-        ObservableList<PieChart.Data> pieObservableList = FXCollections.observableArrayList();
-        for (Menu menu : getMenus())
-            pieObservableList.add(new PieChart.Data(menu.getNama_menu(), getItems(menu).size()));
+            Platform.runLater(() -> bulananChart.getData().setAll(bulananData));
+            bulananChart.getYAxis().setLabel("Pemasukan (Rp)");
 
-        pieChart.setData(pieObservableList);
-        pieChart.setStartAngle(90);
+            ObservableList<PieChart.Data> menuFavData = FXCollections.observableArrayList();
+            for (Menu menu : getMenus())
+                menuFavData.add(new PieChart.Data(menu.getNama_menu(), getItems(menu).size()));
 
-        XYChart.Series seriesLine = new XYChart.Series();
+            Platform.runLater(() -> menuFavChart.setData(menuFavData));
+            menuFavChart.setStartAngle(90);
 
-        for (AtomicInteger i = new AtomicInteger(5); i.get() >= 0; i.getAndDecrement()) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i.get()));
-            String bulan = yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear();
-            Integer totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
-            seriesLine.getData().add(new XYChart.Data<>(bulan, totalKunjungan));
-        }
+            XYChart.Series kunjunganData = new XYChart.Series();
 
-        lineChart.getData().addAll(seriesLine);
-        lineChart.getXAxis().setLabel("Bulan");
-        lineChart.getYAxis().setLabel("Kunjungan");
+            for (int i = 4; i >= 0; i--) {
+                YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
+                String bulan = yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear();
+                int totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
+                kunjunganData.getData().add(new XYChart.Data<>(bulan, totalKunjungan));
+            }
+
+            Platform.runLater(() -> kunjunganChart.getData().setAll(kunjunganData));
+            kunjunganChart.getYAxis().setLabel("Kunjungan");
+        });
     }
 
     public void cetakHarianHandle() {

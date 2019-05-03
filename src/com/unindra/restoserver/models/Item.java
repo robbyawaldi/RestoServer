@@ -41,7 +41,6 @@ public class Item extends RecursiveTreeObject<Item> {
 
     // Simpan
     void simpan(Transaksi transaksi) {
-        System.out.println("ke simpan gak");
         this.id_transaksi = transaksi.getId_transaksi();
         try (Connection connection = DB.sql2o.open()) {
             final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
@@ -88,6 +87,7 @@ public class Item extends RecursiveTreeObject<Item> {
         return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
     }
 
+    @SuppressWarnings("unused")
     int getId_transaksi() {
         return id_transaksi;
     }

@@ -167,6 +167,7 @@ public class DaftarMenuController implements Initializable {
         levelField.setText("");
         hargaLevelField.setText("");
         hargaLevelField.setEditable(false);
+        levelTableView.getSelectionModel().clearSelection();
     }
 
     private Dialog getDialog() {

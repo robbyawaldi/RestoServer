@@ -1,9 +1,12 @@
 package com.unindra.restoserver.models;
 
+import com.google.gson.annotations.Expose;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.DB;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.joda.time.LocalDate;
 import org.sql2o.Connection;
 
@@ -17,11 +20,28 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     private int id_transaksi;
     private String no_meja;
     private Date tanggal;
+    @Expose
+    private static ObservableList<Transaksi> transaksiList = FXCollections.observableArrayList();
 
     // Constructor
     public Transaksi(String no_meja) {
         this.no_meja = no_meja;
         this.tanggal = new Date();
+    }
+
+    static {
+        Thread thread = new Thread(() -> {
+            while (!Thread.interrupted()) {
+                try {
+                    updateTransaksi();
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        thread.start();
     }
 
     // Simpan
@@ -37,12 +57,17 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         TransaksiService.delete(this);
     }
 
-    // Getter
-    private static List<Transaksi> getTransaksiList() {
+    // Sinkronisasi collection dengan database
+    private static void updateTransaksi() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `transaksi`";
-            return connection.createQuery(query).executeAndFetch(Transaksi.class);
+            transaksiList.setAll(connection.createQuery(query).executeAndFetch(Transaksi.class));
         }
+    }
+
+    // Getter
+    public static ObservableList<Transaksi> getTransaksiList() {
+        return transaksiList;
     }
 
     public static List<Transaksi> getTransaksiList(LocalDate tanggal) {
@@ -60,6 +85,13 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                     return localDate.getYear() == tahun && localDate.getMonthOfYear() == bulan;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static int getTotalBayar(int tahun, int bulan) {
+        return getTransaksiList(tahun, bulan)
+                .stream()
+                .mapToInt(Transaksi::getTotalBayar)
+                .sum();
     }
 
     public int getTotalBayar() {

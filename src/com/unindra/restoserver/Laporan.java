@@ -33,6 +33,7 @@ import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Item.getItems;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
+import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Laporan {
@@ -117,16 +118,11 @@ public class Laporan {
 
         for (int i = 0; i < 5; i++) {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
-            int totalPemasukan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear())
-                    .stream()
-                    .mapToInt(Transaksi::getTotalBayar)
-                    .sum();
-            if (totalPemasukan == 0) break;
             transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
-            transaksiTable.addCell(cell(rupiah(totalPemasukan)));
+            transaksiTable.addCell(cell(rupiah(getTotalBayar(yearMonth.getYear(), yearMonth.getMonthOfYear()))));
         }
 
-        document.add(new Paragraph("Tabel Transaksi").setFont(boldFont).setMarginTop(10));
+        document.add(new Paragraph("Pemasukan").setFont(boldFont).setMarginTop(10));
         document.add(transaksiTable);
         document.close();
         showReport(fileName);
@@ -170,7 +166,7 @@ public class Laporan {
             transaksiTable.addCell(cell(String.valueOf(getItems(menu).size())));
         });
 
-        document.add(new Paragraph("Tabel Menu").setMarginTop(10).setFont(boldFont));
+        document.add(new Paragraph("Daftar Menu").setMarginTop(10).setFont(boldFont));
         document.add(transaksiTable);
         document.close();
         showReport(fileName);
@@ -201,12 +197,11 @@ public class Laporan {
         for (int i = 0; i < 5; i++) {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
             int totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
-            if (totalKunjungan == 0) break;
             transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
             transaksiTable.addCell(cell(String.valueOf(totalKunjungan)));
         }
 
-        document.add(new Paragraph("Tabel Kunjungan").setMarginTop(10).setFont(boldFont));
+        document.add(new Paragraph("Kunjungan").setMarginTop(10).setFont(boldFont));
         document.add(transaksiTable);
         document.close();
         showReport(fileName);

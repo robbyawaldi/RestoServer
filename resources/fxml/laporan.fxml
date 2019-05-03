@@ -2,9 +2,8 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ButtonBar?>
@@ -50,50 +49,50 @@
             </buttons>
         </ButtonBar>
     </VBox>
-    <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="600.0">
-        <padding>
-            <Insets right="20.0" />
-        </padding>
-      <Label styleClass="text-judul" text="Laporan Bulanan" />
-        <BarChart fx:id="barChart" legendVisible="false" prefHeight="300.0">
-            <xAxis>
-                <CategoryAxis side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT" />
-            </yAxis>
-        </BarChart>
-        <ButtonBar prefWidth="200.0">
-            <buttons>
-                <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakBulananHandle" styleClass="print-30" text="Cetak Rincian" />
-            </buttons>
-        </ButtonBar>
-    </VBox>
     <VBox alignment="TOP_CENTER" prefHeight="320.0" prefWidth="600.0">
         <padding>
             <Insets bottom="20.0" right="20.0" />
         </padding>
       <Label styleClass="text-judul" text="Menu Favorit" />
-        <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="540.0" />
+        <PieChart fx:id="menuFavChart" prefHeight="300.0" prefWidth="540.0" />
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
             <buttons>
                 <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakFavoritHandle" styleClass="print-30" text="Cetak Rincian" />
             </buttons>
         </ButtonBar>
     </VBox>
-    <VBox alignment="TOP_CENTER" layoutX="610.0" layoutY="10.0" prefHeight="320.0" prefWidth="600.0">
+    <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="600.0">
         <padding>
-            <Insets bottom="20.0" right="20.0" />
+            <Insets right="20.0" />
         </padding>
-      <Label styleClass="text-judul" text="Laporan Kunjungan" />
-        <LineChart fx:id="lineChart" legendVisible="false" prefHeight="300.0" prefWidth="540.0">
+      <Label styleClass="text-judul" text="Laporan Bulanan" />
+        <AreaChart fx:id="bulananChart" legendVisible="false" prefHeight="300.0">
             <xAxis>
                 <CategoryAxis side="BOTTOM" />
             </xAxis>
             <yAxis>
                 <NumberAxis side="LEFT" />
             </yAxis>
-        </LineChart>
+        </AreaChart>
+        <ButtonBar prefWidth="200.0">
+            <buttons>
+                <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakBulananHandle" styleClass="print-30" text="Cetak Rincian" />
+            </buttons>
+        </ButtonBar>
+    </VBox>
+    <VBox alignment="TOP_CENTER" layoutX="610.0" layoutY="10.0" prefHeight="320.0" prefWidth="600.0">
+        <padding>
+            <Insets right="20.0" />
+        </padding>
+      <Label styleClass="text-judul" text="Laporan Kunjungan" />
+        <AreaChart fx:id="kunjunganChart" legendVisible="false" prefHeight="300.0" prefWidth="540.0">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </AreaChart>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
             <buttons>
                 <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakKunjunganHandle" styleClass="print-30" text="Cetak Rincian" />
