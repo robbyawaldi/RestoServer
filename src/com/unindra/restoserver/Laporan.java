@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Item.getItems;
@@ -116,9 +115,8 @@ public class Laporan {
         transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
 
-        AtomicInteger forMinusMonths = new AtomicInteger(0);
-        while (true) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(forMinusMonths.get()));
+        for (int i = 0; i < 5; i++) {
+            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
             int totalPemasukan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear())
                     .stream()
                     .mapToInt(Transaksi::getTotalBayar)
@@ -126,7 +124,6 @@ public class Laporan {
             if (totalPemasukan == 0) break;
             transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
             transaksiTable.addCell(cell(rupiah(totalPemasukan)));
-            forMinusMonths.getAndIncrement();
         }
 
         document.add(new Paragraph("Tabel Transaksi").setFont(boldFont).setMarginTop(10));
@@ -201,14 +198,12 @@ public class Laporan {
         transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
 
-        AtomicInteger forMinusMonths = new AtomicInteger(0);
-        while (true) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(forMinusMonths.get()));
+        for (int i = 0; i < 5; i++) {
+            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
             int totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
             if (totalKunjungan == 0) break;
             transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
             transaksiTable.addCell(cell(String.valueOf(totalKunjungan)));
-            forMinusMonths.getAndIncrement();
         }
 
         document.add(new Paragraph("Tabel Kunjungan").setMarginTop(10).setFont(boldFont));

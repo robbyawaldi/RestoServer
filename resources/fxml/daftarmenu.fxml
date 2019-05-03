@@ -14,12 +14,12 @@
 <?import javafx.scene.layout.VBox?>
 
 <FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.DaftarMenuController">
-    <VBox prefWidth="600.0" spacing="20.0">
+    <VBox prefHeight="372.0" prefWidth="600.0" spacing="20.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
+            <Insets left="30.0" right="20.0" top="20.0" />
         </padding>
         <Label styleClass="text-judul" text="Daftar Menu" />
-        <JFXTreeTableView fx:id="menuTableView" onMouseClicked="#pilihHandle" prefHeight="400.0" showRoot="false" />
+        <JFXTreeTableView fx:id="menuTableView" onMouseClicked="#pilihHandle" prefHeight="332.0" prefWidth="550.0" showRoot="false" />
     </VBox>
     <VBox prefWidth="600.0" spacing="20.0">
         <padding>
@@ -28,10 +28,10 @@
         <Label fx:id="titleLabel" styleClass="text-judul" text="Tambah Menu" />
         <VBox>
             <VBox.margin>
-                <Insets/>
+                <Insets />
             </VBox.margin>
-            <Label styleClass="text-body" text="Nama"/>
-            <JFXTextField fx:id="namaField"/>
+            <Label styleClass="text-body" text="Nama" />
+            <JFXTextField fx:id="namaField" />
         </VBox>
         <HBox spacing="20.0">
             <VBox.margin>
@@ -48,10 +48,10 @@
         </HBox>
         <VBox>
             <VBox.margin>
-                <Insets/>
+                <Insets />
             </VBox.margin>
-            <Label styleClass="text-body" text="Deskripsi"/>
-            <JFXTextArea fx:id="deskArea" prefHeight="50.0" prefWidth="566.0"/>
+            <Label styleClass="text-body" text="Deskripsi" />
+            <JFXTextArea fx:id="deskArea" prefHeight="50.0" prefWidth="566.0" />
         </VBox>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
             <buttons>
@@ -61,6 +61,44 @@
                     </graphic>
                 </JFXButton>
                 <JFXButton fx:id="actionButton" layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#actionHandle" styleClass="tambah" text="Tambah">
+                    <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                    </graphic>
+                </JFXButton>
+            </buttons>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </ButtonBar>
+    </VBox>
+    <VBox layoutX="10.0" layoutY="10.0" prefHeight="309.0" prefWidth="600.0" spacing="20.0">
+        <padding>
+            <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
+        </padding>
+        <Label styleClass="text-judul" text="Level" />
+        <JFXTreeTableView fx:id="levelTableView" onMouseClicked="#pilihLevelHandle" prefHeight="332.0" prefWidth="550.0" showRoot="false" />
+    </VBox>
+    <VBox layoutX="610.0" layoutY="10.0" prefWidth="600.0" spacing="20.0">
+        <padding>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+        </padding>
+        <Label styleClass="text-judul" text="Ubah Level" />
+        <HBox spacing="20.0">
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+            <VBox prefHeight="42.0" prefWidth="246.0">
+                <Label styleClass="text-body" text="Level" />
+                <JFXTextField fx:id="levelField" editable="false" />
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+                <Label styleClass="text-body" text="Harga" />
+                <JFXTextField fx:id="hargaLevelField" editable="false" />
+            </VBox>
+        </HBox>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <buttons>
+                <JFXButton layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#ubahLevelHandle" styleClass="ubah" text="Ubah">
                     <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
                     </graphic>

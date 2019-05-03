@@ -9,9 +9,8 @@ import com.unindra.restoserver.models.*;
 import javafx.collections.FXCollections;
 
 import static com.unindra.restoserver.models.ItemService.getItems;
+import static com.unindra.restoserver.models.Level.getLevels;
 import static com.unindra.restoserver.models.Menu.getMenus;
-import static com.unindra.restoserver.models.Level.getLevelList;
-import static spark.Spark.delete;
 import static spark.Spark.*;
 
 class Server {
@@ -97,7 +96,7 @@ class Server {
 
             return gson.toJson(new StandardResponse(
                     StatusResponse.SUCCESS,
-                    gson.toJsonTree(getLevelList()))
+                    gson.toJsonTree(getLevels()))
             );
         });
 

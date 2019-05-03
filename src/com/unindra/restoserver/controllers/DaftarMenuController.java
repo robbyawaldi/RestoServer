@@ -3,6 +3,7 @@ package com.unindra.restoserver.controllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.Dialog;
+import com.unindra.restoserver.models.Level;
 import com.unindra.restoserver.models.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.unindra.restoserver.models.Level.getLevels;
 import static com.unindra.restoserver.models.Menu.getMenus;
 
 public class DaftarMenuController implements Initializable {
@@ -28,9 +30,13 @@ public class DaftarMenuController implements Initializable {
     public JFXComboBox<String> tipeComboBox;
     public JFXTextArea deskArea;
     public Label titleLabel;
+    public JFXTreeTableView<Level> levelTableView;
+    public JFXTextField hargaLevelField;
+    public JFXTextField levelField;
 
     private ObservableList<String> tipeList;
     private Menu menu;
+    private Level level;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,8 +48,8 @@ public class DaftarMenuController implements Initializable {
         tipeCol.setCellValueFactory(param -> param.getValue().getValue().tipeProperty());
         hargaCol.setCellValueFactory(param -> param.getValue().getValue().hargaProperty());
 
-        TreeItem<Menu> root = new RecursiveTreeItem<>(getMenus(), RecursiveTreeObject::getChildren);
-        menuTableView.setRoot(root);
+        TreeItem<Menu> rootMenu = new RecursiveTreeItem<>(getMenus(), RecursiveTreeObject::getChildren);
+        menuTableView.setRoot(rootMenu);
         menuTableView.getColumns().add(namaCol);
         menuTableView.getColumns().add(tipeCol);
         menuTableView.getColumns().add(hargaCol);
@@ -52,13 +58,29 @@ public class DaftarMenuController implements Initializable {
         tipeList = FXCollections.observableArrayList("ramen", "minuman", "cemilan", "lainnya");
         tipeComboBox.setItems(tipeList);
 
+        TreeTableColumn<Level, Integer> levelCol = new TreeTableColumn<>("Level");
+        TreeTableColumn<Level, String> hargaLevelCol = new TreeTableColumn<>("Harga");
+
+        levelCol.setCellValueFactory(param -> param.getValue().getValue().levelProperty());
+        hargaLevelCol.setCellValueFactory(param -> param.getValue().getValue().hargaProperty());
+
+        TreeItem<Level> rootLevel = new RecursiveTreeItem<>(getLevels(), RecursiveTreeObject::getChildren);
+        levelTableView.setRoot(rootLevel);
+        levelTableView.getColumns().add(levelCol);
+        levelTableView.getColumns().add(hargaLevelCol);
+        levelTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+
         hargaField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 hargaField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
 
-        menuTableView.selectionModelProperty().addListener((observable, oldValue, newValue) -> System.out.println(observable));
+        hargaLevelField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                hargaLevelField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     public void actionHandle() {
@@ -85,6 +107,14 @@ public class DaftarMenuController implements Initializable {
         }
     }
 
+    public void ubahLevelHandle() {
+        level.setHarga_level(Integer.parseInt(hargaLevelField.getText()));
+        if (level.update()) {
+            getDialog().information("Berhasil!", "Level berhasil diubah");
+            reset();
+        }
+    }
+
     public void pilihHandle(MouseEvent mouseEvent) {
         if (!menuTableView.getSelectionModel().isEmpty()) {
             menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
@@ -97,6 +127,16 @@ public class DaftarMenuController implements Initializable {
             hapusButton.setVisible(true);
             actionButton.setText("Ubah");
             actionButton.getStyleClass().set(2, "update");
+        }
+        if (mouseEvent.getClickCount() == 2) reset();
+    }
+
+    public void pilihLevelHandle(MouseEvent mouseEvent) {
+        if (!levelTableView.getSelectionModel().isEmpty()) {
+            level = levelTableView.getSelectionModel().getSelectedItem().getValue();
+            levelField.setText(String.valueOf(level.getLevel_item()));
+            hargaLevelField.setText(String.valueOf(level.getHarga_level()));
+            hargaLevelField.setEditable(true);
         }
         if (mouseEvent.getClickCount() == 2) reset();
     }
@@ -124,9 +164,15 @@ public class DaftarMenuController implements Initializable {
         tipeComboBox.getSelectionModel().clearSelection();
         hargaField.setText("");
         deskArea.setText("");
+        levelField.setText("");
+        hargaLevelField.setText("");
+        hargaLevelField.setEditable(false);
     }
 
     private Dialog getDialog() {
         return new Dialog((Stage) actionButton.getScene().getWindow());
     }
+
+
+
 }
