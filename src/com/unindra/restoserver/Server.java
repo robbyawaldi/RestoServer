@@ -16,6 +16,9 @@ import static spark.Spark.*;
 class Server {
     private static Gson gson;
 
+    public static void main(String[] args) {
+        new Server();
+    }
     static {
         gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
             @Override

@@ -260,7 +260,7 @@ public class Laporan {
 
         footerTable.setTextAlignment(TextAlignment.RIGHT);
         footerTable.addCell(cellNoBorder("Total").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6));
 
         document.add(footerTable);
         document.close();
@@ -321,11 +321,11 @@ public class Laporan {
 
         footerTable.setTextAlignment(TextAlignment.RIGHT);
         footerTable.addCell(cellNoBorder("Total").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayar())).setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6));
         footerTable.addCell(cellNoBorder("Tunai").setFontSize(6));
         footerTable.addCell(cellNoBorder(rupiah(tunai)).setFontSize(6));
         footerTable.addCell(cellNoBorder("Kembali").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(tunai - transaksi.getTotalBayar())).setFontSize(6));
+        footerTable.addCell(cellNoBorder(rupiah(tunai - transaksi.getTotalBayarFromService())).setFontSize(6));
 
         document.add(footerTable);
         document.close();

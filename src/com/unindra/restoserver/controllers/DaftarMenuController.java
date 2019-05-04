@@ -126,7 +126,7 @@ public class DaftarMenuController implements Initializable {
             titleLabel.setText("UBAH MENU");
             hapusButton.setVisible(true);
             actionButton.setText("Ubah");
-            actionButton.getStyleClass().set(2, "update");
+            actionButton.getStyleClass().set(2, "ubah");
         }
         if (mouseEvent.getClickCount() == 2) reset();
     }
@@ -158,7 +158,7 @@ public class DaftarMenuController implements Initializable {
         titleLabel.setText("TAMBAH MENU");
         hapusButton.setVisible(false);
         actionButton.setText("Tambah");
-        actionButton.getStyleClass().set(2, "add");
+        actionButton.getStyleClass().set(2, "tambah");
         menuTableView.getSelectionModel().clearSelection();
         namaField.setText("");
         tipeComboBox.getSelectionModel().clearSelection();

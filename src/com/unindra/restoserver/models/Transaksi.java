@@ -98,7 +98,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return Item.getItems(this).stream().mapToInt(Item::getTotal).sum();
     }
 
-    private int getTotalBayarFromService() {
+    public int getTotalBayarFromService() {
         return ItemService.getItems().stream()
                 .filter(item -> item.getNo_meja().equals(no_meja))
                 .collect(Collectors.toList()).stream()
