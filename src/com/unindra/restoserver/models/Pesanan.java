@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
 import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
 
-public class Item extends RecursiveTreeObject<Item> {
+public class Pesanan extends RecursiveTreeObject<Pesanan> {
     private int id_transaksi;
     private int id_item;
     private int id_menu;
-    private int jumlah_item;
-    private int level_item;
+    private int jumlah;
+    private int level;
     private String no_meja;
     private String status_item;
 
     // Constructor
-    public Item(int id_item, int id_menu, int jumlah_item, int lvl_item, String no_meja, String status_item) {
+    public Pesanan(int id_item, int id_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
         this.id_item = id_item;
         this.id_menu = id_menu;
-        this.jumlah_item = jumlah_item;
-        this.level_item = lvl_item;
+        this.jumlah = jumlah;
+        this.level = lvl_item;
         this.no_meja = no_meja;
         this.status_item = status_item;
     }
@@ -43,40 +43,40 @@ public class Item extends RecursiveTreeObject<Item> {
     void simpan(Transaksi transaksi) {
         this.id_transaksi = transaksi.getId_transaksi();
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `item` (`id_transaksi`,`id_menu`,`jumlah_item`,`level_item`)" +
-                    " VALUES (:id_transaksi,:id_menu,:jumlah_item,:level_item)";
+            final String query = "INSERT INTO `pesanan` (`id_transaksi`,`id_menu`,`jumlah`,`level`)" +
+                    " VALUES (:id_transaksi,:id_menu,:jumlah,:level)";
             connection.createQuery(query).bind(this).executeUpdate();
         }
     }
 
     // Getter
-    private static List<Item> getItems() {
+    private static List<Pesanan> getItems() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "SELECT * FROM `item`";
-            return connection.createQuery(query).executeAndFetch(Item.class);
+            final String query = "SELECT * FROM `pesanan`";
+            return connection.createQuery(query).executeAndFetch(Pesanan.class);
         }
     }
 
-    static List<Item> getItems(Transaksi transaksi) {
+    static List<Pesanan> getItems(Transaksi transaksi) {
         return getItems()
                 .stream()
                 .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
                 .collect(Collectors.toList());
     }
 
-    public static List<Item> getItems(Menu menu, List<Transaksi> transaksiList) {
-        List<Item> items = getItems(menu);
-        List<Item> filterItems = FXCollections.observableArrayList();
+    public static List<Pesanan> getItems(Menu menu, List<Transaksi> transaksiList) {
+        List<Pesanan> pesanans = getItems(menu);
+        List<Pesanan> filterPesanans = FXCollections.observableArrayList();
         for (Transaksi transaksi : transaksiList) {
-            filterItems.addAll(
-                    items.stream()
+            filterPesanans.addAll(
+                    pesanans.stream()
                             .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
                             .collect(Collectors.toList()));
         }
-        return filterItems;
+        return filterPesanans;
     }
 
-    public static List<Item> getItems(Menu menu) {
+    public static List<Pesanan> getItems(Menu menu) {
         return getItems()
                 .stream()
                 .filter(item -> item.getId_menu() == menu.getId_menu())
@@ -84,7 +84,7 @@ public class Item extends RecursiveTreeObject<Item> {
     }
 
     public int getTotal() {
-        return (menu(this).getHarga_menu() + level(level_item).getHarga_level()) * jumlah_item;
+        return (menu(this).getHarga_menu() + level(level).getHarga_level()) * jumlah;
     }
 
     @SuppressWarnings("unused")
@@ -92,8 +92,8 @@ public class Item extends RecursiveTreeObject<Item> {
         return id_transaksi;
     }
 
-    public int getJumlah_item() {
-        return jumlah_item;
+    public int getJumlah() {
+        return jumlah;
     }
 
     int getId_item() {
@@ -104,8 +104,8 @@ public class Item extends RecursiveTreeObject<Item> {
         return id_menu;
     }
 
-    public int getLevel_item() {
-        return level_item;
+    public int getLevel() {
+        return level;
     }
 
     public String getNo_meja() {
@@ -123,7 +123,7 @@ public class Item extends RecursiveTreeObject<Item> {
 
     // Property
     public ObjectProperty<Integer> jumlahProperty() {
-        return new SimpleObjectProperty<>(jumlah_item);
+        return new SimpleObjectProperty<>(jumlah);
     }
 
     public StringProperty no_mejaProperty() {
@@ -133,12 +133,12 @@ public class Item extends RecursiveTreeObject<Item> {
     // toString
     @Override
     public String toString() {
-        return "Item{" +
+        return "Pesanan{" +
                 "id_transaksi=" + id_transaksi +
                 ", id_item=" + id_item +
                 ", id_menu=" + id_menu +
-                ", jumlah_item=" + jumlah_item +
-                ", level_item=" + level_item +
+                ", jumlah=" + jumlah +
+                ", level=" + level +
                 ", no_meja='" + no_meja + '\'' +
                 ", status_item='" + status_item + '\'' +
                 '}';

@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Item.getItems;
+import static com.unindra.restoserver.models.Pesanan.getItems;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Menu extends RecursiveTreeObject<Menu> {
@@ -112,10 +112,10 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return menufav.get();
     }
 
-    public static Menu menu(Item item) {
+    public static Menu menu(Pesanan pesanan) {
         return getMenus()
                 .stream()
-                .filter(daftarMenu -> daftarMenu.id_menu == item.getId_menu())
+                .filter(daftarMenu -> daftarMenu.id_menu == pesanan.getId_menu())
                 .findFirst()
                 .orElse(null);
     }

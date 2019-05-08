@@ -7,7 +7,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.Dialog;
 import com.unindra.restoserver.Laporan;
-import com.unindra.restoserver.models.Item;
+import com.unindra.restoserver.models.Pesanan;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
@@ -31,16 +31,16 @@ import static com.unindra.restoserver.models.TransaksiService.getTransaksiList;
 
 public class UtamaController implements Initializable {
 
-    public JFXTreeTableView<Item> pesananTableView;
+    public JFXTreeTableView<Pesanan> pesananTableView;
     public JFXTreeTableView<Transaksi> pembayaranTableView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TreeTableColumn<Item, String> mejaCol = new TreeTableColumn<>("No Meja");
-        TreeTableColumn<Item, String> namaCol = new TreeTableColumn<>("Nama");
-        TreeTableColumn<Item, Integer> jumlahCol = new TreeTableColumn<>("Jumlah");
-        TreeTableColumn<Item, String> terimaCol = new TreeTableColumn<>("Terima");
-        TreeTableColumn<Item, String> tolakCol = new TreeTableColumn<>("Tolak");
+        TreeTableColumn<Pesanan, String> mejaCol = new TreeTableColumn<>("No Meja");
+        TreeTableColumn<Pesanan, String> namaCol = new TreeTableColumn<>("Nama");
+        TreeTableColumn<Pesanan, Integer> jumlahCol = new TreeTableColumn<>("Jumlah");
+        TreeTableColumn<Pesanan, String> terimaCol = new TreeTableColumn<>("Terima");
+        TreeTableColumn<Pesanan, String> tolakCol = new TreeTableColumn<>("Tolak");
 
         mejaCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
         namaCol.setCellValueFactory(param -> menu(param.getValue().getValue()).namaProperty());
@@ -48,19 +48,19 @@ public class UtamaController implements Initializable {
         terimaCol.setCellValueFactory(param -> new SimpleStringProperty(""));
         tolakCol.setCellValueFactory(param -> new SimpleStringProperty(""));
 
-        namaCol.setCellFactory(new Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>>() {
+        namaCol.setCellFactory(new Callback<TreeTableColumn<Pesanan, String>, TreeTableCell<Pesanan, String>>() {
             @Override
-            public TreeTableCell<Item, String> call(TreeTableColumn<Item, String> param) {
-                return new TreeTableCell<Item, String>() {
+            public TreeTableCell<Pesanan, String> call(TreeTableColumn<Pesanan, String> param) {
+                return new TreeTableCell<Pesanan, String>() {
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null) {
                             setText(null);
                         } else {
-                            Item i = getItems().get(getIndex());
+                            Pesanan i = getPesanans().get(getIndex());
                             if (menu(i).getTipe_menu().equals("ramen"))
-                                setText(item + " lv." + i.getLevel_item());
+                                setText(item + " lv." + i.getLevel());
                             else setText(item);
                         }
                     }
@@ -68,10 +68,10 @@ public class UtamaController implements Initializable {
             }
         });
 
-        terimaCol.setCellFactory(new Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>>() {
+        terimaCol.setCellFactory(new Callback<TreeTableColumn<Pesanan, String>, TreeTableCell<Pesanan, String>>() {
             @Override
-            public TreeTableCell<Item, String> call(TreeTableColumn<Item, String> param) {
-                return new TreeTableCell<Item, String>() {
+            public TreeTableCell<Pesanan, String> call(TreeTableColumn<Pesanan, String> param) {
+                return new TreeTableCell<Pesanan, String>() {
                     final JFXButton button = new JFXButton("Terima");
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -82,7 +82,7 @@ public class UtamaController implements Initializable {
                         } else {
                             button.getStyleClass().add("terima");
                             button.setOnAction(event -> {
-                                Item i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();
+                                Pesanan i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();
                                 i.terima();
                                 update(i);
                             });
@@ -94,10 +94,10 @@ public class UtamaController implements Initializable {
             }
         });
 
-        tolakCol.setCellFactory(new Callback<TreeTableColumn<Item, String>, TreeTableCell<Item, String>>() {
+        tolakCol.setCellFactory(new Callback<TreeTableColumn<Pesanan, String>, TreeTableCell<Pesanan, String>>() {
             @Override
-            public TreeTableCell<Item, String> call(TreeTableColumn<Item, String> param) {
-                return new TreeTableCell<Item, String>() {
+            public TreeTableCell<Pesanan, String> call(TreeTableColumn<Pesanan, String> param) {
+                return new TreeTableCell<Pesanan, String>() {
                     final JFXButton button = new JFXButton("Tolak");
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -109,7 +109,7 @@ public class UtamaController implements Initializable {
                             button.getStyleClass().add("tolak");
                             button.setOnAction(event -> {
                                 Dialog alert = new Dialog((Stage) pesananTableView.getScene().getWindow());
-                                Item i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();
+                                Pesanan i = pesananTableView.getRoot().getChildren().get(getIndex()).getValue();
 
                                 alert.confirmation(
                                         "Anda yakin ingin menolak pesanan ini?",
@@ -126,11 +126,11 @@ public class UtamaController implements Initializable {
             }
         });
 
-        Predicate<Item> predicate = item -> item.getStatus_item().equals("dipesan");
-        FilteredList<Item> filteredList = new FilteredList<>(getItems(), predicate);
-        getItems().addListener((ListChangeListener<Item>) c -> filteredList.setPredicate(predicate));
+        Predicate<Pesanan> predicate = item -> item.getStatus_item().equals("dipesan");
+        FilteredList<Pesanan> filteredList = new FilteredList<>(getPesanans(), predicate);
+        getPesanans().addListener((ListChangeListener<Pesanan>) c -> filteredList.setPredicate(predicate));
 
-        TreeItem<Item> rootItem = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
+        TreeItem<Pesanan> rootItem = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
 
         pesananTableView.setRoot(rootItem);
         pesananTableView.getColumns().add(mejaCol);

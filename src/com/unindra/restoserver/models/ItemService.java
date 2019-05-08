@@ -8,21 +8,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class ItemService {
-    private static final ObservableList<Item> items = FXCollections.observableArrayList();
+    private static final ObservableList<Pesanan> PESANANS = FXCollections.observableArrayList();
     private static final AtomicInteger count = new AtomicInteger(0);
     private static StatusItem status = StatusItem.CHANGED;
 
     // Getter
-    public static ObservableList<Item> getItems() {
-        return items;
+    public static ObservableList<Pesanan> getPesanans() {
+        return PESANANS;
     }
 
-    public static List<Item> getItems(String no_meja) {
-        return items.stream().filter(item -> item.getNo_meja().equals(no_meja)).collect(Collectors.toList());
+    public static List<Pesanan> getItems(String no_meja) {
+        return PESANANS.stream().filter(item -> item.getNo_meja().equals(no_meja)).collect(Collectors.toList());
     }
 
-    public static List<Item> getItems(Transaksi transaksi) {
-        return items.stream()
+    public static List<Pesanan> getItems(Transaksi transaksi) {
+        return PESANANS.stream()
                 .filter(item -> item.getNo_meja().equals(transaksi.getNo_meja()))
                 .collect(Collectors.toList());
     }
@@ -32,27 +32,27 @@ public class ItemService {
     }
 
     // Add
-    public static void add(Item item) {
-        item.setId_item(count.getAndIncrement());
-        items.add(item);
+    public static void add(Pesanan pesanan) {
+        pesanan.setId_item(count.getAndIncrement());
+        PESANANS.add(pesanan);
         status = StatusItem.CHANGED;
     }
 
     // Update
-    public static boolean update(Item item) {
-        Item toEdit = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
+    public static boolean update(Pesanan pesanan) {
+        Pesanan toEdit = PESANANS.stream().filter(i -> i.getId_item() == pesanan.getId_item()).findFirst().orElse(null);
         if (toEdit != null) {
-            items.set(items.indexOf(toEdit), item);
+            PESANANS.set(PESANANS.indexOf(toEdit), pesanan);
             status = StatusItem.CHANGED;
             return true;
         } else return false;
     }
 
     // Delete
-    public static boolean delete(Item item) {
-        Item toDelete = items.stream().filter(i -> i.getId_item() == item.getId_item()).findFirst().orElse(null);
+    public static boolean delete(Pesanan pesanan) {
+        Pesanan toDelete = PESANANS.stream().filter(i -> i.getId_item() == pesanan.getId_item()).findFirst().orElse(null);
         if (toDelete != null) {
-            items.remove(toDelete);
+            PESANANS.remove(toDelete);
             status = StatusItem.CHANGED;
             return true;
         } else return false;

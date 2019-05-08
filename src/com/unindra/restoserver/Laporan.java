@@ -14,7 +14,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
-import com.unindra.restoserver.models.Item;
+import com.unindra.restoserver.models.Pesanan;
 import com.unindra.restoserver.models.ItemService;
 import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Transaksi;
@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Item.getItems;
+import static com.unindra.restoserver.models.Pesanan.getItems;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
@@ -154,8 +154,8 @@ public class Laporan {
 
         List<Menu> menus = FXCollections.observableArrayList(getMenus());
         menus.sort((menu1, menu2) -> {
-            List<Item> items1 = getItems(menu1);
-            List<Item> items2 = getItems(menu2);
+            List<Pesanan> items1 = getItems(menu1);
+            List<Pesanan> items2 = getItems(menu2);
             return items2.size() - items1.size();
         });
 
@@ -208,7 +208,7 @@ public class Laporan {
     }
 
     public static void bill(Transaksi transaksi) throws IOException {
-        List<Item> items = ItemService.getItems(transaksi);
+        List<Pesanan> pesanans = ItemService.getItems(transaksi);
 
         String fileName = "bill.pdf";
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
@@ -225,7 +225,7 @@ public class Laporan {
                         .add(new Text("OSAKA RAMEN").setFont(boldFont))
                         .add("\n-----------------------------------------------------------------------------------------\n")
                         .add("No Meja:")
-                        .add(items.get(0).getNo_meja())
+                        .add(pesanans.get(0).getNo_meja())
                         .add("\tTanggal:")
                         .add(localDate+" "+new LocalTime().toString().substring(0, 8))
                         .add("\n-----------------------------------------------------------------------------------------\n")
@@ -239,9 +239,9 @@ public class Laporan {
         itemsTable.setFontSize(6);
         itemsTable.setTextAlignment(TextAlignment.CENTER);
 
-        items.forEach(item -> {
+        pesanans.forEach(item -> {
             itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
-            itemsTable.addCell(cellNoBorder(item.getJumlah_item()+"x"));
+            itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
             itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
         });
 
@@ -268,7 +268,7 @@ public class Laporan {
     }
 
     public static void struk(Transaksi transaksi, int tunai) throws IOException {
-        List<Item> items = ItemService.getItems(transaksi);
+        List<Pesanan> pesanans = ItemService.getItems(transaksi);
 
         String fileName = "struk.pdf";
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
@@ -286,7 +286,7 @@ public class Laporan {
                         .add("\nJl. Keadilan No. 23G, Rangkapan Jaya Baru, Pancoran Mas, Kota Depok Jawa Barat")
                         .add("\n-----------------------------------------------------------------------------------------\n")
                         .add("No Meja:")
-                        .add(items.get(0).getNo_meja())
+                        .add(pesanans.get(0).getNo_meja())
                         .add("\tTanggal:")
                         .add(localDate+" "+new LocalTime().toString().substring(0, 8))
                         .add("\n-----------------------------------------------------------------------------------------\n")
@@ -300,9 +300,9 @@ public class Laporan {
         itemsTable.setFontSize(6);
         itemsTable.setTextAlignment(TextAlignment.CENTER);
 
-        items.forEach(item -> {
+        pesanans.forEach(item -> {
             itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
-            itemsTable.addCell(cellNoBorder(item.getJumlah_item()+"x"));
+            itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
             itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
         });
 

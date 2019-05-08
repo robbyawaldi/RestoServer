@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Item.getItems;
+import static com.unindra.restoserver.models.Pesanan.getItems;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTotalBayar;

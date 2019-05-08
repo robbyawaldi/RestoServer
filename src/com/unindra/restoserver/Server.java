@@ -45,8 +45,8 @@ class Server {
         post("/items", (request, response) -> {
             response.type("application/json");
 
-            Item item = gson.fromJson(request.body(), Item.class);
-            ItemService.add(item);
+            Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
+            ItemService.add(pesanan);
 
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
@@ -67,22 +67,22 @@ class Server {
         put("/items", (request, response) -> {
             response.type("application/json");
 
-            Item item = gson.fromJson(request.body(), Item.class);
-            item.setChildren(FXCollections.observableArrayList());
-            if (ItemService.update(item))
-                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Item diedit"));
+            Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
+            pesanan.setChildren(FXCollections.observableArrayList());
+            if (ItemService.update(pesanan))
+                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Pesanan diedit"));
 
-            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
+            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Pesanan gagal dihapus"));
         });
 
         delete("/items", (request, response) -> {
             response.type("application/json");
 
-            Item item = gson.fromJson(request.body(), Item.class);
-            if (ItemService.delete(item))
-                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Item dihapus"));
+            Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
+            if (ItemService.delete(pesanan))
+                return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Pesanan dihapus"));
 
-            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Item gagal dihapus"));
+            return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Pesanan gagal dihapus"));
         });
 
         get("/menus", (request, response) -> {
