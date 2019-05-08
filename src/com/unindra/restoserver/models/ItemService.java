@@ -33,14 +33,14 @@ public class ItemService {
 
     // Add
     public static void add(Pesanan pesanan) {
-        pesanan.setId_item(count.getAndIncrement());
+        pesanan.setId_pesanan(count.getAndIncrement());
         PESANANS.add(pesanan);
         status = StatusItem.CHANGED;
     }
 
     // Update
     public static boolean update(Pesanan pesanan) {
-        Pesanan toEdit = PESANANS.stream().filter(i -> i.getId_item() == pesanan.getId_item()).findFirst().orElse(null);
+        Pesanan toEdit = PESANANS.stream().filter(i -> i.getId_pesanan() == pesanan.getId_pesanan()).findFirst().orElse(null);
         if (toEdit != null) {
             PESANANS.set(PESANANS.indexOf(toEdit), pesanan);
             status = StatusItem.CHANGED;
@@ -50,7 +50,7 @@ public class ItemService {
 
     // Delete
     public static boolean delete(Pesanan pesanan) {
-        Pesanan toDelete = PESANANS.stream().filter(i -> i.getId_item() == pesanan.getId_item()).findFirst().orElse(null);
+        Pesanan toDelete = PESANANS.stream().filter(i -> i.getId_pesanan() == pesanan.getId_pesanan()).findFirst().orElse(null);
         if (toDelete != null) {
             PESANANS.remove(toDelete);
             status = StatusItem.CHANGED;

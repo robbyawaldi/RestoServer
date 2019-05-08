@@ -17,7 +17,7 @@ import static com.unindra.restoserver.models.Menu.menu;
 
 public class Pesanan extends RecursiveTreeObject<Pesanan> {
     private int id_transaksi;
-    private int id_item;
+    private int id_pesanan;
     private int id_menu;
     private int jumlah;
     private int level;
@@ -25,8 +25,8 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     private String status_item;
 
     // Constructor
-    public Pesanan(int id_item, int id_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
-        this.id_item = id_item;
+    public Pesanan(int id_pesanan, int id_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
+        this.id_pesanan = id_pesanan;
         this.id_menu = id_menu;
         this.jumlah = jumlah;
         this.level = lvl_item;
@@ -96,8 +96,8 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return jumlah;
     }
 
-    int getId_item() {
-        return id_item;
+    int getId_pesanan() {
+        return id_pesanan;
     }
 
     int getId_menu() {
@@ -117,8 +117,8 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     }
 
     // Setter
-    void setId_item(int id_item) {
-        this.id_item = id_item;
+    void setId_pesanan(int id_pesanan) {
+        this.id_pesanan = id_pesanan;
     }
 
     // Property
@@ -135,7 +135,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     public String toString() {
         return "Pesanan{" +
                 "id_transaksi=" + id_transaksi +
-                ", id_item=" + id_item +
+                ", id_pesanan=" + id_pesanan +
                 ", id_menu=" + id_menu +
                 ", jumlah=" + jumlah +
                 ", level=" + level +
