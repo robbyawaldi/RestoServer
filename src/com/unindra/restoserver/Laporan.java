@@ -15,7 +15,7 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.unindra.restoserver.models.Pesanan;
-import com.unindra.restoserver.models.ItemService;
+import com.unindra.restoserver.models.PesananService;
 import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.collections.FXCollections;
@@ -208,7 +208,7 @@ public class Laporan {
     }
 
     public static void bill(Transaksi transaksi) throws IOException {
-        List<Pesanan> pesanans = ItemService.getItems(transaksi);
+        List<Pesanan> pesanans = PesananService.getItems(transaksi);
 
         String fileName = "bill.pdf";
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
@@ -268,7 +268,7 @@ public class Laporan {
     }
 
     public static void struk(Transaksi transaksi, int tunai) throws IOException {
-        List<Pesanan> pesanans = ItemService.getItems(transaksi);
+        List<Pesanan> pesanans = PesananService.getItems(transaksi);
 
         String fileName = "struk.pdf";
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);

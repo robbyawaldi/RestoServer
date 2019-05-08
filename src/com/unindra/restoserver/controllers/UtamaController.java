@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import static com.unindra.restoserver.models.ItemService.*;
+import static com.unindra.restoserver.models.PesananService.*;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.TransaksiService.getTransaksiList;
 
@@ -58,7 +58,7 @@ public class UtamaController implements Initializable {
                         if (item == null) {
                             setText(null);
                         } else {
-                            Pesanan i = getPesanans().get(getIndex());
+                            Pesanan i = getPesananList().get(getIndex());
                             if (menu(i).getTipe_menu().equals("ramen"))
                                 setText(item + " lv." + i.getLevel());
                             else setText(item);
@@ -127,8 +127,8 @@ public class UtamaController implements Initializable {
         });
 
         Predicate<Pesanan> predicate = item -> item.getStatus_item().equals("dipesan");
-        FilteredList<Pesanan> filteredList = new FilteredList<>(getPesanans(), predicate);
-        getPesanans().addListener((ListChangeListener<Pesanan>) c -> filteredList.setPredicate(predicate));
+        FilteredList<Pesanan> filteredList = new FilteredList<>(getPesananList(), predicate);
+        getPesananList().addListener((ListChangeListener<Pesanan>) c -> filteredList.setPredicate(predicate));
 
         TreeItem<Pesanan> rootItem = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
 

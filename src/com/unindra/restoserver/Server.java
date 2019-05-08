@@ -8,7 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.models.*;
 import javafx.collections.FXCollections;
 
-import static com.unindra.restoserver.models.ItemService.getItems;
+import static com.unindra.restoserver.models.PesananService.getItems;
 import static com.unindra.restoserver.models.Level.getLevels;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static spark.Spark.*;
@@ -42,20 +42,20 @@ class Server {
             }
         }).create();
 
-        post("/items", (request, response) -> {
+        post("/pesanan", (request, response) -> {
             response.type("application/json");
 
             Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
-            ItemService.add(pesanan);
+            PesananService.add(pesanan);
 
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
-        get("/items/:no_meja", (request, response) -> {
+        get("/pesanan/:no_meja", (request, response) -> {
             response.type("application/json");
 
-            if (ItemService.getStatus() == ItemService.StatusItem.CHANGED) {
-                ItemService.setStatus(ItemService.StatusItem.STILL);
+            if (PesananService.getStatus() == PesananService.StatusPesanan.CHANGED) {
+                PesananService.setStatus(PesananService.StatusPesanan.STILL);
                 return gson.toJson(new StandardResponse(
                         StatusResponse.SUCCESS,
                         gson.toJsonTree(getItems(request.params(":no_meja"))))
@@ -64,22 +64,22 @@ class Server {
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "NOTHING UPDATE"));
         });
 
-        put("/items", (request, response) -> {
+        put("/pesanan", (request, response) -> {
             response.type("application/json");
 
             Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
             pesanan.setChildren(FXCollections.observableArrayList());
-            if (ItemService.update(pesanan))
+            if (PesananService.update(pesanan))
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Pesanan diedit"));
 
             return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Pesanan gagal dihapus"));
         });
 
-        delete("/items", (request, response) -> {
+        delete("/pesanan", (request, response) -> {
             response.type("application/json");
 
             Pesanan pesanan = gson.fromJson(request.body(), Pesanan.class);
-            if (ItemService.delete(pesanan))
+            if (PesananService.delete(pesanan))
                 return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "Pesanan dihapus"));
 
             return gson.toJson(new StandardResponse(StatusResponse.ERROR, "Pesanan gagal dihapus"));

@@ -51,9 +51,9 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
             connection.createQuery(query).bind(this).executeUpdate();
             this.id_transaksi = connection.getKey(Integer.class);
         }
-        List<Pesanan> pesanans = ItemService.getItems(this);
+        List<Pesanan> pesanans = PesananService.getItems(this);
         pesanans.forEach(item -> item.simpan(this));
-        pesanans.forEach(ItemService::delete);
+        pesanans.forEach(PesananService::delete);
         TransaksiService.delete(this);
     }
 
@@ -99,7 +99,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     public int getTotalBayarFromService() {
-        return ItemService.getPesanans().stream()
+        return PesananService.getPesananList().stream()
                 .filter(item -> item.getNo_meja().equals(no_meja))
                 .collect(Collectors.toList()).stream()
                 .mapToInt(Pesanan::getTotal)
