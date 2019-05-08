@@ -46,7 +46,7 @@ public class DaftarMenuController implements Initializable {
 
         namaCol.setCellValueFactory(param -> param.getValue().getValue().namaProperty());
         tipeCol.setCellValueFactory(param -> param.getValue().getValue().tipeProperty());
-        hargaCol.setCellValueFactory(param -> param.getValue().getValue().hargaProperty());
+        hargaCol.setCellValueFactory(param -> param.getValue().getValue().harga_menuProperty());
 
         TreeItem<Menu> rootMenu = new RecursiveTreeItem<>(getMenus(), RecursiveTreeObject::getChildren);
         menuTableView.setRoot(rootMenu);
@@ -62,7 +62,7 @@ public class DaftarMenuController implements Initializable {
         TreeTableColumn<Level, String> hargaLevelCol = new TreeTableColumn<>("Harga");
 
         levelCol.setCellValueFactory(param -> param.getValue().getValue().levelProperty());
-        hargaLevelCol.setCellValueFactory(param -> param.getValue().getValue().hargaProperty());
+        hargaLevelCol.setCellValueFactory(param -> param.getValue().getValue().harga_levelProperty());
 
         TreeItem<Level> rootLevel = new RecursiveTreeItem<>(getLevels(), RecursiveTreeObject::getChildren);
         levelTableView.setRoot(rootLevel);
@@ -98,7 +98,7 @@ public class DaftarMenuController implements Initializable {
         } else {
             menu.setNama(namaField.getText());
             menu.setTipe(tipeComboBox.getSelectionModel().getSelectedItem());
-            menu.setHarga(Integer.valueOf(hargaField.getText()));
+            menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
             menu.setDeskripsi(deskArea.getText());
             if (menu.update()) {
                 getDialog().information("Berhasil!", "Menu berhasil diubah");
@@ -108,7 +108,7 @@ public class DaftarMenuController implements Initializable {
     }
 
     public void ubahLevelHandle() {
-        level.setHarga(Integer.parseInt(hargaLevelField.getText()));
+        level.setHarga_level(Integer.parseInt(hargaLevelField.getText()));
         if (level.update()) {
             getDialog().information("Berhasil!", "Level berhasil diubah");
             reset();
@@ -121,7 +121,7 @@ public class DaftarMenuController implements Initializable {
             namaField.setText(menu.getNama());
             int index = tipeList.indexOf(menu.getTipe());
             tipeComboBox.getSelectionModel().clearAndSelect(index);
-            hargaField.setText(String.valueOf(menu.getHarga()));
+            hargaField.setText(String.valueOf(menu.getHarga_menu()));
             deskArea.setText(menu.getDeskripsi());
             titleLabel.setText("UBAH MENU");
             hapusButton.setVisible(true);
@@ -135,7 +135,7 @@ public class DaftarMenuController implements Initializable {
         if (!levelTableView.getSelectionModel().isEmpty()) {
             level = levelTableView.getSelectionModel().getSelectedItem().getValue();
             levelField.setText(String.valueOf(level.getLevel()));
-            hargaLevelField.setText(String.valueOf(level.getHarga()));
+            hargaLevelField.setText(String.valueOf(level.getHarga_level()));
             hargaLevelField.setEditable(true);
         }
         if (mouseEvent.getClickCount() == 2) reset();

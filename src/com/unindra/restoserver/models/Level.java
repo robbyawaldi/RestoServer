@@ -15,14 +15,14 @@ import static com.unindra.restoserver.Rupiah.rupiah;
 
 public class Level extends RecursiveTreeObject<Level> {
     private int level;
-    private int harga;
+    private int harga_level;
     @Expose
     private static ObservableList<Level> levels = FXCollections.observableArrayList();
 
     // Constructor
-    private Level(int level, int harga) {
+    private Level(int level, int harga_level) {
         this.level = level;
-        this.harga = harga;
+        this.harga_level = harga_level;
     }
 
     static {
@@ -40,7 +40,7 @@ public class Level extends RecursiveTreeObject<Level> {
     // Update Level
     public boolean update() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "UPDATE `level` SET `harga` = :harga WHERE `level` = :level";
+            final String query = "UPDATE `level` SET `harga_level` = :harga_level WHERE `level` = :level";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateLevel();
@@ -63,13 +63,13 @@ public class Level extends RecursiveTreeObject<Level> {
         return level;
     }
 
-    public int getHarga() {
-        return harga;
+    public int getHarga_level() {
+        return harga_level;
     }
 
     // Setter
-    public void setHarga(int harga) {
-        this.harga = harga;
+    public void setHarga_level(int harga_level) {
+        this.harga_level = harga_level;
     }
 
     // Property
@@ -77,8 +77,8 @@ public class Level extends RecursiveTreeObject<Level> {
         return new SimpleObjectProperty<>(level);
     }
 
-    public StringProperty hargaProperty() {
-        return new SimpleStringProperty(rupiah(harga));
+    public StringProperty harga_levelProperty() {
+        return new SimpleStringProperty(rupiah(harga_level));
     }
 
 }

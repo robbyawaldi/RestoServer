@@ -21,7 +21,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     private int id_menu;
     private String nama;
     private String tipe;
-    private int harga;
+    private int harga_menu;
     private String deskripsi;
     @Expose
     private static ObservableList<Menu> menus = FXCollections.observableArrayList();
@@ -31,18 +31,18 @@ public class Menu extends RecursiveTreeObject<Menu> {
     }
 
     // Constructor
-    public Menu(int id_menu, String nama, String type, int harga, String deskripsi) {
+    public Menu(int id_menu, String nama, String type, int harga_menu, String deskripsi) {
         this.id_menu = id_menu;
         this.nama = nama;
         this.tipe = type;
-        this.harga = harga;
+        this.harga_menu = harga_menu;
         this.deskripsi = deskripsi;
     }
 
-    public Menu(String nama, String tipe, int harga, String deskripsi) {
+    public Menu(String nama, String tipe, int harga_menu, String deskripsi) {
         this.nama = nama;
         this.tipe = tipe;
-        this.harga = harga;
+        this.harga_menu = harga_menu;
         this.deskripsi = deskripsi;
     }
 
@@ -61,8 +61,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
     // add update delete
     public boolean add() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `menu` (`nama`, `tipe`, `harga`, `deskripsi`) " +
-                    "VALUES (:nama, :tipe, :harga, :deskripsi)";
+            final String query = "INSERT INTO `menu` (`nama`, `tipe`, `harga_menu`, `deskripsi`) " +
+                    "VALUES (:nama, :tipe, :harga_menu, :deskripsi)";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -75,7 +75,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     public boolean update() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "UPDATE `menu` SET `nama` = :nama, `tipe` = :tipe, " +
-                    "`harga` = :harga, `deskripsi` = :deskripsi WHERE `id_menu` = :id_menu";
+                    "`harga_menu` = :harga_menu, `deskripsi` = :deskripsi WHERE `id_menu` = :id_menu";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -132,8 +132,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return tipe;
     }
 
-    public int getHarga() {
-        return harga;
+    public int getHarga_menu() {
+        return harga_menu;
     }
 
     public String getDeskripsi() {
@@ -149,8 +149,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
         this.tipe = tipe;
     }
 
-    public void setHarga(int harga) {
-        this.harga = harga;
+    public void setHarga_menu(int harga_menu) {
+        this.harga_menu = harga_menu;
     }
 
     public void setDeskripsi(String deskripsi) {
@@ -166,8 +166,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return new SimpleStringProperty(tipe);
     }
 
-    public StringProperty hargaProperty() {
-        return new SimpleStringProperty(rupiah(harga));
+    public StringProperty harga_menuProperty() {
+        return new SimpleStringProperty(rupiah(harga_menu));
     }
 
     @Override
@@ -175,7 +175,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return "Menu{" +
                 "id_menu=" + id_menu +
                 ", nama='" + nama + '\'' +
-                ", harga=" + harga +
+                ", harga_menu=" + harga_menu +
                 ", tipe='" + tipe + '\'' +
                 ", deskripsi='" + deskripsi + '\'' +
                 '}';

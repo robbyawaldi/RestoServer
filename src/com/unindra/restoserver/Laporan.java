@@ -162,7 +162,7 @@ public class Laporan {
         menus.forEach(menu -> {
             transaksiTable.addCell(cell(menu.getNama()));
             transaksiTable.addCell(cell(menu.getTipe()));
-            transaksiTable.addCell(cell(rupiah(menu.getHarga())));
+            transaksiTable.addCell(cell(rupiah(menu.getHarga_menu())));
             transaksiTable.addCell(cell(String.valueOf(getItems(menu).size())));
         });
 
