@@ -72,7 +72,7 @@ public class Laporan {
                                         .mapToInt(Transaksi::getTotalBayar)
                                         .sum())));
         detailTable.addCell(cellNoBorder("Menu Favorit:"));
-        detailTable.addCell(cellNoBorder(menu(localDate).getNama_menu()));
+        detailTable.addCell(cellNoBorder(menu(localDate).getNama()));
 
         document.add(detailTable);
 
@@ -160,9 +160,9 @@ public class Laporan {
         });
 
         menus.forEach(menu -> {
-            transaksiTable.addCell(cell(menu.getNama_menu()));
-            transaksiTable.addCell(cell(menu.getTipe_menu()));
-            transaksiTable.addCell(cell(rupiah(menu.getHarga_menu())));
+            transaksiTable.addCell(cell(menu.getNama()));
+            transaksiTable.addCell(cell(menu.getTipe()));
+            transaksiTable.addCell(cell(rupiah(menu.getHarga())));
             transaksiTable.addCell(cell(String.valueOf(getItems(menu).size())));
         });
 
@@ -240,7 +240,7 @@ public class Laporan {
         itemsTable.setTextAlignment(TextAlignment.CENTER);
 
         pesanans.forEach(item -> {
-            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
+            itemsTable.addCell(cellNoBorder(menu(item).getNama()));
             itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
             itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
         });
@@ -301,7 +301,7 @@ public class Laporan {
         itemsTable.setTextAlignment(TextAlignment.CENTER);
 
         pesanans.forEach(item -> {
-            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
+            itemsTable.addCell(cellNoBorder(menu(item).getNama()));
             itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
             itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
         });

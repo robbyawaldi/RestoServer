@@ -84,7 +84,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     }
 
     public int getTotal() {
-        return (menu(this).getHarga_menu() + level(level).getHarga_level()) * jumlah;
+        return (menu(this).getHarga() + level(level).getHarga()) * jumlah;
     }
 
     @SuppressWarnings("unused")

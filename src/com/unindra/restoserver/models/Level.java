@@ -14,15 +14,15 @@ import org.sql2o.Connection;
 import static com.unindra.restoserver.Rupiah.rupiah;
 
 public class Level extends RecursiveTreeObject<Level> {
-    private int level_item;
-    private int harga_level;
+    private int level;
+    private int harga;
     @Expose
     private static ObservableList<Level> levels = FXCollections.observableArrayList();
 
     // Constructor
-    private Level(int level, int harga_level) {
-        this.level_item = level;
-        this.harga_level = harga_level;
+    private Level(int level, int harga) {
+        this.level = level;
+        this.harga = harga;
     }
 
     static {
@@ -40,7 +40,7 @@ public class Level extends RecursiveTreeObject<Level> {
     // Update Level
     public boolean update() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "UPDATE `level` SET `harga_level` = :harga_level WHERE `level_item` = :level_item";
+            final String query = "UPDATE `level` SET `harga` = :harga WHERE `level` = :level";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateLevel();
@@ -56,29 +56,29 @@ public class Level extends RecursiveTreeObject<Level> {
     }
 
     static Level level(int level) {
-        return levels.stream().filter(l -> l.level_item == level).findFirst().orElse(null);
+        return levels.stream().filter(l -> l.level == level).findFirst().orElse(null);
     }
 
-    public int getLevel_item() {
-        return level_item;
+    public int getLevel() {
+        return level;
     }
 
-    public int getHarga_level() {
-        return harga_level;
+    public int getHarga() {
+        return harga;
     }
 
     // Setter
-    public void setHarga_level(int harga_level) {
-        this.harga_level = harga_level;
+    public void setHarga(int harga) {
+        this.harga = harga;
     }
 
     // Property
     public ObjectProperty<Integer> levelProperty() {
-        return new SimpleObjectProperty<>(level_item);
+        return new SimpleObjectProperty<>(level);
     }
 
     public StringProperty hargaProperty() {
-        return new SimpleStringProperty(rupiah(harga_level));
+        return new SimpleStringProperty(rupiah(harga));
     }
 
 }
