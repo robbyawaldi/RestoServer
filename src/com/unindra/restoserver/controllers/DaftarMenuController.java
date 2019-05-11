@@ -55,7 +55,7 @@ public class DaftarMenuController implements Initializable {
         menuTableView.getColumns().add(hargaCol);
         menuTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
 
-        tipeList = FXCollections.observableArrayList("ramen", "minuman", "cemilan", "lainnya");
+        tipeList = FXCollections.observableArrayList("minuman", "cemilan", "lainnya");
         tipeComboBox.setItems(tipeList);
 
         TreeTableColumn<Level, Integer> levelCol = new TreeTableColumn<>("Level");
@@ -168,6 +168,7 @@ public class DaftarMenuController implements Initializable {
         hargaLevelField.setText("");
         hargaLevelField.setEditable(false);
         levelTableView.getSelectionModel().clearSelection();
+        namaField.requestFocus();
     }
 
     private Dialog getDialog() {

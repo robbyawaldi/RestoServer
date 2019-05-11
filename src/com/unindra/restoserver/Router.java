@@ -13,11 +13,11 @@ import static com.unindra.restoserver.models.Level.getLevels;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static spark.Spark.*;
 
-class Server {
+class Router {
     private static Gson gson;
 
     public static void main(String[] args) {
-        new Server();
+        new Router();
     }
     static {
         gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {

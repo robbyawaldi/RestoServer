@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        new Server();
+        new Router();
 
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/app.fxml"));
         primaryStage.getIcons().add(new Image("/icons/logo-ramen-bulet-merah-copy50x50.png"));
