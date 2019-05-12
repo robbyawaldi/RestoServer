@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         new Router();
 
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/app.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/signin.fxml"));
         primaryStage.getIcons().add(new Image("/icons/logo-ramen-bulet-merah-copy50x50.png"));
         primaryStage.setTitle("Osaka Ramen");
         primaryStage.setScene(new Scene(root));

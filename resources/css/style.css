@@ -105,6 +105,12 @@
     -fx-alignment: center;
 }
 
+.border {
+    -fx-border-width: 1;
+    -fx-border-color: #DADCE0;
+    -fx-border-radius: 5pt;
+}
+
  /*******************************************************************************
   *                                                                             *
   * Text   			                                                            *

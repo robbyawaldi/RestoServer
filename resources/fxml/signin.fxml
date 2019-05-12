@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" fillWidth="false" prefHeight="500.0" prefWidth="780.0" styleClass="body-white"
+      stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.unindra.restoserver.controllers.SignInController">
+    <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="500.0" spacing="30.0">
+        <padding>
+            <Insets left="20.0" right="20.0" top="10.0"/>
+        </padding>
+        <styleClass>
+            <String fx:value="body-white"/>
+            <String fx:value="border"/>
+        </styleClass>
+        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/logo-ramen-bulet-merah-copy50x50.png"/>
+        </ImageView>
+        <Label styleClass="text-judul" text="Sign in"/>
+        <JFXTextField fx:id="usernameField" labelFloat="true" promptText="Username"/>
+        <JFXPasswordField fx:id="passwordField" labelFloat="true" promptText="Password"/>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <buttons>
+                <JFXButton mnemonicParsing="false" onAction="#signInAction"
+                           style="-fx-background-color: #4059a9; -fx-text-fill: white;" text="Sign in"/>
+            </buttons>
+        </ButtonBar>
+    </VBox>
+</VBox>

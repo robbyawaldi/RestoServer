@@ -1,12 +1,16 @@
 package com.unindra.restoserver.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.unindra.restoserver.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +44,7 @@ public class AppController implements Initializable {
         return FXMLLoader.load(getClass().getResource("/fxml/"+fxml+".fxml"));
     }
 
-    public void menuHandle(ActionEvent actionEvent) {
+    public void menuHandle(ActionEvent actionEvent) throws IOException {
         utamaButton.getStyleClass().set(2, "halaman-utama");
         menuButton.getStyleClass().set(2, "daftar-menu");
         laporanButton.getStyleClass().set(2, "laporan");
@@ -56,6 +60,17 @@ public class AppController implements Initializable {
         } else if (laporanButton.equals(source)) {
             laporanButton.getStyleClass().set(2, "laporan-pressed");
             scrollPane.setContent(laporan);
-        } else System.exit(0);
+        } else {
+            Stage stage = (Stage) utamaButton.getScene().getWindow();
+            Parent parent = FXMLLoader.load(getClass().getResource("/fxml/signin.fxml"));
+            stage.setScene(new Scene(parent));
+        }
+    }
+
+    void setUser(User user) {
+        if (user.getUsername().equals("pegawai")) {
+            menuButton.setDisable(true);
+            laporanButton.setDisable(true);
+        }
     }
 }
