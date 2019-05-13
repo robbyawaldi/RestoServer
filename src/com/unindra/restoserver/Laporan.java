@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Pesanan.getItems;
+import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
@@ -154,8 +154,8 @@ public class Laporan {
 
         List<Menu> menus = FXCollections.observableArrayList(getMenus());
         menus.sort((menu1, menu2) -> {
-            List<Pesanan> items1 = getItems(menu1);
-            List<Pesanan> items2 = getItems(menu2);
+            List<Pesanan> items1 = getPesanan(menu1);
+            List<Pesanan> items2 = getPesanan(menu2);
             return items2.size() - items1.size();
         });
 
@@ -163,7 +163,7 @@ public class Laporan {
             transaksiTable.addCell(cell(menu.getNama()));
             transaksiTable.addCell(cell(menu.getTipe()));
             transaksiTable.addCell(cell(rupiah(menu.getHarga_menu())));
-            transaksiTable.addCell(cell(String.valueOf(getItems(menu).size())));
+            transaksiTable.addCell(cell(String.valueOf(getPesanan(menu).size())));
         });
 
         document.add(new Paragraph("Daftar Menu").setMarginTop(10).setFont(boldFont));

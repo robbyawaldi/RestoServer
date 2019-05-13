@@ -2,6 +2,7 @@ package com.unindra.restoserver.controllers;
 
 import com.unindra.restoserver.Laporan;
 import com.unindra.restoserver.models.Menu;
+import com.unindra.restoserver.models.Pesanan;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,10 +17,11 @@ import org.joda.time.YearMonth;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Pesanan.getItems;
+import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
@@ -40,13 +42,15 @@ public class LaporanController implements Initializable {
         getTransaksiList().addListener((ListChangeListener<Transaksi>) c -> {
             LocalDate localDate = new LocalDate(new Date());
 
-            tglLabel.setText(localDate.toString());
-            totalTransaksiLabel.setText(String.valueOf(getTransaksiList(localDate).size()));
-            pemasukanLabel.setText(rupiah(getTransaksiList(localDate)
-                    .stream()
-                    .mapToInt(Transaksi::getTotalBayar)
-                    .sum()));
-            menufavLabel.setText(menu(localDate).getNama());
+            Platform.runLater(() -> {
+                tglLabel.setText(localDate.toString());
+                totalTransaksiLabel.setText(String.valueOf(getTransaksiList(localDate).size()));
+                pemasukanLabel.setText(rupiah(getTransaksiList(localDate)
+                        .stream()
+                        .mapToInt(Transaksi::getTotalBayar)
+                        .sum()));
+                menufavLabel.setText(menu(localDate).getNama());
+            });
 
             XYChart.Series bulananData = new XYChart.Series();
             for (int i = 4; i >= 0; i--) {
@@ -59,9 +63,17 @@ public class LaporanController implements Initializable {
             Platform.runLater(() -> bulananChart.getData().setAll(bulananData));
             bulananChart.getYAxis().setLabel("Pemasukan (Rp)");
 
+            // Sorting
+            List<Menu> menus = FXCollections.observableArrayList(getMenus());
+            menus.sort((menu1, menu2) -> {
+                List<Pesanan> items1 = getPesanan(menu1);
+                List<Pesanan> items2 = getPesanan(menu2);
+                return items2.size() - items1.size();
+            });
+
             ObservableList<PieChart.Data> menuFavData = FXCollections.observableArrayList();
-            for (Menu menu : getMenus())
-                menuFavData.add(new PieChart.Data(menu.getNama(), getItems(menu).size()));
+            for (int i = 0; i < 5; i++)
+                menuFavData.add(new PieChart.Data(menus.get(i).getNama(), getPesanan(menus.get(i)).size()));
 
             Platform.runLater(() -> menuFavChart.setData(menuFavData));
             menuFavChart.setStartAngle(90);

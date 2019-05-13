@@ -95,7 +95,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     }
 
     public int getTotalBayar() {
-        return Pesanan.getItems(this).stream().mapToInt(Pesanan::getTotal).sum();
+        return Pesanan.getPesanan(this).stream().mapToInt(Pesanan::getTotal).sum();
     }
 
     public int getTotalBayarFromService() {

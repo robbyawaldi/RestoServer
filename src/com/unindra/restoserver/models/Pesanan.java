@@ -50,22 +50,22 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     }
 
     // Getter
-    private static List<Pesanan> getItems() {
+    private static List<Pesanan> getPesanan() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `pesanan`";
             return connection.createQuery(query).executeAndFetch(Pesanan.class);
         }
     }
 
-    static List<Pesanan> getItems(Transaksi transaksi) {
-        return getItems()
+    static List<Pesanan> getPesanan(Transaksi transaksi) {
+        return getPesanan()
                 .stream()
                 .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
                 .collect(Collectors.toList());
     }
 
-    public static List<Pesanan> getItems(Menu menu, List<Transaksi> transaksiList) {
-        List<Pesanan> pesanans = getItems(menu);
+    public static List<Pesanan> getPesanan(Menu menu, List<Transaksi> transaksiList) {
+        List<Pesanan> pesanans = getPesanan(menu);
         List<Pesanan> filterPesanans = FXCollections.observableArrayList();
         for (Transaksi transaksi : transaksiList) {
             filterPesanans.addAll(
@@ -76,8 +76,8 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return filterPesanans;
     }
 
-    public static List<Pesanan> getItems(Menu menu) {
-        return getItems()
+    public static List<Pesanan> getPesanan(Menu menu) {
+        return getPesanan()
                 .stream()
                 .filter(item -> item.getId_menu() == menu.getId_menu())
                 .collect(Collectors.toList());

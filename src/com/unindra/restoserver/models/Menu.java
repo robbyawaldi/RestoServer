@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Pesanan.getItems;
+import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Menu extends RecursiveTreeObject<Menu> {
@@ -103,7 +103,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
                 new Menu(0, "tidak ada", "", 0, ""));
         AtomicInteger jumlahAtomic = new AtomicInteger();
         for (Menu menu : getMenus()) {
-            int jumlah = getItems(menu, getTransaksiList(localDate)).size();
+            int jumlah = Pesanan.getPesanan(menu, getTransaksiList(localDate)).size();
             if (jumlahAtomic.get() < jumlah) {
                 menufav.set(menu);
                 jumlahAtomic.set(jumlah);
