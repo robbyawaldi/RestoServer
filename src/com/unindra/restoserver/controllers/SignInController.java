@@ -24,9 +24,6 @@ public class SignInController {
                 Parent parent = fxmlLoader.load();
                 ((AppController) fxmlLoader.getController()).setUser(user);
                 getStage().setScene(new Scene(parent));
-                usernameField.requestFocus();
-                usernameField.setText("");
-                passwordField.setText("");
             } else {
                 getDialog().information("Error", "Password salah");
                 passwordField.requestFocus();

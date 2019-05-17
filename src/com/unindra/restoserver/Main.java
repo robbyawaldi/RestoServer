@@ -10,7 +10,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Jalankan Server Resto
         new Router();
+        // Jalankan Server MySQL
+        Runtime.getRuntime().exec("C:\\xampp\\mysql\\bin\\mysqld.exe");
 
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/signin.fxml"));
         primaryStage.getIcons().add(new Image("/icons/logo-ramen-bulet-merah-copy50x50.png"));
