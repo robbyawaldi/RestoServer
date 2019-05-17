@@ -212,7 +212,12 @@ public class UtamaController implements Initializable {
                                             Thread thread = new Thread(() -> {
                                                 Transaksi transaksi = getTransaksiList().get(getIndex());
                                                 try {
-                                                    Laporan.struk(transaksi, Integer.parseInt(tunaiField.getText()));
+                                                    int tunai = Integer.parseInt(tunaiField.getText());
+                                                    if (tunai >= transaksi.getTotalBayar())
+                                                        Laporan.struk(transaksi, tunai);
+                                                    else jumlahTunaiDialog.information(
+                                                            "Error",
+                                                            "Jumlah tunai tidak mencukupi total pembayaran");
                                                 } catch (IOException ex) {
                                                     ex.printStackTrace();
                                                 }
