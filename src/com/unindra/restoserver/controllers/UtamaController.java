@@ -213,7 +213,7 @@ public class UtamaController implements Initializable {
                                                 Transaksi transaksi = getTransaksiList().get(getIndex());
                                                 try {
                                                     int tunai = Integer.parseInt(tunaiField.getText());
-                                                    if (tunai >= transaksi.getTotalBayar())
+                                                    if (tunai >= transaksi.getTotalBayarFromService())
                                                         Laporan.struk(transaksi, tunai);
                                                     else jumlahTunaiDialog.information(
                                                             "Error",
