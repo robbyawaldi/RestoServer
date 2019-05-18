@@ -1,9 +1,6 @@
 package com.unindra.restoserver;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.models.*;
 import javafx.collections.FXCollections;
@@ -19,6 +16,7 @@ class Router {
     public static void main(String[] args) {
         new Router();
     }
+
     static {
         gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
             @Override
@@ -51,17 +49,12 @@ class Router {
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
+
         get("/pesanan/:no_meja", (request, response) -> {
             response.type("application/json");
 
-            if (PesananService.getStatus() == PesananService.StatusPesanan.CHANGED) {
-                PesananService.setStatus(PesananService.StatusPesanan.STILL);
-                return gson.toJson(new StandardResponse(
-                        StatusResponse.SUCCESS,
-                        gson.toJsonTree(getItems(request.params(":no_meja"))))
-                );
-            }
-            return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, "NOTHING UPDATE"));
+            JsonElement jsonElement = gson.toJsonTree(getItems(request.params(":no_meja")));
+            return gson.toJson(new StandardResponse(StatusResponse.SUCCESS, jsonElement));
         });
 
         put("/pesanan", (request, response) -> {

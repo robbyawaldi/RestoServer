@@ -21,6 +21,12 @@ public class StandardResponse {
         this.data = data;
     }
 
+    public StandardResponse(StatusResponse status, String message, JsonElement data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "StandardResponse{" +

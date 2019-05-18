@@ -9,6 +9,7 @@ import com.unindra.restoserver.Dialog;
 import com.unindra.restoserver.Laporan;
 import com.unindra.restoserver.models.Pesanan;
 import com.unindra.restoserver.models.Transaksi;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
@@ -215,9 +216,16 @@ public class UtamaController implements Initializable {
                                                     int tunai = Integer.parseInt(tunaiField.getText());
                                                     if (tunai >= transaksi.getTotalBayarFromService())
                                                         Laporan.struk(transaksi, tunai);
-                                                    else jumlahTunaiDialog.information(
-                                                            "Error",
-                                                            "Jumlah tunai tidak mencukupi total pembayaran");
+                                                    else {
+                                                        Platform.runLater(() -> {
+                                                            Dialog dialog = new Dialog(
+                                                                    (Stage) pesananTableView
+                                                                            .getScene().getWindow());
+                                                            dialog.information(
+                                                                    "Error",
+                                                                    "Jumlah tunai tidak mencukupi total pembayaran");
+                                                        });
+                                                    }
                                                 } catch (IOException ex) {
                                                     ex.printStackTrace();
                                                 }
