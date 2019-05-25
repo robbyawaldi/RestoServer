@@ -14,12 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Menu extends RecursiveTreeObject<Menu> {
-    private int id_menu;
-    private String nama;
+    private String nama_menu;
     private String tipe;
     private int harga_menu;
     private String deskripsi;
@@ -31,16 +29,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
     }
 
     // Constructor
-    public Menu(int id_menu, String nama, String type, int harga_menu, String deskripsi) {
-        this.id_menu = id_menu;
-        this.nama = nama;
-        this.tipe = type;
-        this.harga_menu = harga_menu;
-        this.deskripsi = deskripsi;
-    }
-
-    public Menu(String nama, String tipe, int harga_menu, String deskripsi) {
-        this.nama = nama;
+    public Menu(String nama_menu, String tipe, int harga_menu, String deskripsi) {
+        this.nama_menu = nama_menu;
         this.tipe = tipe;
         this.harga_menu = harga_menu;
         this.deskripsi = deskripsi;
@@ -61,8 +51,9 @@ public class Menu extends RecursiveTreeObject<Menu> {
     // add update delete
     public boolean add() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `menu` (`nama`, `tipe`, `harga_menu`, `deskripsi`) " +
-                    "VALUES (:nama, :tipe, :harga_menu, :deskripsi)";
+            final String query =
+                    "INSERT INTO `menu` (`nama_menu`, `tipe`, `harga_menu`, `deskripsi`) " +
+                    "VALUES (:nama_menu, :tipe, :harga_menu, :deskripsi)";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -74,8 +65,9 @@ public class Menu extends RecursiveTreeObject<Menu> {
 
     public boolean update() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "UPDATE `menu` SET `nama` = :nama, `tipe` = :tipe, " +
-                    "`harga_menu` = :harga_menu, `deskripsi` = :deskripsi WHERE `id_menu` = :id_menu";
+            final String query =
+                    "UPDATE `menu` SET `tipe` = :tipe, `harga_menu` = :harga_menu, `deskripsi` = :deskripsi " +
+                    "WHERE `nama_menu` = :nama_menu";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -87,7 +79,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
 
     public boolean delete() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "DELETE FROM `menu` WHERE `id_menu` = :id_menu";
+            final String query = "DELETE FROM `menu` WHERE `nama_menu` = :nama_menu";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -100,7 +92,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     // Getter
     public static Menu menu(LocalDate localDate) {
         AtomicReference<Menu> menufav = new AtomicReference<>(
-                new Menu(0, "tidak ada", "", 0, ""));
+                new Menu("tidak ada", "", 0, ""));
         AtomicInteger jumlahAtomic = new AtomicInteger();
         for (Menu menu : getMenus()) {
             int jumlah = Pesanan.getPesanan(menu, getTransaksiList(localDate)).size();
@@ -115,17 +107,13 @@ public class Menu extends RecursiveTreeObject<Menu> {
     public static Menu menu(Pesanan pesanan) {
         return getMenus()
                 .stream()
-                .filter(daftarMenu -> daftarMenu.id_menu == pesanan.getId_menu())
+                .filter(menu -> menu.getNama_menu().equals(pesanan.getNama_menu()))
                 .findFirst()
                 .orElse(null);
     }
 
-    int getId_menu() {
-        return id_menu;
-    }
-
-    public String getNama() {
-        return nama;
+    public String getNama_menu() {
+        return nama_menu;
     }
 
     public String getTipe() {
@@ -141,8 +129,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
     }
 
     // Setter
-    public void setNama(String nama) {
-        this.nama = nama;
+    public void setNama_menu(String nama_menu) {
+        this.nama_menu = nama_menu;
     }
 
     public void setTipe(String tipe) {
@@ -158,8 +146,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
     }
 
     // Property
-    public StringProperty namaProperty() {
-        return new SimpleStringProperty(nama);
+    public StringProperty nama_menuProperty() {
+        return new SimpleStringProperty(nama_menu);
     }
 
     public StringProperty tipeProperty() {
@@ -173,8 +161,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     @Override
     public String toString() {
         return "Menu{" +
-                "id_menu=" + id_menu +
-                ", nama='" + nama + '\'' +
+                ", nama_menu='" + nama_menu + '\'' +
                 ", harga_menu=" + harga_menu +
                 ", tipe='" + tipe + '\'' +
                 ", deskripsi='" + deskripsi + '\'' +

@@ -7,9 +7,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static com.unindra.restoserver.models.Pesanan.getPesanan;
+
 public class PesananService {
     private static final ObservableList<Pesanan> pesananList = FXCollections.observableArrayList();
-    private static final AtomicInteger count = new AtomicInteger(0);
+    private static final AtomicInteger count;
+
+    static {
+        String latestID ;
+        if (!getPesanan().isEmpty()) latestID = getPesanan().get(getPesanan().size() - 1).getId_pesanan();
+        else latestID = "1";
+        count = new AtomicInteger(Integer.parseInt(latestID));
+    }
 
     // Getter
     public static ObservableList<Pesanan> getPesananList() {
@@ -28,13 +37,17 @@ public class PesananService {
 
     // Add
     public static void add(Pesanan pesanan) {
-        pesanan.setId_pesanan(count.getAndIncrement());
+        pesanan.setId_pesanan(Id.getIdStringFromInt(count.incrementAndGet()));
         pesananList.add(pesanan);
     }
 
     // Update
     public static boolean update(Pesanan pesanan) {
-        Pesanan toEdit = pesananList.stream().filter(i -> i.getId_pesanan() == pesanan.getId_pesanan()).findFirst().orElse(null);
+        Pesanan toEdit = pesananList
+                .stream()
+                .filter(i -> i.getId_pesanan().equals(pesanan.getId_pesanan()))
+                .findFirst()
+                .orElse(null);
         if (toEdit != null) {
             pesananList.set(pesananList.indexOf(toEdit), pesanan);
             return true;
@@ -43,7 +56,11 @@ public class PesananService {
 
     // Delete
     public static boolean delete(Pesanan pesanan) {
-        Pesanan toDelete = pesananList.stream().filter(i -> i.getId_pesanan() == pesanan.getId_pesanan()).findFirst().orElse(null);
+        Pesanan toDelete = pesananList
+                .stream()
+                .filter(i -> i.getId_pesanan().equals(pesanan.getId_pesanan()))
+                .findFirst()
+                .orElse(null);
         if (toDelete != null) {
             pesananList.remove(toDelete);
             return true;

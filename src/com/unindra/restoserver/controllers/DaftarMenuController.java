@@ -44,7 +44,7 @@ public class DaftarMenuController implements Initializable {
         TreeTableColumn<Menu, String> tipeCol = new TreeTableColumn<>("Tipe");
         TreeTableColumn<Menu, String> hargaCol = new TreeTableColumn<>("Harga");
 
-        namaCol.setCellValueFactory(param -> param.getValue().getValue().namaProperty());
+        namaCol.setCellValueFactory(param -> param.getValue().getValue().nama_menuProperty());
         tipeCol.setCellValueFactory(param -> param.getValue().getValue().tipeProperty());
         hargaCol.setCellValueFactory(param -> param.getValue().getValue().harga_menuProperty());
 
@@ -96,7 +96,7 @@ public class DaftarMenuController implements Initializable {
             }
             else getDialog().information("Gagal", "Menu gagal ditambahkan");
         } else {
-            menu.setNama(namaField.getText());
+            menu.setNama_menu(namaField.getText());
             menu.setTipe(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
             menu.setDeskripsi(deskArea.getText());
@@ -118,12 +118,13 @@ public class DaftarMenuController implements Initializable {
     public void pilihHandle(MouseEvent mouseEvent) {
         if (!menuTableView.getSelectionModel().isEmpty()) {
             menu = menuTableView.getSelectionModel().getSelectedItem().getValue();
-            namaField.setText(menu.getNama());
+            namaField.setText(menu.getNama_menu());
             int index = tipeList.indexOf(menu.getTipe());
             tipeComboBox.getSelectionModel().clearAndSelect(index);
             hargaField.setText(String.valueOf(menu.getHarga_menu()));
             deskArea.setText(menu.getDeskripsi());
             titleLabel.setText("UBAH MENU");
+            namaField.setDisable(true);
             hapusButton.setVisible(true);
             actionButton.setText("Ubah");
             actionButton.getStyleClass().set(2, "ubah");
@@ -136,7 +137,7 @@ public class DaftarMenuController implements Initializable {
             level = levelTableView.getSelectionModel().getSelectedItem().getValue();
             levelField.setText(String.valueOf(level.getLevel()));
             hargaLevelField.setText(String.valueOf(level.getHarga_level()));
-            hargaLevelField.setEditable(true);
+            hargaLevelField.setDisable(false);
         }
         if (mouseEvent.getClickCount() == 2) reset();
     }
@@ -160,13 +161,14 @@ public class DaftarMenuController implements Initializable {
         actionButton.setText("Tambah");
         actionButton.getStyleClass().set(2, "tambah");
         menuTableView.getSelectionModel().clearSelection();
+        namaField.setDisable(false);
         namaField.setText("");
         tipeComboBox.getSelectionModel().clearSelection();
         hargaField.setText("");
         deskArea.setText("");
         levelField.setText("");
         hargaLevelField.setText("");
-        hargaLevelField.setEditable(false);
+        hargaLevelField.setDisable(true);
         levelTableView.getSelectionModel().clearSelection();
         namaField.requestFocus();
     }

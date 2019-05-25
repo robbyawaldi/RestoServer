@@ -89,11 +89,11 @@
             </VBox.margin>
             <VBox prefHeight="42.0" prefWidth="246.0">
                 <Label styleClass="text-body" text="Level" />
-                <JFXTextField fx:id="levelField" editable="false" />
+                <JFXTextField fx:id="levelField" disable="true" editable="false" />
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                 <Label styleClass="text-body" text="Harga" />
-                <JFXTextField fx:id="hargaLevelField" editable="false" />
+                <JFXTextField fx:id="hargaLevelField" disable="true" />
             </VBox>
         </HBox>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">

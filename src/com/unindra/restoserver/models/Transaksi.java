@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.sql2o.Connection;
 
 import java.util.Date;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 import static com.unindra.restoserver.Rupiah.rupiah;
 
 public class Transaksi extends RecursiveTreeObject<Transaksi> {
-    private int id_transaksi;
+    private String id_transaksi;
     private String no_meja;
     private Date tanggal;
     @Expose
@@ -25,6 +26,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
 
     // Constructor
     public Transaksi(String no_meja) {
+        this.id_transaksi = Id.getIdByDateTime(new LocalDateTime());
         this.no_meja = no_meja;
         this.tanggal = new Date();
     }
@@ -47,14 +49,17 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
     // Simpan
     public void simpan() {
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `transaksi` (`no_meja`,`tanggal`) VALUES (:no_meja,:tanggal)";
+            final String query =
+                    "INSERT INTO `transaksi` (`id_transaksi`,`no_meja`,`tanggal`) " +
+                    "VALUES (:id_transaksi,:no_meja,:tanggal)";
             connection.createQuery(query).bind(this).executeUpdate();
-            this.id_transaksi = connection.getKey(Integer.class);
+            if (connection.getResult() > 0) {
+                List<Pesanan> pesanans = PesananService.getItems(this);
+                pesanans.forEach(pesanan -> pesanan.simpan(this));
+                pesanans.forEach(PesananService::delete);
+                TransaksiService.delete(this);
+            }
         }
-        List<Pesanan> pesanans = PesananService.getItems(this);
-        pesanans.forEach(item -> item.simpan(this));
-        pesanans.forEach(PesananService::delete);
-        TransaksiService.delete(this);
     }
 
     // Sinkronisasi collection dengan database
@@ -106,7 +111,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .sum();
     }
 
-    public int getId_transaksi() {
+    public String getId_transaksi() {
         return id_transaksi;
     }
 

@@ -49,7 +49,7 @@ public class LaporanController implements Initializable {
                         .stream()
                         .mapToInt(Transaksi::getTotalBayar)
                         .sum()));
-                menufavLabel.setText(menu(localDate).getNama());
+                menufavLabel.setText(menu(localDate).getNama_menu());
             });
 
             XYChart.Series bulananData = new XYChart.Series();
@@ -60,8 +60,10 @@ public class LaporanController implements Initializable {
                 bulananData.getData().add(new XYChart.Data<>(bulan, totalPendapatan));
             }
 
-            Platform.runLater(() -> bulananChart.getData().setAll(bulananData));
-            bulananChart.getYAxis().setLabel("Pemasukan (Rp)");
+            Platform.runLater(() -> {
+                bulananChart.getData().setAll(bulananData);
+                bulananChart.getYAxis().setLabel("Pemasukan (Rp)");
+            });
 
             // Sorting
             List<Menu> menus = FXCollections.observableArrayList(getMenus());
@@ -73,7 +75,7 @@ public class LaporanController implements Initializable {
 
             ObservableList<PieChart.Data> menuFavData = FXCollections.observableArrayList();
             for (int i = 0; i < 5; i++)
-                menuFavData.add(new PieChart.Data(menus.get(i).getNama(), getPesanan(menus.get(i)).size()));
+                menuFavData.add(new PieChart.Data(menus.get(i).getNama_menu(), getPesanan(menus.get(i)).size()));
 
             Platform.runLater(() -> menuFavChart.setData(menuFavData));
             menuFavChart.setStartAngle(90);

@@ -16,18 +16,18 @@ import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
 
 public class Pesanan extends RecursiveTreeObject<Pesanan> {
-    private int id_transaksi;
-    private int id_pesanan;
-    private int id_menu;
+    private String id_transaksi;
+    private String id_pesanan;
+    private String nama_menu;
     private int jumlah;
     private int level;
     private String no_meja;
     private String status_item;
 
     // Constructor
-    public Pesanan(int id_pesanan, int id_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
+    public Pesanan(String id_pesanan, String nama_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
         this.id_pesanan = id_pesanan;
-        this.id_menu = id_menu;
+        this.nama_menu = nama_menu;
         this.jumlah = jumlah;
         this.level = lvl_item;
         this.no_meja = no_meja;
@@ -43,14 +43,15 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     void simpan(Transaksi transaksi) {
         this.id_transaksi = transaksi.getId_transaksi();
         try (Connection connection = DB.sql2o.open()) {
-            final String query = "INSERT INTO `pesanan` (`id_transaksi`,`id_menu`,`jumlah`,`level`)" +
-                    " VALUES (:id_transaksi,:id_menu,:jumlah,:level)";
+            final String query =
+                    "INSERT INTO `pesanan` (`id_pesanan`,`id_transaksi`,`nama_menu`,`jumlah`,`level`) " +
+                    "VALUES (:id_pesanan,:id_transaksi,:nama_menu,:jumlah,:level)";
             connection.createQuery(query).bind(this).executeUpdate();
         }
     }
 
     // Getter
-    private static List<Pesanan> getPesanan() {
+    static List<Pesanan> getPesanan() {
         try (Connection connection = DB.sql2o.open()) {
             final String query = "SELECT * FROM `pesanan`";
             return connection.createQuery(query).executeAndFetch(Pesanan.class);
@@ -60,7 +61,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     static List<Pesanan> getPesanan(Transaksi transaksi) {
         return getPesanan()
                 .stream()
-                .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
+                .filter(item -> item.id_transaksi.equals(transaksi.getId_transaksi()))
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +71,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         for (Transaksi transaksi : transaksiList) {
             filterPesanans.addAll(
                     pesanans.stream()
-                            .filter(item -> item.id_transaksi == transaksi.getId_transaksi())
+                            .filter(item -> item.id_transaksi.equals(transaksi.getId_transaksi()))
                             .collect(Collectors.toList()));
         }
         return filterPesanans;
@@ -79,7 +80,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     public static List<Pesanan> getPesanan(Menu menu) {
         return getPesanan()
                 .stream()
-                .filter(item -> item.getId_menu() == menu.getId_menu())
+                .filter(pesanan -> pesanan.getNama_menu().equals(menu.getNama_menu()))
                 .collect(Collectors.toList());
     }
 
@@ -88,7 +89,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     }
 
     @SuppressWarnings("unused")
-    int getId_transaksi() {
+    String getId_transaksi() {
         return id_transaksi;
     }
 
@@ -96,12 +97,12 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return jumlah;
     }
 
-    int getId_pesanan() {
+    String getId_pesanan() {
         return id_pesanan;
     }
 
-    int getId_menu() {
-        return id_menu;
+    String getNama_menu() {
+        return nama_menu;
     }
 
     public int getLevel() {
@@ -117,7 +118,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     }
 
     // Setter
-    void setId_pesanan(int id_pesanan) {
+    void setId_pesanan(String id_pesanan) {
         this.id_pesanan = id_pesanan;
     }
 
@@ -136,7 +137,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return "Pesanan{" +
                 "id_transaksi=" + id_transaksi +
                 ", id_pesanan=" + id_pesanan +
-                ", id_menu=" + id_menu +
+                ", nama_menu=" + nama_menu +
                 ", jumlah=" + jumlah +
                 ", level=" + level +
                 ", no_meja='" + no_meja + '\'' +

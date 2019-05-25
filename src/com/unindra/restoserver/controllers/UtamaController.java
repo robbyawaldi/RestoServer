@@ -44,7 +44,7 @@ public class UtamaController implements Initializable {
         TreeTableColumn<Pesanan, String> tolakCol = new TreeTableColumn<>("Tolak");
 
         mejaCol.setCellValueFactory(param -> param.getValue().getValue().no_mejaProperty());
-        namaCol.setCellValueFactory(param -> menu(param.getValue().getValue()).namaProperty());
+        namaCol.setCellValueFactory(param -> menu(param.getValue().getValue()).nama_menuProperty());
         jumlahCol.setCellValueFactory(param -> param.getValue().getValue().jumlahProperty());
         terimaCol.setCellValueFactory(param -> new SimpleStringProperty(""));
         tolakCol.setCellValueFactory(param -> new SimpleStringProperty(""));
