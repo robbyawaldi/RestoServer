@@ -5,17 +5,13 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.models.*;
 import javafx.collections.FXCollections;
 
-import static com.unindra.restoserver.models.PesananService.getItems;
 import static com.unindra.restoserver.models.Level.getLevels;
 import static com.unindra.restoserver.models.Menu.getMenus;
+import static com.unindra.restoserver.models.PesananService.getItems;
 import static spark.Spark.*;
 
 class Router {
     private static Gson gson;
-
-    public static void main(String[] args) {
-        new Router();
-    }
 
     static {
         gson = new GsonBuilder().addSerializationExclusionStrategy(new ExclusionStrategy() {
@@ -103,6 +99,14 @@ class Router {
             TransaksiService.add(transaksi);
 
             return gson.toJson(new StandardResponse(StatusResponse.SUCCESS));
+        });
+
+        get("/detail_ramen/:nama_menu", (request, response) -> {
+            response.type("application/json");
+
+            return gson.toJson(new StandardResponse(
+                    StatusResponse.SUCCESS,
+                    gson.toJsonTree(DetailRamen.detailRamen(new DetailRamen(request.params(":nama_menu"))))));
         });
     }
 }

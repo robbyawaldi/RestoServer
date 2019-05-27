@@ -88,8 +88,7 @@ public class DaftarMenuController implements Initializable {
             Menu menu = new Menu(
                     namaField.getText(),
                     tipeComboBox.getSelectionModel().getSelectedItem(),
-                    Integer.valueOf(hargaField.getText()),
-                    deskArea.getText());
+                    Integer.valueOf(hargaField.getText()));
             if (menu.add()) {
                 getDialog().information("Berhasil!", "Menu berhasil ditambahkan");
                 reset();
@@ -99,7 +98,6 @@ public class DaftarMenuController implements Initializable {
             menu.setNama_menu(namaField.getText());
             menu.setTipe(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
-            menu.setDeskripsi(deskArea.getText());
             if (menu.update()) {
                 getDialog().information("Berhasil!", "Menu berhasil diubah");
                 reset();
@@ -122,7 +120,6 @@ public class DaftarMenuController implements Initializable {
             int index = tipeList.indexOf(menu.getTipe());
             tipeComboBox.getSelectionModel().clearAndSelect(index);
             hargaField.setText(String.valueOf(menu.getHarga_menu()));
-            deskArea.setText(menu.getDeskripsi());
             titleLabel.setText("UBAH MENU");
             namaField.setDisable(true);
             hapusButton.setVisible(true);

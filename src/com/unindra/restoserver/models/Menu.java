@@ -20,7 +20,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
     private String nama_menu;
     private String tipe;
     private int harga_menu;
-    private String deskripsi;
     @Expose
     private static ObservableList<Menu> menus = FXCollections.observableArrayList();
 
@@ -29,11 +28,10 @@ public class Menu extends RecursiveTreeObject<Menu> {
     }
 
     // Constructor
-    public Menu(String nama_menu, String tipe, int harga_menu, String deskripsi) {
+    public Menu(String nama_menu, String tipe, int harga_menu) {
         this.nama_menu = nama_menu;
         this.tipe = tipe;
         this.harga_menu = harga_menu;
-        this.deskripsi = deskripsi;
     }
 
     public static ObservableList<Menu> getMenus() {
@@ -92,7 +90,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     // Getter
     public static Menu menu(LocalDate localDate) {
         AtomicReference<Menu> menufav = new AtomicReference<>(
-                new Menu("tidak ada", "", 0, ""));
+                new Menu("tidak ada", "", 0));
         AtomicInteger jumlahAtomic = new AtomicInteger();
         for (Menu menu : getMenus()) {
             int jumlah = Pesanan.getPesanan(menu, getTransaksiList(localDate)).size();
@@ -124,10 +122,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
         return harga_menu;
     }
 
-    public String getDeskripsi() {
-        return deskripsi;
-    }
-
     // Setter
     public void setNama_menu(String nama_menu) {
         this.nama_menu = nama_menu;
@@ -139,10 +133,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
 
     public void setHarga_menu(int harga_menu) {
         this.harga_menu = harga_menu;
-    }
-
-    public void setDeskripsi(String deskripsi) {
-        this.deskripsi = deskripsi;
     }
 
     // Property
@@ -164,7 +154,6 @@ public class Menu extends RecursiveTreeObject<Menu> {
                 ", nama_menu='" + nama_menu + '\'' +
                 ", harga_menu=" + harga_menu +
                 ", tipe='" + tipe + '\'' +
-                ", deskripsi='" + deskripsi + '\'' +
                 '}';
     }
 }
