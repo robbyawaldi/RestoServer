@@ -50,8 +50,8 @@ public class Menu extends RecursiveTreeObject<Menu> {
     public boolean add() {
         try (Connection connection = DB.sql2o.open()) {
             final String query =
-                    "INSERT INTO `menu` (`nama_menu`, `tipe`, `harga_menu`, `deskripsi`) " +
-                    "VALUES (:nama_menu, :tipe, :harga_menu, :deskripsi)";
+                    "INSERT INTO `menu` (`nama_menu`, `tipe`, `harga_menu`) " +
+                    "VALUES (:nama_menu, :tipe, :harga_menu)";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 updateMenu();
@@ -64,7 +64,7 @@ public class Menu extends RecursiveTreeObject<Menu> {
     public boolean update() {
         try (Connection connection = DB.sql2o.open()) {
             final String query =
-                    "UPDATE `menu` SET `tipe` = :tipe, `harga_menu` = :harga_menu, `deskripsi` = :deskripsi " +
+                    "UPDATE `menu` SET `tipe` = :tipe, `harga_menu` = :harga_menu " +
                     "WHERE `nama_menu` = :nama_menu";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {

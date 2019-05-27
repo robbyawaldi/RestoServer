@@ -13,99 +13,118 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.DaftarMenuController">
+<FlowPane prefHeight="500.0" prefWidth="1200.0" styleClass="body-white" xmlns="http://javafx.com/javafx/8.0.172-ea"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.unindra.restoserver.controllers.DaftarMenuController">
     <VBox prefHeight="372.0" prefWidth="600.0" spacing="20.0">
         <padding>
-            <Insets left="30.0" right="20.0" top="20.0" />
+            <Insets left="30.0" right="20.0" top="20.0"/>
         </padding>
-        <Label styleClass="text-judul" text="Daftar Menu" />
-        <JFXTreeTableView fx:id="menuTableView" onMouseClicked="#pilihHandle" prefHeight="332.0" prefWidth="550.0" showRoot="false" />
+        <Label styleClass="text-judul" text="Daftar Menu"/>
+        <JFXTreeTableView fx:id="menuTableView" onMouseClicked="#pilihHandle" prefHeight="332.0" prefWidth="550.0"
+                          showRoot="false"/>
     </VBox>
     <VBox prefWidth="600.0" spacing="20.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
         </padding>
-        <Label fx:id="titleLabel" styleClass="text-judul" text="Tambah Menu" />
+        <Label fx:id="titleLabel" styleClass="text-judul" text="Tambah Menu"/>
         <VBox>
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
-            <Label styleClass="text-body" text="Nama" />
-            <JFXTextField fx:id="namaField" />
+            <Label styleClass="text-body" text="Nama"/>
+            <JFXTextField fx:id="namaField"/>
         </VBox>
         <HBox spacing="20.0">
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
             <VBox>
-                <Label styleClass="text-body" text="Tipe" />
-                <JFXComboBox fx:id="tipeComboBox" prefHeight="25.0" prefWidth="222.0" promptText="Pilih tipe menu..." />
+                <Label styleClass="text-body" text="Tipe"/>
+                <JFXComboBox fx:id="tipeComboBox" onAction="#tipeHandle" prefHeight="25.0" prefWidth="222.0"
+                             promptText="Pilih tipe menu..."/>
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
-                <Label styleClass="text-body" text="Harga" />
-                <JFXTextField fx:id="hargaField" />
+                <Label styleClass="text-body" text="Harga"/>
+                <JFXTextField fx:id="hargaField"/>
             </VBox>
         </HBox>
-        <VBox>
+        <HBox fx:id="formForRamenPane" prefHeight="47.0" prefWidth="540.0" spacing="20.0">
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
-            <Label styleClass="text-body" text="Deskripsi" />
-            <JFXTextArea fx:id="deskArea" prefHeight="50.0" prefWidth="566.0" />
-        </VBox>
+            <VBox prefHeight="67.0">
+                <Label styleClass="text-body" text="Deskripsi"/>
+                <JFXTextArea fx:id="deskArea" prefHeight="2.0" prefWidth="400.0"/>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="67.0">
+                <Label styleClass="text-body" text="Gambar">
+                    <VBox.margin>
+                        <Insets left="15.0"/>
+                    </VBox.margin>
+                </Label>
+                <JFXButton fx:id="pilihGambarButton" mnemonicParsing="false" onAction="#pilihGambarHandle"
+                           prefHeight="35.0" prefWidth="307.0" styleClass="file"
+                           text="Pilih gambar... (max : 2048 KB)"/>
+            </VBox>
+        </HBox>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
             <buttons>
-                <JFXButton fx:id="hapusButton" mnemonicParsing="false" onAction="#hapusHandle" styleClass="hapus" text="Hapus" visible="false">
+                <JFXButton fx:id="hapusButton" mnemonicParsing="false" onAction="#hapusHandle" styleClass="hapus"
+                           text="Hapus" visible="false">
                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true"/>
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="actionButton" layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#actionHandle" styleClass="tambah" text="Tambah">
+                <JFXButton fx:id="actionButton" layoutX="457.0" layoutY="11.0" mnemonicParsing="false"
+                           onAction="#actionHandle" styleClass="tambah" text="Tambah">
                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true"/>
                     </graphic>
                 </JFXButton>
             </buttons>
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
         </ButtonBar>
     </VBox>
     <VBox layoutX="10.0" layoutY="10.0" prefHeight="309.0" prefWidth="600.0" spacing="20.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />
+            <Insets bottom="20.0" left="30.0" right="20.0" top="20.0"/>
         </padding>
-        <Label styleClass="text-judul" text="Level" />
-        <JFXTreeTableView fx:id="levelTableView" onMouseClicked="#pilihLevelHandle" prefHeight="332.0" prefWidth="550.0" showRoot="false" />
+        <Label styleClass="text-judul" text="Level"/>
+        <JFXTreeTableView fx:id="levelTableView" onMouseClicked="#pilihLevelHandle" prefHeight="332.0" prefWidth="550.0"
+                          showRoot="false"/>
     </VBox>
     <VBox layoutX="610.0" layoutY="10.0" prefWidth="600.0" spacing="20.0">
         <padding>
-            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
         </padding>
-        <Label styleClass="text-judul" text="Ubah Level" />
+        <Label styleClass="text-judul" text="Ubah Level"/>
         <HBox spacing="20.0">
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
             <VBox prefHeight="42.0" prefWidth="246.0">
-                <Label styleClass="text-body" text="Level" />
-                <JFXTextField fx:id="levelField" disable="true" editable="false" />
+                <Label styleClass="text-body" text="Level"/>
+                <JFXTextField fx:id="levelField" disable="true" editable="false"/>
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
-                <Label styleClass="text-body" text="Harga" />
-                <JFXTextField fx:id="hargaLevelField" disable="true" />
+                <Label styleClass="text-body" text="Harga"/>
+                <JFXTextField fx:id="hargaLevelField" disable="true"/>
             </VBox>
         </HBox>
         <ButtonBar prefHeight="40.0" prefWidth="200.0">
             <buttons>
-                <JFXButton layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#ubahLevelHandle" styleClass="ubah" text="Ubah">
+                <JFXButton layoutX="457.0" layoutY="11.0" mnemonicParsing="false" onAction="#ubahLevelHandle"
+                           styleClass="ubah" text="Ubah">
                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true"/>
                     </graphic>
                 </JFXButton>
             </buttons>
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
         </ButtonBar>
     </VBox>

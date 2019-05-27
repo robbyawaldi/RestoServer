@@ -85,6 +85,11 @@
 .tolak {
     -fx-graphic: url('/icons/icons8-waste-20.png');
 }
+
+.file {
+    -fx-graphic: url('/icons/icons8-split-files-25.png');
+}
+
 /*******************************************************************************
  *                                                                             *
  * Pane  			                                                           *

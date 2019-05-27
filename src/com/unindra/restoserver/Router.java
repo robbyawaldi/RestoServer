@@ -106,7 +106,7 @@ class Router {
 
             return gson.toJson(new StandardResponse(
                     StatusResponse.SUCCESS,
-                    gson.toJsonTree(DetailRamen.detailRamen(new DetailRamen(request.params(":nama_menu"))))));
+                    gson.toJsonTree(DetailRamen.detailRamen(request.params(":nama_menu")))));
         });
     }
 }
