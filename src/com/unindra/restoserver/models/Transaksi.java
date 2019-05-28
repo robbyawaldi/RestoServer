@@ -111,7 +111,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .sum();
     }
 
-    public String getId_transaksi() {
+    String getId_transaksi() {
         return id_transaksi;
     }
 
@@ -119,8 +119,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         return no_meja;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    Date getTanggal() {
+    public Date getTanggal() {
         return tanggal;
     }
 

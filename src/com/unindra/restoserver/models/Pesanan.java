@@ -58,7 +58,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         }
     }
 
-    static List<Pesanan> getPesanan(Transaksi transaksi) {
+    public static List<Pesanan> getPesanan(Transaksi transaksi) {
         return getPesanan()
                 .stream()
                 .filter(item -> item.id_transaksi.equals(transaksi.getId_transaksi()))
@@ -101,7 +101,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return id_pesanan;
     }
 
-    String getNama_menu() {
+    public String getNama_menu() {
         return nama_menu;
     }
 

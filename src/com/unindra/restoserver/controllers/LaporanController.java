@@ -99,7 +99,7 @@ public class LaporanController implements Initializable {
     public void cetakHarianHandle() {
         Thread thread = new Thread(() -> {
             try {
-                Laporan.harian();
+                Laporan.pemesanan();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -110,7 +110,7 @@ public class LaporanController implements Initializable {
     public void cetakBulananHandle() {
         Thread thread = new Thread(() -> {
             try {
-                Laporan.bulanan();
+                Laporan.pemasukan();
             } catch (IOException e) {
                 e.printStackTrace();
             }

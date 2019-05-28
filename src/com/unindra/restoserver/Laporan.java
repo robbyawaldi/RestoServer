@@ -44,37 +44,39 @@ public class Laporan {
     private static final String bold = "fonts/OpenSans-Bold.ttf";
 
     private static Table kop_surat(String judul) throws MalformedURLException {
-        Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 10),
-                new UnitValue(UnitValue.PERCENT, 90)}, true);
-        table.setFontSize(12);
         Image image = new Image(ImageDataFactory.create("resources/icons/logo-ramen-bulet-merah-copy50x50.png"));
-        table.addCell(cellNoBorder(image.setAutoScale(true)));
-        table.addCell(
-                cellNoBorder("Osaka Ramen\n"+judul)
-                        .setTextAlignment(TextAlignment.CENTER)
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER)
-                        .setVerticalAlignment(VerticalAlignment.MIDDLE));
-        return table;
+
+        return new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 10),
+                new UnitValue(UnitValue.PERCENT, 90)}, true)
+                .setFontSize(12)
+                .addCell(cellNoBorder(image.setAutoScale(true)))
+                .addCell(
+                        cellNoBorder("Osaka Ramen\n" + judul)
+                                .setTextAlignment(TextAlignment.CENTER)
+                                .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                                .setVerticalAlignment(VerticalAlignment.MIDDLE));
     }
 
     private static Table signature(LocalDate tgl) {
-        Table table = new Table(1);
-        table.setFontSize(10);
-        table.setWidth(200);
-        table.setHeight(80);
-        table.addCell(
-                cellNoBorder("Depok" +", "+
-                        hari().get(tgl.getDayOfWeek())+", "+
-                        tgl.getDayOfMonth()+" "+
-                        bulan().get(tgl.getMonthOfYear())+" "+
-                        tgl.getYear())
-                        .setTextAlignment(TextAlignment.CENTER));
-        table.addCell(
-                cellNoBorder("Pemilik\nTaufiq")
-                        .setTextAlignment(TextAlignment.CENTER)
-                        .setVerticalAlignment(VerticalAlignment.BOTTOM));
-        return table;
+        return new Table(
+                1)
+                .setFontSize(10)
+                .setWidth(200)
+                .setHeight(80)
+                .setMarginTop(50)
+                .setHorizontalAlignment(HorizontalAlignment.RIGHT)
+                .addCell(
+                        cellNoBorder("Depok" + ", " +
+                                hari().get(tgl.getDayOfWeek()) + ", " +
+                                tgl.getDayOfMonth() + " " +
+                                bulan().get(tgl.getMonthOfYear()) + " " +
+                                tgl.getYear())
+                                .setTextAlignment(TextAlignment.CENTER))
+                .addCell(
+                        cellNoBorder("Pemilik\nTaufiq")
+                                .setTextAlignment(TextAlignment.CENTER)
+                                .setVerticalAlignment(VerticalAlignment.BOTTOM));
     }
 
     private static Cell cellNoBorder(String text) {
@@ -135,75 +137,74 @@ public class Laporan {
         }
     }
 
-    public static void harian() throws IOException {
+    public static void pemesanan() throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
-        String fileName = String.format("laporan-harian-%s.pdf", localDate.toString());
+        String fileName = String.format("laporan-transaksi-pemesanan-%s.pdf", localDate.toString());
         List<Transaksi> transaksiList = getTransaksiList(localDate);
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
 
-        document.add(kop_surat("Laporan Transaksi Harian"));
+        document.add(kop_surat("Laporan Transaksi Pemesanan"));
 
-        Table transaksiTable = new Table(3);
-        transaksiTable.setWidth(520);
-        transaksiTable.setFontSize(10);
+        Table table = new Table(
+                6)
+                .setWidth(520)
+                .setMarginTop(10)
+                .setFontSize(10)
+                .addHeaderCell(cell("Pukul").setFont(boldFont))
+                .addHeaderCell(cell("No Meja").setFont(boldFont))
+                .addHeaderCell(cell("Nama Menu").setFont(boldFont))
+                .addHeaderCell(cell("Jumlah").setFont(boldFont))
+                .addHeaderCell(cell("Harga").setFont(boldFont))
+                .addHeaderCell(cell("Total Harga").setFont(boldFont));
 
-        transaksiTable.addHeaderCell(cell("Id Transaksi").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("No Meja").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Total Bayar").setFont(boldFont));
+        transaksiList.forEach(transaksi ->
+                Pesanan.getPesanan(transaksi).forEach(pesanan -> {
+                    LocalTime t = new LocalTime(transaksi.getTanggal());
+                    table.addCell(cell(String.format("%d:%d WIB", t.getHourOfDay(), t.getMinuteOfHour())));
+                    table.addCell(cell(transaksi.getNo_meja()));
+                    table.addCell(cell(pesanan.getNama_menu()));
+                    table.addCell(cell(String.valueOf(pesanan.getJumlah())));
+                    table.addCell(cell(rupiah(menu(pesanan).getHarga_menu())));
+                    table.addCell(cell(rupiah(pesanan.getTotal())));
+                }));
 
-        transaksiList.forEach(transaksi -> {
-            transaksiTable.addCell(cell(String.valueOf(transaksi.getId_transaksi())));
-            transaksiTable.addCell(cell(transaksi.getNo_meja()));
-            transaksiTable.addCell(cell(rupiah(transaksi.getTotalBayar())));
-        });
-
-        document.add(transaksiTable.setMarginTop(10));
-
-        document.add(
-                signature(localDate)
-                        .setMarginTop(50)
-                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
-
+        document.add(table);
+        document.add(signature(localDate));
         document.close();
         showReport(fileName);
     }
 
-    public static void bulanan() throws IOException {
+    public static void pemasukan() throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
-        String fileName = String.format("laporan-bulanan-%s.pdf", localDate.toString());
+        String fileName = String.format("laporan-pemasukan-%s.pdf", localDate.toString());
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
 
-        document.add(kop_surat("Laporan Pemasukan Bulanan"));
+        document.add(kop_surat("Laporan Pemasukan"));
 
-        Table transaksiTable = new Table(2);
-        transaksiTable.setWidth(520);
-        transaksiTable.setFontSize(10);
-
-        transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
+        Table table = new Table(
+                2)
+                .setWidth(520)
+                .setMarginTop(10)
+                .setFontSize(10)
+                .addHeaderCell(cell("Bulan").setFont(boldFont))
+                .addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
 
         for (int i = 0; i < 5; i++) {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
-            transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
-            transaksiTable.addCell(cell(rupiah(getTotalBayar(yearMonth.getYear(), yearMonth.getMonthOfYear()))));
+            table.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
+            table.addCell(cell(rupiah(getTotalBayar(yearMonth.getYear(), yearMonth.getMonthOfYear()))));
         }
 
-        document.add(new Paragraph("Pemasukan").setFont(boldFont).setMarginTop(10));
-
-        document.add(transaksiTable.setMarginTop(10));
-        document.add(
-                signature(localDate)
-                        .setMarginTop(50)
-                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
-
+        document.add(table);
+        document.add(signature(localDate));
         document.close();
         showReport(fileName);
     }
@@ -219,14 +220,15 @@ public class Laporan {
 
         document.add(kop_surat("Laporan Menu Favorit"));
 
-        Table transaksiTable = new Table(4);
-        transaksiTable.setWidth(520);
-        transaksiTable.setFontSize(10);
-
-        transaksiTable.addHeaderCell(cell("Nama Menu").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Tipe").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Harga").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Total Dipesan").setFont(boldFont));
+        Table table = new Table(
+                4)
+                .setWidth(520)
+                .setMarginTop(10)
+                .setFontSize(10)
+                .addHeaderCell(cell("Nama Menu").setFont(boldFont))
+                .addHeaderCell(cell("Tipe").setFont(boldFont))
+                .addHeaderCell(cell("Harga").setFont(boldFont))
+                .addHeaderCell(cell("Total Dipesan").setFont(boldFont));
 
         List<Menu> menus = FXCollections.observableArrayList(getMenus());
         menus.sort((menu1, menu2) -> {
@@ -236,21 +238,14 @@ public class Laporan {
         });
 
         menus.forEach(menu -> {
-            transaksiTable.addCell(cell(menu.getNama_menu()));
-            transaksiTable.addCell(cell(menu.getTipe()));
-            transaksiTable.addCell(cell(rupiah(menu.getHarga_menu())));
-            transaksiTable.addCell(cell(String.valueOf(getPesanan(menu).size())));
+            table.addCell(cell(menu.getNama_menu()));
+            table.addCell(cell(menu.getTipe()));
+            table.addCell(cell(rupiah(menu.getHarga_menu())));
+            table.addCell(cell(String.valueOf(getPesanan(menu).size())));
         });
 
-        document.add(new Paragraph("Daftar Menu").setMarginTop(10).setFont(boldFont));
-
-        document.add(transaksiTable.setMarginTop(10));
-
-        document.add(
-                signature(localDate)
-                        .setMarginTop(50)
-                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
-
+        document.add(table);
+        document.add(signature(localDate));
         document.close();
         showReport(fileName);
     }
@@ -264,31 +259,25 @@ public class Laporan {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
 
-        document.add(kop_surat("Laporan Kunjungan Bulanan"));
+        document.add(kop_surat("Laporan Kunjungan"));
 
-        Table transaksiTable = new Table(2);
-        transaksiTable.setWidth(520);
-        transaksiTable.setFontSize(10);
-
-        transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
-        transaksiTable.addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
+        Table table = new Table(
+                2)
+                .setWidth(520)
+                .setMarginTop(10)
+                .setFontSize(10)
+                .addHeaderCell(cell("Bulan").setFont(boldFont))
+                .addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
 
         for (int i = 0; i < 5; i++) {
             YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
             int totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
-            transaksiTable.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
-            transaksiTable.addCell(cell(String.valueOf(totalKunjungan)));
+            table.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
+            table.addCell(cell(String.valueOf(totalKunjungan)));
         }
 
-        document.add(new Paragraph("Kunjungan").setMarginTop(10).setFont(boldFont));
-
-        document.add(transaksiTable.setMarginTop(10));
-
-        document.add(
-                signature(localDate)
-                        .setMarginTop(50)
-                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
-
+        document.add(table);
+        document.add(signature(localDate));
         document.close();
         showReport(fileName);
     }
@@ -313,25 +302,24 @@ public class Laporan {
                         .add("No Meja:")
                         .add(pesanans.get(0).getNo_meja())
                         .add("\tTanggal:")
-                        .add(localDate+" "+new LocalTime().toString().substring(0, 8))
+                        .add(localDate + " " + new LocalTime().toString().substring(0, 8))
                         .add("\n-----------------------------------------------------------------------------------------\n")
         );
 
-        Table itemsTable = new Table(new UnitValue[]{
+        Table table = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 30),
                 new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 50),}, true);
-
-        itemsTable.setFontSize(6);
-        itemsTable.setTextAlignment(TextAlignment.CENTER);
+                new UnitValue(UnitValue.PERCENT, 50),}, true)
+                .setFontSize(6)
+                .setTextAlignment(TextAlignment.CENTER);
 
         pesanans.forEach(item -> {
-            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
-            itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
-            itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
+            table.addCell(cellNoBorder(menu(item).getNama_menu()));
+            table.addCell(cellNoBorder(item.getJumlah() + "x"));
+            table.addCell(cellNoBorder(rupiah(item.getTotal())));
         });
 
-        document.add(itemsTable);
+        document.add(table);
 
         document.add(
                 new Paragraph()
@@ -342,11 +330,10 @@ public class Laporan {
 
         Table footerTable = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 50),}, true);
-
-        footerTable.setTextAlignment(TextAlignment.RIGHT);
-        footerTable.addCell(cellNoBorder("Total").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6));
+                new UnitValue(UnitValue.PERCENT, 50),}, true)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .addCell(cellNoBorder("Total").setFontSize(6))
+                .addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6));
 
         document.add(footerTable);
         document.close();
@@ -374,25 +361,24 @@ public class Laporan {
                         .add("No Meja:")
                         .add(pesanans.get(0).getNo_meja())
                         .add("\tTanggal:")
-                        .add(localDate+" "+new LocalTime().toString().substring(0, 8))
+                        .add(localDate + " " + new LocalTime().toString().substring(0, 8))
                         .add("\n-----------------------------------------------------------------------------------------\n")
         );
 
-        Table itemsTable = new Table(new UnitValue[]{
+        Table table = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 30),
                 new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 50),}, true);
-
-        itemsTable.setFontSize(6);
-        itemsTable.setTextAlignment(TextAlignment.CENTER);
+                new UnitValue(UnitValue.PERCENT, 50),}, true)
+                .setFontSize(6)
+                .setTextAlignment(TextAlignment.CENTER);
 
         pesanans.forEach(item -> {
-            itemsTable.addCell(cellNoBorder(menu(item).getNama_menu()));
-            itemsTable.addCell(cellNoBorder(item.getJumlah()+"x"));
-            itemsTable.addCell(cellNoBorder(rupiah(item.getTotal())));
+            table.addCell(cellNoBorder(menu(item).getNama_menu()));
+            table.addCell(cellNoBorder(item.getJumlah() + "x"));
+            table.addCell(cellNoBorder(rupiah(item.getTotal())));
         });
 
-        document.add(itemsTable);
+        document.add(table);
 
         document.add(
                 new Paragraph()
@@ -403,15 +389,14 @@ public class Laporan {
 
         Table footerTable = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 50),}, true);
-
-        footerTable.setTextAlignment(TextAlignment.RIGHT);
-        footerTable.addCell(cellNoBorder("Total").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6));
-        footerTable.addCell(cellNoBorder("Tunai").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(tunai)).setFontSize(6));
-        footerTable.addCell(cellNoBorder("Kembali").setFontSize(6));
-        footerTable.addCell(cellNoBorder(rupiah(tunai - transaksi.getTotalBayarFromService())).setFontSize(6));
+                new UnitValue(UnitValue.PERCENT, 50),}, true)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .addCell(cellNoBorder("Total").setFontSize(6))
+                .addCell(cellNoBorder(rupiah(transaksi.getTotalBayarFromService())).setFontSize(6))
+                .addCell(cellNoBorder("Tunai").setFontSize(6))
+                .addCell(cellNoBorder(rupiah(tunai)).setFontSize(6))
+                .addCell(cellNoBorder("Kembali").setFontSize(6))
+                .addCell(cellNoBorder(rupiah(tunai - transaksi.getTotalBayarFromService())).setFontSize(6));
 
         document.add(footerTable);
         document.close();
