@@ -89,8 +89,10 @@ public class LaporanController implements Initializable {
                 kunjunganData.getData().add(new XYChart.Data<>(bulan, totalKunjungan));
             }
 
-            Platform.runLater(() -> kunjunganChart.getData().setAll(kunjunganData));
-            kunjunganChart.getYAxis().setLabel("Kunjungan");
+            Platform.runLater(() -> {
+                kunjunganChart.getData().setAll(kunjunganData);
+                kunjunganChart.getYAxis().setLabel("Kunjungan");
+            });
         });
     }
 

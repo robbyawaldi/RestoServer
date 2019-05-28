@@ -1,5 +1,6 @@
 package com.unindra.restoserver;
 
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -8,15 +9,15 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import com.itextpdf.layout.property.VerticalAlignment;
+import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Pesanan;
 import com.unindra.restoserver.models.PesananService;
-import com.unindra.restoserver.models.Menu;
 import com.unindra.restoserver.models.Transaksi;
 import javafx.collections.FXCollections;
 import org.joda.time.LocalDate;
@@ -26,19 +27,113 @@ import org.joda.time.YearMonth;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
-import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
+import static com.unindra.restoserver.models.Pesanan.getPesanan;
 import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Laporan {
 
     private static final String bold = "fonts/OpenSans-Bold.ttf";
+
+    private static Table kop_surat(String judul) throws MalformedURLException {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 10),
+                new UnitValue(UnitValue.PERCENT, 90)}, true);
+        table.setFontSize(12);
+        Image image = new Image(ImageDataFactory.create("resources/icons/logo-ramen-bulet-merah-copy50x50.png"));
+        table.addCell(cellNoBorder(image.setAutoScale(true)));
+        table.addCell(
+                cellNoBorder("Osaka Ramen\n"+judul)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE));
+        return table;
+    }
+
+    private static Table signature(LocalDate tgl) {
+        Table table = new Table(1);
+        table.setFontSize(10);
+        table.setWidth(200);
+        table.setHeight(80);
+        table.addCell(
+                cellNoBorder("Depok" +", "+
+                        hari().get(tgl.getDayOfWeek())+", "+
+                        tgl.getDayOfMonth()+" "+
+                        bulan().get(tgl.getMonthOfYear())+" "+
+                        tgl.getYear())
+                        .setTextAlignment(TextAlignment.CENTER));
+        table.addCell(
+                cellNoBorder("Pemilik\nTaufiq")
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setVerticalAlignment(VerticalAlignment.BOTTOM));
+        return table;
+    }
+
+    private static Cell cellNoBorder(String text) {
+        return new Cell()
+                .setBorder(Border.NO_BORDER)
+                .add(new Paragraph(text));
+    }
+
+    private static Cell cellNoBorder(Image image) {
+        return new Cell()
+                .setBorder(Border.NO_BORDER)
+                .add(image);
+    }
+
+    private static Cell cell(String text) {
+        return new Cell()
+                .add(new Paragraph(text));
+    }
+
+    private static List<String> hari() {
+        return Arrays.asList(
+                "",
+                "Senin",
+                "Selasa",
+                "Rabu",
+                "Kamis",
+                "Jumat",
+                "Sabtu",
+                "Minggu"
+        );
+    }
+
+    private static List<String> bulan() {
+        return Arrays.asList(
+                "",
+                "Januari",
+                "Februari",
+                "Maret",
+                "April",
+                "Mei",
+                "Juni",
+                "Juli",
+                "Agustus",
+                "September",
+                "Oktober",
+                "November",
+                "Desember"
+        );
+    }
+
+    private static void showReport(String fileName) {
+        File file = new File(fileName);
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.open(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void harian() throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
@@ -48,36 +143,13 @@ public class Laporan {
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+        Document document = new Document(pdf, PageSize.A4);
 
-        document.add(
-                new Paragraph()
-                        .setTextAlignment(TextAlignment.RIGHT)
-                        .setMultipliedLeading(1)
-                        .add(new Text("Laporan Harian\n").setFont(boldFont))
-                        .add(localDate.toString()));
-
-        Table detailTable = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 50)}, true);
-
-        detailTable.addCell(cellNoBorder("Total Transaksi:"));
-        detailTable.addCell(cellNoBorder(String.valueOf(transaksiList.size())));
-        detailTable.addCell(cellNoBorder("Pemasukan:"));
-        detailTable.addCell(
-                cellNoBorder(
-                        rupiah(
-                                transaksiList
-                                        .stream()
-                                        .mapToInt(Transaksi::getTotalBayar)
-                                        .sum())));
-        detailTable.addCell(cellNoBorder("Menu Favorit:"));
-        detailTable.addCell(cellNoBorder(menu(localDate).getNama_menu()));
-
-        document.add(detailTable);
+        document.add(kop_surat("Laporan Transaksi Harian"));
 
         Table transaksiTable = new Table(3);
         transaksiTable.setWidth(520);
+        transaksiTable.setFontSize(10);
 
         transaksiTable.addHeaderCell(cell("Id Transaksi").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("No Meja").setFont(boldFont));
@@ -90,6 +162,12 @@ public class Laporan {
         });
 
         document.add(transaksiTable.setMarginTop(10));
+
+        document.add(
+                signature(localDate)
+                        .setMarginTop(50)
+                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
+
         document.close();
         showReport(fileName);
     }
@@ -101,17 +179,13 @@ public class Laporan {
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+        Document document = new Document(pdf, PageSize.A4);
 
-        document.add(
-                new Paragraph()
-                        .setTextAlignment(TextAlignment.RIGHT)
-                        .setMultipliedLeading(1)
-                        .add(new Text("Laporan Bulanan\n").setFont(boldFont))
-                        .add(localDate.toString()));
+        document.add(kop_surat("Laporan Pemasukan Bulanan"));
 
         Table transaksiTable = new Table(2);
         transaksiTable.setWidth(520);
+        transaksiTable.setFontSize(10);
 
         transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
@@ -123,7 +197,13 @@ public class Laporan {
         }
 
         document.add(new Paragraph("Pemasukan").setFont(boldFont).setMarginTop(10));
-        document.add(transaksiTable);
+
+        document.add(transaksiTable.setMarginTop(10));
+        document.add(
+                signature(localDate)
+                        .setMarginTop(50)
+                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
+
         document.close();
         showReport(fileName);
     }
@@ -135,17 +215,13 @@ public class Laporan {
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+        Document document = new Document(pdf, PageSize.A4);
 
-        document.add(
-                new Paragraph()
-                        .setTextAlignment(TextAlignment.RIGHT)
-                        .setMultipliedLeading(1)
-                        .add(new Text("Laporan Menu Favorit\n").setFont(boldFont))
-                        .add(localDate.toString()));
+        document.add(kop_surat("Laporan Menu Favorit"));
 
         Table transaksiTable = new Table(4);
         transaksiTable.setWidth(520);
+        transaksiTable.setFontSize(10);
 
         transaksiTable.addHeaderCell(cell("Nama Menu").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Tipe").setFont(boldFont));
@@ -167,7 +243,14 @@ public class Laporan {
         });
 
         document.add(new Paragraph("Daftar Menu").setMarginTop(10).setFont(boldFont));
-        document.add(transaksiTable);
+
+        document.add(transaksiTable.setMarginTop(10));
+
+        document.add(
+                signature(localDate)
+                        .setMarginTop(50)
+                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
+
         document.close();
         showReport(fileName);
     }
@@ -179,17 +262,13 @@ public class Laporan {
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+        Document document = new Document(pdf, PageSize.A4);
 
-        document.add(
-                new Paragraph()
-                        .setTextAlignment(TextAlignment.RIGHT)
-                        .setMultipliedLeading(1)
-                        .add(new Text("Laporan Kunjungan\n").setFont(boldFont))
-                        .add(localDate.toString()));
+        document.add(kop_surat("Laporan Kunjungan Bulanan"));
 
         Table transaksiTable = new Table(2);
         transaksiTable.setWidth(520);
+        transaksiTable.setFontSize(10);
 
         transaksiTable.addHeaderCell(cell("Bulan").setFont(boldFont));
         transaksiTable.addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
@@ -202,7 +281,14 @@ public class Laporan {
         }
 
         document.add(new Paragraph("Kunjungan").setMarginTop(10).setFont(boldFont));
-        document.add(transaksiTable);
+
+        document.add(transaksiTable.setMarginTop(10));
+
+        document.add(
+                signature(localDate)
+                        .setMarginTop(50)
+                        .setHorizontalAlignment(HorizontalAlignment.RIGHT));
+
         document.close();
         showReport(fileName);
     }
@@ -330,25 +416,5 @@ public class Laporan {
         document.add(footerTable);
         document.close();
         showReport(fileName);
-    }
-
-    private static Cell cellNoBorder(String text) {
-        return new Cell()
-                .setBorder(Border.NO_BORDER)
-                .add(new Paragraph(text));
-    }
-
-    private static Cell cell(String text) {
-        return new Cell().add(new Paragraph(text));
-    }
-
-    private static void showReport(String fileName) {
-        File file = new File(fileName);
-        Desktop desktop = Desktop.getDesktop();
-        try {
-            desktop.open(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
