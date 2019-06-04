@@ -7,8 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+import org.joda.time.*;
 import org.sql2o.Connection;
 
 import java.util.Date;
@@ -51,7 +50,7 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
         try (Connection connection = DB.sql2o.open()) {
             final String query =
                     "INSERT INTO `transaksi` (`id_transaksi`,`no_meja`,`tanggal`) " +
-                    "VALUES (:id_transaksi,:no_meja,:tanggal)";
+                            "VALUES (:id_transaksi,:no_meja,:tanggal)";
             connection.createQuery(query).bind(this).executeUpdate();
             if (connection.getResult() > 0) {
                 List<Pesanan> pesanans = PesananService.getItems(this);
@@ -92,6 +91,14 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
                 .collect(Collectors.toList());
     }
 
+    public static Transaksi getTransaksi(Pesanan pesanan) {
+        return getTransaksiList()
+                .stream()
+                .filter(transaksi -> transaksi.getId_transaksi().equals(pesanan.getId_transaksi()))
+                .findFirst()
+                .orElse(null);
+    }
+
     public static int getTotalBayar(int tahun, int bulan) {
         return getTransaksiList(tahun, bulan)
                 .stream()
@@ -130,6 +137,11 @@ public class Transaksi extends RecursiveTreeObject<Transaksi> {
 
     public StringProperty totalProperty() {
         return new SimpleStringProperty(rupiah(getTotalBayarFromService()));
+    }
+
+    public StringProperty pukulProperty() {
+        LocalTime t = new LocalTime(tanggal);
+        return new SimpleStringProperty(String.format("%d:%d WIB", t.getHourOfDay(), t.getMinuteOfHour()));
     }
 
     @Override

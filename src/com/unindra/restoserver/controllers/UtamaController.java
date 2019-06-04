@@ -132,7 +132,6 @@ public class UtamaController implements Initializable {
         getPesananList().addListener((ListChangeListener<Pesanan>) c -> filteredList.setPredicate(predicate));
 
         TreeItem<Pesanan> rootItem = new RecursiveTreeItem<>(filteredList, RecursiveTreeObject::getChildren);
-
         pesananTableView.setRoot(rootItem);
         pesananTableView.getColumns().add(mejaCol);
         pesananTableView.getColumns().add(namaCol);

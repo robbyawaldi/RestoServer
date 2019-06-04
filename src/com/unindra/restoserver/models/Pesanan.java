@@ -1,5 +1,6 @@
 package com.unindra.restoserver.models;
 
+import com.google.gson.annotations.Expose;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unindra.restoserver.DB;
 import javafx.beans.property.ObjectProperty;
@@ -7,11 +8,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.sql2o.Connection;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Level.level;
 import static com.unindra.restoserver.models.Menu.menu;
 
@@ -23,6 +26,8 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
     private int level;
     private String no_meja;
     private String status_item;
+    @Expose
+    private static ObservableList<Pesanan> pesananList = FXCollections.observableArrayList();
 
     // Constructor
     public Pesanan(String id_pesanan, String nama_menu, int jumlah, int lvl_item, String no_meja, String status_item) {
@@ -32,6 +37,10 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         this.level = lvl_item;
         this.no_meja = no_meja;
         this.status_item = status_item;
+    }
+
+    public static ObservableList<Pesanan> getPesananList() {
+        return pesananList;
     }
 
     // Terima
@@ -45,7 +54,7 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         try (Connection connection = DB.sql2o.open()) {
             final String query =
                     "INSERT INTO `pesanan` (`id_pesanan`,`id_transaksi`,`nama_menu`,`jumlah`,`level`) " +
-                    "VALUES (:id_pesanan,:id_transaksi,:nama_menu,:jumlah,:level)";
+                            "VALUES (:id_pesanan,:id_transaksi,:nama_menu,:jumlah,:level)";
             connection.createQuery(query).bind(this).executeUpdate();
         }
     }
@@ -62,6 +71,16 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
         return getPesanan()
                 .stream()
                 .filter(item -> item.id_transaksi.equals(transaksi.getId_transaksi()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Pesanan> getPesanan(Transaksi transaksi, Menu menu) {
+        return getPesanan()
+                .stream()
+                .filter(item -> item.id_transaksi.equals(transaksi.getId_transaksi()))
+                .collect(Collectors.toList())
+                .stream()
+                .filter(pesanan -> pesanan.getNama_menu().equals(menu.getNama_menu()))
                 .collect(Collectors.toList());
     }
 
@@ -129,6 +148,10 @@ public class Pesanan extends RecursiveTreeObject<Pesanan> {
 
     public StringProperty no_mejaProperty() {
         return new SimpleStringProperty(no_meja);
+    }
+
+    public StringProperty totalHargaProperty() {
+        return new SimpleStringProperty(rupiah(getTotal()));
     }
 
     // toString

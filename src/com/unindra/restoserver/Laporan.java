@@ -22,7 +22,6 @@ import com.unindra.restoserver.models.Transaksi;
 import javafx.collections.FXCollections;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.YearMonth;
 
 import java.awt.*;
 import java.io.File;
@@ -31,6 +30,7 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Menu.getMenus;
@@ -137,17 +137,16 @@ public class Laporan {
         }
     }
 
-    public static void pemesanan() throws IOException {
+    public static void pemesanan(LocalDate dari, LocalDate sampai) throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
-        String fileName = String.format("laporan-transaksi-pemesanan-%s.pdf", localDate.toString());
-        List<Transaksi> transaksiList = getTransaksiList(localDate);
+        String fileName = String.format("laporan-pemesanan-%s.pdf", localDate.toString());
 
         PdfWriter writer = new PdfWriter(fileName);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
 
-        document.add(kop_surat("Laporan Transaksi Pemesanan"));
+        document.add(kop_surat("Laporan Pemesanan"));
 
         Table table = new Table(
                 6)
@@ -161,16 +160,18 @@ public class Laporan {
                 .addHeaderCell(cell("Harga").setFont(boldFont))
                 .addHeaderCell(cell("Total Harga").setFont(boldFont));
 
-        transaksiList.forEach(transaksi ->
-                Pesanan.getPesanan(transaksi).forEach(pesanan -> {
-                    LocalTime t = new LocalTime(transaksi.getTanggal());
-                    table.addCell(cell(String.format("%d:%d WIB", t.getHourOfDay(), t.getMinuteOfHour())));
-                    table.addCell(cell(transaksi.getNo_meja()));
-                    table.addCell(cell(pesanan.getNama_menu()));
-                    table.addCell(cell(String.valueOf(pesanan.getJumlah())));
-                    table.addCell(cell(rupiah(menu(pesanan).getHarga_menu())));
-                    table.addCell(cell(rupiah(pesanan.getTotal())));
-                }));
+        while (dari.isBefore(sampai.plusDays(1))) {
+            getTransaksiList(dari).forEach(transaksi -> Pesanan.getPesanan(transaksi).forEach(pesanan -> {
+                LocalTime t = new LocalTime(transaksi.getTanggal());
+                table.addCell(cell(String.format("%d:%d WIB", t.getHourOfDay(), t.getMinuteOfHour())));
+                table.addCell(cell(transaksi.getNo_meja()));
+                table.addCell(cell(pesanan.getNama_menu()));
+                table.addCell(cell(String.valueOf(pesanan.getJumlah())));
+                table.addCell(cell(rupiah(menu(pesanan).getHarga_menu())));
+                table.addCell(cell(rupiah(pesanan.getTotal())));
+            }));
+            dari = dari.plusDays(1);
+        }
 
         document.add(table);
         document.add(signature(localDate));
@@ -178,7 +179,7 @@ public class Laporan {
         showReport(fileName);
     }
 
-    public static void pemasukan() throws IOException {
+    public static void pemasukan(LocalDate dari, LocalDate sampai) throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
         String fileName = String.format("laporan-pemasukan-%s.pdf", localDate.toString());
@@ -194,13 +195,13 @@ public class Laporan {
                 .setWidth(520)
                 .setMarginTop(10)
                 .setFontSize(10)
-                .addHeaderCell(cell("Bulan").setFont(boldFont))
+                .addHeaderCell(cell("Tanggal").setFont(boldFont))
                 .addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
 
-        for (int i = 0; i < 5; i++) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
-            table.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
-            table.addCell(cell(rupiah(getTotalBayar(yearMonth.getYear(), yearMonth.getMonthOfYear()))));
+        while (dari.isBefore(sampai.plusDays(1))) {
+            table.addCell(cell(dari.toString()));
+            table.addCell(cell(rupiah(getTotalBayar(dari.getYear(), dari.getMonthOfYear()))));
+            dari = dari.plusDays(1);
         }
 
         document.add(table);
@@ -209,7 +210,7 @@ public class Laporan {
         showReport(fileName);
     }
 
-    public static void menuFavorit() throws IOException {
+    public static void menuFavorit(LocalDate dari, LocalDate sampai) throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
         String fileName = String.format("laporan-menu-favorit-%s.pdf", localDate.toString());
@@ -236,13 +237,22 @@ public class Laporan {
             List<Pesanan> items2 = getPesanan(menu2);
             return items2.size() - items1.size();
         });
-
-        menus.forEach(menu -> {
-            table.addCell(cell(menu.getNama_menu()));
-            table.addCell(cell(menu.getTipe()));
-            table.addCell(cell(rupiah(menu.getHarga_menu())));
-            table.addCell(cell(String.valueOf(getPesanan(menu).size())));
-        });
+        for (Menu menu : getMenus()) {
+            AtomicInteger jumlahMenu = new AtomicInteger();
+            LocalDate tgl = dari;
+            while (tgl.isBefore(sampai.plusDays(1))) {
+                for (Transaksi transaksi : getTransaksiList(tgl)) {
+                    jumlahMenu.addAndGet(getPesanan(transaksi, menu).stream().mapToInt(Pesanan::getJumlah).sum());
+                }
+                tgl = tgl.plusDays(1);
+            }
+            if (jumlahMenu.get() > 0) {
+                table.addCell(cell(menu.getNama_menu()));
+                table.addCell(cell(menu.getTipe()));
+                table.addCell(cell(rupiah(menu.getHarga_menu())));
+                table.addCell(cell(String.valueOf(getPesanan(menu).size())));
+            }
+        }
 
         document.add(table);
         document.add(signature(localDate));
@@ -250,7 +260,7 @@ public class Laporan {
         showReport(fileName);
     }
 
-    public static void kunjungan() throws IOException {
+    public static void kunjungan(LocalDate dari, LocalDate sampai) throws IOException {
         PdfFont boldFont = PdfFontFactory.createFont(bold, true);
         LocalDate localDate = new LocalDate(new Date());
         String fileName = String.format("laporan-kunjungan-%s.pdf", localDate.toString());
@@ -266,14 +276,14 @@ public class Laporan {
                 .setWidth(520)
                 .setMarginTop(10)
                 .setFontSize(10)
-                .addHeaderCell(cell("Bulan").setFont(boldFont))
+                .addHeaderCell(cell("Tanggal").setFont(boldFont))
                 .addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
 
-        for (int i = 0; i < 5; i++) {
-            YearMonth yearMonth = new YearMonth(localDate.minusMonths(i));
-            int totalKunjungan = getTransaksiList(yearMonth.getYear(), yearMonth.getMonthOfYear()).size();
-            table.addCell(cell(yearMonth.monthOfYear().getAsText() + " " + yearMonth.getYear()));
+        while (dari.isBefore(sampai.plusDays(1))) {
+            int totalKunjungan = getTransaksiList(dari.getYear(), dari.getMonthOfYear()).size();
+            table.addCell(cell(dari.toString()));
             table.addCell(cell(String.valueOf(totalKunjungan)));
+            dari = dari.plusDays(1);
         }
 
         document.add(table);

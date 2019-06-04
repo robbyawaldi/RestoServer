@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,14 +27,14 @@ public class AppController implements Initializable {
 
     private FlowPane utama;
     private FlowPane daftarmenu;
-    private FlowPane laporan;
+    private VBox laporan;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             utama = (FlowPane) setPane("utama");
             daftarmenu = (FlowPane) setPane("daftarmenu");
-            laporan = (FlowPane) setPane("laporan");
+            laporan = (VBox) setPane("laporan");
             scrollPane.setContent(utama);
         } catch (IOException e) {
             e.printStackTrace();
