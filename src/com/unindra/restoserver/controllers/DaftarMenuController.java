@@ -118,6 +118,7 @@ public class DaftarMenuController implements Initializable {
             menu.setTipe(tipeComboBox.getSelectionModel().getSelectedItem());
             menu.setHarga_menu(Integer.valueOf(hargaField.getText()));
             if (menu.getTipe().equals("ramen")) {
+                detailRamen.setNama_menu(menu.getNama_menu());
                 detailRamen.setDeskripsi(deskArea.getText());
                 if (menu.update() && detailRamen.update()) {
                     getDialog().information("Berhasil!", "Menu berhasil diubah");
