@@ -70,7 +70,6 @@ public class AppController implements Initializable {
 
     void setUser(User user) {
         if (user.getUsername().equals("pegawai")) {
-            menuButton.setDisable(true);
             laporanButton.setDisable(true);
         }
     }
