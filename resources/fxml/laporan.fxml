@@ -19,7 +19,7 @@
         <JFXDatePicker fx:id="dariDatePicker" prefWidth="150.0" promptText="Dari" />
         <JFXDatePicker fx:id="sampaiDatePicker" prefWidth="150.0" promptText="Sampai" />
         <JFXComboBox fx:id="pilihLaporanCombo" prefWidth="120.0" promptText="Pilih Laporan..." />
-        <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakHarianHandle" styleClass="print-30" text="Cetak Rincian" />
+        <JFXButton focusTraversable="false" mnemonicParsing="false" onAction="#cetakHarianHandle" styleClass="print-30" text="Cetak" />
     </HBox>
     <FlowPane prefHeight="620.0" prefWidth="1200.0" styleClass="body-white" vgap="15.0">
         <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="300.0" prefWidth="600.0" spacing="10.0">
