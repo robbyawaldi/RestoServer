@@ -83,7 +83,7 @@ public class Laporan {
                                 tgl.getYear())
                                 .setTextAlignment(TextAlignment.CENTER))
                 .addCell(
-                        cellNoBorder("Pemilik\nTaufiq")
+                        cellNoBorder("Pemilik\nTaufik Hidayat")
                                 .setTextAlignment(TextAlignment.CENTER)
                                 .setVerticalAlignment(VerticalAlignment.BOTTOM));
     }
