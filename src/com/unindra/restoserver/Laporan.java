@@ -279,7 +279,7 @@ public class Laporan {
                     table.addCell(cell(menu.getNama_menu()));
                     table.addCell(cell(menu.getTipe()));
                     table.addCell(cell(rupiah(menu.getHarga_menu())));
-                    table.addCell(cell(String.valueOf(getPesanan(menu).size())));
+                    table.addCell(cell(String.valueOf(jumlahMenu.get())));
                 }
             }
 
