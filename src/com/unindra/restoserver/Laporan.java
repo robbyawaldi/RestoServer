@@ -38,7 +38,6 @@ import static com.unindra.restoserver.Rupiah.rupiah;
 import static com.unindra.restoserver.models.Menu.getMenus;
 import static com.unindra.restoserver.models.Menu.menu;
 import static com.unindra.restoserver.models.Pesanan.getPesanan;
-import static com.unindra.restoserver.models.Transaksi.getTotalBayar;
 import static com.unindra.restoserver.models.Transaksi.getTransaksiList;
 
 public class Laporan {
@@ -223,8 +222,11 @@ public class Laporan {
                     .addHeaderCell(cell("Total Pemasukan").setFont(boldFont));
 
             while (dari.isBefore(sampai.plusDays(1))) {
-                table.addCell(cell(dari.toString()));
-                table.addCell(cell(rupiah(getTotalBayar(dari.getYear(), dari.getMonthOfYear()))));
+                int totalPemasukan = getTransaksiList(dari).stream().mapToInt(Transaksi::getTotalBayar).sum();
+                if (totalPemasukan > 0) {
+                    table.addCell(cell(dari.toString()));
+                    table.addCell(cell(rupiah(totalPemasukan)));
+                }
                 dari = dari.plusDays(1);
             }
 
@@ -314,9 +316,11 @@ public class Laporan {
                     .addHeaderCell(cell("Total Kunjungan").setFont(boldFont));
 
             while (dari.isBefore(sampai.plusDays(1))) {
-                int totalKunjungan = getTransaksiList(dari.getYear(), dari.getMonthOfYear()).size();
-                table.addCell(cell(dari.toString()));
-                table.addCell(cell(String.valueOf(totalKunjungan)));
+                int totalKunjungan = getTransaksiList(dari).size();
+                if (totalKunjungan > 0) {
+                    table.addCell(cell(dari.toString()));
+                    table.addCell(cell(String.valueOf(totalKunjungan)));
+                }
                 dari = dari.plusDays(1);
             }
 
